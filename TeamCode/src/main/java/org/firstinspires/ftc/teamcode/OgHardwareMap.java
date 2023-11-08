@@ -14,10 +14,10 @@ public class OgHardwareMap {
     public void init(HardwareMap ahwMap){
         hdwMap = ahwMap;
 
-        motor1 = hdwMap.get(DcMotor.class, "leftFront");
-        motor2 = hdwMap.get(DcMotor.class, "rightFront");
-        motor3 = hdwMap.get(DcMotor.class, "leftBack");
-        motor4 = hdwMap.get(DcMotor.class, "rightBack");
+        motor1 = hdwMap.get(DcMotor.class, "motor1");
+        motor2 = hdwMap.get(DcMotor.class, "motor2");
+        motor3 = hdwMap.get(DcMotor.class, "motor3");
+        motor4 = hdwMap.get(DcMotor.class, "motor4");
 
 
     }
