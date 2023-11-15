@@ -21,7 +21,7 @@ public class TestMotor1 extends OpMode {
     @Override
     public void init() {
         motor = map.motor1;
-        motor.setDirection((DcMotorSimple.Direction.FORWARD));
+        motor.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
     @Override
