@@ -29,4 +29,9 @@ public class TestMotor1 extends OpMode {
         runtime.reset();
         motor.setPower(20);
     }
+
+    @Override
+    public void loop() {
+
+    }
 }
