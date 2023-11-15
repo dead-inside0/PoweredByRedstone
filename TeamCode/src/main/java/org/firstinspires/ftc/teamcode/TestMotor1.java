@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.OgHardwareMap;
+import org.firstinspires.ftc.teamcode.MyHardwareMap;
 
 @TeleOp(name="Test motor 1", group="Linear OpMode")
 @Disabled
