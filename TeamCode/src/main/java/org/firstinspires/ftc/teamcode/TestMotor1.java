@@ -5,13 +5,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.OgHardwareMap;
 
 @TeleOp(name="Test motor 1", group="Linear OpMode")
 @Disabled
 public class TestMotor1 extends LinearOpMode {
-    OgHardwareMap map = new OgHardwareMap();
+    MyHardwareMap map = new MyHardwareMap();
 
     private DcMotor motor = null;
 

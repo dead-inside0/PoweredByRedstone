@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class OgHardwareMap {
+public class MyHardwareMap {
     HardwareMap hdwMap = null;
 
     public DcMotor motor1 = null;
