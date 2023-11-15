@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.MyHardwareMap;
 
 @TeleOp(name="Test motor 1")
 public class TestMotor1 extends OpMode {
-    MyHardwareMap map = new MyHardwareMap();
+    //MyHardwareMap map = new MyHardwareMap();
 
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -20,14 +20,14 @@ public class TestMotor1 extends OpMode {
 
     @Override
     public void init() {
-        motor = map.motor1;
+        motor = hardwareMap.get(DcMotor.class, "motor1");
         motor.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
     @Override
     public void start() {
         runtime.reset();
-        motor.setPower(20);
+        motor.setPower(0.5);
     }
 
     @Override
