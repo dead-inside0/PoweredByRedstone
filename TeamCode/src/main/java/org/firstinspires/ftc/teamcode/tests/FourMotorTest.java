@@ -1,3 +1,4 @@
+//note: Motors config works only for the test rig. As the naming refers to the positions of the motor on the rig.
 package org.firstinspires.ftc.teamcode.tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
