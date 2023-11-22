@@ -19,8 +19,6 @@ public class TwoMotorTest extends OpMode {
     @Override
     public void init() {
         //Left
-        //leftMotor = hardwareMap.get(DcMotor.class, "motor1");
-        leftMotor = hMap.motor1;
         leftMotor = hardwareMap.get(DcMotor.class, "motor1");
         //Right
         rightMotor = hardwareMap.get(DcMotor.class, "motor2");
