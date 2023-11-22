@@ -23,12 +23,17 @@ public class FourMotorTest extends OpMode {
 
     @Override
     public void init() {
+        hMap.init(hardwareMap);
         //Left Back
-        backleftMotor = hardwareMap.get(DcMotor.class, "motor1");
-        frontleftMotor = hardwareMap.get(DcMotor.class, "motor4");
+        //backleftMotor = hardwareMap.get(DcMotor.class, "motor1");
+        backleftMotor = hMap.motor1;
+        //frontleftMotor = hardwareMap.get(DcMotor.class, "motor4");
+        frontleftMotor = hMap.motor4;
         //Right Back
-        backrightMotor = hardwareMap.get(DcMotor.class, "motor2");
-        frontrightMotor = hardwareMap.get(DcMotor.class, "motor3");
+        //backrightMotor = hardwareMap.get(DcMotor.class, "motor2");
+        backrightMotor = hMap.motor2;
+        //frontrightMotor = hardwareMap.get(DcMotor.class, "motor3");
+        frontrightMotor = hMap.motor3;
 
         backleftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         backrightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
