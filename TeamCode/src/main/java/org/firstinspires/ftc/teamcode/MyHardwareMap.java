@@ -11,14 +11,13 @@ public class MyHardwareMap {
     public DcMotor motor3 = null;
     public DcMotor motor4 = null;
 
-    public void init(HardwareMap ahwMap){
-        hdwMap = ahwMap;
+    public MyHardwareMap(HardwareMap map){
+        hdwMap = map;
 
         motor1 = hdwMap.get(DcMotor.class, "motor1");
         motor2 = hdwMap.get(DcMotor.class, "motor2");
         motor3 = hdwMap.get(DcMotor.class, "motor3");
         motor4 = hdwMap.get(DcMotor.class, "motor4");
-
 
     }
 }
