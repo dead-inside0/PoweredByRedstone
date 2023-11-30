@@ -12,24 +12,15 @@ import org.firstinspires.ftc.teamcode.MyHardwareMap;
 
 @TeleOp(name="Mecanum wheel test")
 public class MecanumWheelTest extends OpMode {
-    private MyHardwareMap hMap = new MyHardwareMap(hardwareMap);
-    private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor backleftMotor = null;
-    private DcMotor backrightMotor = null;
-    private DcMotor frontleftMotor = null;
-    private DcMotor frontrightMotor = null;
+    final private ElapsedTime runtime = new ElapsedTime();
 
+    final private MyHardwareMap hMap = new MyHardwareMap(hardwareMap);
+    final private DcMotor backleftMotor = hMap.motor1;
+    final private DcMotor backrightMotor = hMap.motor2;
+    final private DcMotor frontleftMotor = hMap.motor4;
+    final private DcMotor frontrightMotor = hMap.motor3;
     @Override
     public void init() {
-        //backleftMotor = hardwareMap.get(DcMotor.class, "motor1");
-        backleftMotor = hMap.motor1;
-        //frontleftMotor = hardwareMap.get(DcMotor.class, "motor4");
-        frontleftMotor = hMap.motor4;
-        //backrightMotor = hardwareMap.get(DcMotor.class, "motor2");
-        backrightMotor = hMap.motor2;
-        //frontrightMotor = hardwareMap.get(DcMotor.class, "motor3");
-        frontrightMotor = hMap.motor3;
-
         backleftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         backrightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         frontleftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -43,9 +34,9 @@ public class MecanumWheelTest extends OpMode {
 
     @Override
     public void loop() {
-        double forward = -gamepad1.left_stick_y;
-        double side = gamepad1.left_stick_x;
-        double rotate = gamepad1.right_stick_x;
+        final double forward = -gamepad1.left_stick_y;
+        final double side = gamepad1.left_stick_x;
+        final double rotate = gamepad1.right_stick_x;
         backleftMotor.setPower(Range.clip(forward-side+rotate,-1.0,1.0));
         backrightMotor.setPower(Range.clip(forward+side-rotate,-1.0,1.0));
         frontleftMotor.setPower(Range.clip(forward+side+rotate,-1.0,1.0));
