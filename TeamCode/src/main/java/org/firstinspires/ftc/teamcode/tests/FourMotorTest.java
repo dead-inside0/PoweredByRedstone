@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.MyHardwareMap;
 @TeleOp(name="Four-Motor joystick test")
 public class FourMotorTest extends OpMode {
 
-    private MyHardwareMap hMap = new MyHardwareMap();
+    private MyHardwareMap hMap = new MyHardwareMap(hardwareMap);
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor backleftMotor = null;
     private DcMotor backrightMotor = null;
@@ -23,7 +23,6 @@ public class FourMotorTest extends OpMode {
 
     @Override
     public void init() {
-        hMap.init(hardwareMap);
         //Left Back
         //backleftMotor = hardwareMap.get(DcMotor.class, "motor1");
         backleftMotor = hMap.motor1;
