@@ -6,10 +6,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class MyHardwareMap {
     HardwareMap hdwMap = null;
 
-    public DcMotor motor1 = null;
-    public DcMotor motor2 = null;
-    public DcMotor motor3 = null;
-    public DcMotor motor4 = null;
+    public DcMotor motor1,motor2,motor3,motor4;
+
+    public DcMotor encR,encL,encF;
 
     public MyHardwareMap(HardwareMap map){
         hdwMap = map;

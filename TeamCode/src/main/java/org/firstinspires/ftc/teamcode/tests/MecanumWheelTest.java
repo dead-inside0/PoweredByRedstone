@@ -14,13 +14,18 @@ import org.firstinspires.ftc.teamcode.MyHardwareMap;
 public class MecanumWheelTest extends OpMode {
     final private ElapsedTime runtime = new ElapsedTime();
 
-    final private MyHardwareMap hMap = new MyHardwareMap(hardwareMap);
-    final private DcMotor backleftMotor = hMap.motor1;
-    final private DcMotor backrightMotor = hMap.motor2;
-    final private DcMotor frontleftMotor = hMap.motor4;
-    final private DcMotor frontrightMotor = hMap.motor3;
+    private MyHardwareMap hMap;
+    private DcMotor backleftMotor;
+    private DcMotor backrightMotor;
+    private DcMotor frontleftMotor;
+    private DcMotor frontrightMotor;
     @Override
     public void init() {
+        hMap = new MyHardwareMap(hardwareMap);
+        backleftMotor = hMap.motor1;
+        backrightMotor = hMap.motor2;
+        frontleftMotor = hMap.motor4;
+        frontrightMotor = hMap.motor3;
         backleftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         backrightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         frontleftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -45,6 +50,5 @@ public class MecanumWheelTest extends OpMode {
         telemetry.addData("Joystick Y", forward);
         telemetry.addData("Runtime", runtime.toString());
     }
-
 }
 
