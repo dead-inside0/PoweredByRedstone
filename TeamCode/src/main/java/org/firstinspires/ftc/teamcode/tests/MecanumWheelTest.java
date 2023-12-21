@@ -41,7 +41,7 @@ public class MecanumWheelTest extends OpMode {
     public void loop() {
         double forward = -gamepad1.left_stick_y;
         double side = gamepad1.left_stick_x;
-        double rotate = gamepad1.right_stick_x;
+        double rotate = gamepad2.right_stick_x;
         backleftMotor.setPower(Range.clip(forward-side+rotate,-1.0,1.0));
         backrightMotor.setPower(Range.clip(forward+side-rotate,-1.0,1.0));
         frontleftMotor.setPower(Range.clip(forward+side+rotate,-1.0,1.0));
