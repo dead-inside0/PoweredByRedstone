@@ -40,8 +40,11 @@ public class odoTest extends OpMode {
     }
 
     double[] getCurrentPos(double deltaRightOdo, double deltaLeftOdo, double deltaMiddleOdo){
-        final double sideSensorsDistance = 0.3;
-        final double wheelCircumference = 0.1;
+        final double sideSensorsDistance = 0;
+        final double wheelCircumference = 0;
+        final double sensorResolution = 0;
+
+
 
         double[] currentPos = {0, 0, 0}; //x, y, angle
         return currentPos;
