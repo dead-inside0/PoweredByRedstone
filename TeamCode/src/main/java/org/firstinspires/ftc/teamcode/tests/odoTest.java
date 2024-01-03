@@ -44,7 +44,7 @@ public class odoTest extends OpMode {
         final double wheelCircumference = 0;
         final double sensorResolution = 0;
 
-
+        ernest ma maly pero
 
         double[] currentPos = {0, 0, 0}; //x, y, angle
         return currentPos;
