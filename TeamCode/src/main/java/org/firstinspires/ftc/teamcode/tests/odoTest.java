@@ -40,9 +40,9 @@ public class odoTest extends OpMode {
     }
 
     double[] getPositionChange(double contactsRightOdo, double contactsLeftOdo, double contactsMiddleOdo, double prevAngle){
-        final double sideOdosDistance = 0;
-        final double wheelCircumference = 0;
-        final double sensorResolution = 0;
+        final double sideOdosDistance = 306.69;
+        final double wheelCircumference = 60 * Math.PI;
+        final double sensorResolution = 8192;
 
         double rightArcLength = wheelCircumference * contactsRightOdo / sensorResolution;
         double leftArcLength = wheelCircumference * contactsLeftOdo / sensorResolution;
@@ -57,7 +57,13 @@ public class odoTest extends OpMode {
         double deltaX = shiftLength * Math.cos(prevAngle + directionAngle);
         double deltaY = shiftLength * Math.sin(prevAngle + directionAngle);
 
-        //TODO: adjust for strafing with third wheel
+        double strafing = wheelCircumference * contactsMiddleOdo / sensorResolution;
+
+        double strafingDeltaX = strafing * Math.sin(prevAngle + directionAngle);
+        double strafingDeltaY = strafing * Math.cos(prevAngle + directionAngle);
+
+        deltaX += strafingDeltaX;
+        deltaY += strafingDeltaY;
 
         double[] positionChange = {deltaX, deltaY, directionAngle}; //x, y, angle
         return positionChange;
