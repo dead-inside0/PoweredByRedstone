@@ -62,10 +62,10 @@ public class odoTest extends OpMode {
         double strafingDeltaX = strafing * Math.sin(prevAngle + directionAngle);
         double strafingDeltaY = strafing * Math.cos(prevAngle + directionAngle);
 
-        deltaX += strafingDeltaX;
-        deltaY += strafingDeltaY;
+        double totalDeltaX = deltaX + strafingDeltaX;
+        double totalDeltaY = deltaY + strafingDeltaY;
 
-        double[] positionChange = {deltaX, deltaY, directionAngle}; //x, y, angle
+        double[] positionChange = {totalDeltaX, totalDeltaY, directionAngle}; //x, y, angle
         return positionChange;
     }
 
