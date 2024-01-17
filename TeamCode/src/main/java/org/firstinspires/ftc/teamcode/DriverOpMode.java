@@ -1,5 +1,4 @@
-//note: Motors config works only for the test rig. As the naming refers to the positions of the motor on the rig.
-package org.firstinspires.ftc.teamcode.tests;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -7,12 +6,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
-import org.firstinspires.ftc.teamcode.Odometry;
 
-import org.firstinspires.ftc.teamcode.MyHardwareMap;
-
-@TeleOp(name="MecanumTest")
-public class MecanumTest extends OpMode {
+@TeleOp(name="Driver")
+public class DriverOpMode extends OpMode {
     final private ElapsedTime runtime = new ElapsedTime();
     private MyHardwareMap hMap;
     private DcMotor backleftMotor;
@@ -23,6 +19,7 @@ public class MecanumTest extends OpMode {
     double posX = 0;
     double posY = 0;
     double directionAngle = 0;
+
     @Override
     public void init() {
         //get motors from hardware map
@@ -50,10 +47,10 @@ public class MecanumTest extends OpMode {
         double side = gamepad1.left_stick_x;
         double rotate = gamepad2.right_stick_x;
         //move robot
-        backleftMotor.setPower(Range.clip(forward-side+rotate,-1.0,1.0));
-        backrightMotor.setPower(Range.clip(forward+side-rotate,-1.0,1.0));
-        frontleftMotor.setPower(Range.clip(forward+side+rotate,-1.0,1.0));
-        frontrightMotor.setPower(Range.clip(forward-side-rotate,-1.0,1.0));
+        backleftMotor.setPower(Range.clip(forward - side + rotate, -1.0, 1.0));
+        backrightMotor.setPower(Range.clip(forward + side - rotate, -1.0, 1.0));
+        frontleftMotor.setPower(Range.clip(forward + side + rotate, -1.0, 1.0));
+        frontrightMotor.setPower(Range.clip(forward - side - rotate, -1.0, 1.0));
 
         //update position
         double contactsRightOdo = backrightMotor.getCurrentPosition();

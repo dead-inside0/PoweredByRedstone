@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 public class Odometry {
-    double[] getPositionChange(double contactsRightOdo, double contactsLeftOdo, double contactsMiddleOdo, double prevAngle){
+    public static double[] getPositionChange(double contactsRightOdo, double contactsLeftOdo, double contactsMiddleOdo, double prevAngle){
         final double sideOdosDistance = 305;
         final double wheelCircumference = 60 * Math.PI;
         final double sensorResolution = 8192;
