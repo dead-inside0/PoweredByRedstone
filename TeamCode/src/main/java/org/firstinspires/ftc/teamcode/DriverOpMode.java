@@ -18,7 +18,11 @@ public class DriverOpMode extends OpMode {
 
     double posX = 0;
     double posY = 0;
-    double directionAngle = 0;
+    double robotAngle = 0;
+
+    int contactsRightOdo = 0;
+    int contactsLeftOdo = 0;
+    int contactsMiddleOdo = 0;
 
     @Override
     public void init() {
@@ -43,29 +47,37 @@ public class DriverOpMode extends OpMode {
     @Override
     public void loop() {
         //get gamepad input
-        double forward = -gamepad1.left_stick_y;
-        double side = gamepad1.left_stick_x;
+        double joystickY = -gamepad1.left_stick_y;
+        double joystickX = gamepad1.left_stick_x;
         double rotate = gamepad2.right_stick_x;
         //move robot
-        backleftMotor.setPower(Range.clip(forward - side + rotate, -1.0, 1.0));
-        backrightMotor.setPower(Range.clip(forward + side - rotate, -1.0, 1.0));
-        frontleftMotor.setPower(Range.clip(forward + side + rotate, -1.0, 1.0));
-        frontrightMotor.setPower(Range.clip(forward - side - rotate, -1.0, 1.0));
+        backleftMotor.setPower(Range.clip(joystickY - joystickX + rotate, -1.0, 1.0));
+        backrightMotor.setPower(Range.clip(joystickY + joystickX - rotate, -1.0, 1.0));
+        frontleftMotor.setPower(Range.clip(joystickY + joystickX + rotate, -1.0, 1.0));
+        frontrightMotor.setPower(Range.clip(joystickY - joystickX - rotate, -1.0, 1.0));
 
         //update position
-        double contactsRightOdo = backrightMotor.getCurrentPosition();
-        double contactsLeftOdo = backleftMotor.getCurrentPosition();
-        double contactsMiddleOdo = frontrightMotor.getCurrentPosition();
-        double[] positionChange = Odometry.getPositionChange(contactsRightOdo, contactsLeftOdo, contactsMiddleOdo, directionAngle);
+        int deltaContactsRightOdo = backrightMotor.getCurrentPosition() - contactsRightOdo;
+        int deltaContactsLeftOdo = backleftMotor.getCurrentPosition() - contactsLeftOdo;
+        int deltaContactsMiddleOdo = frontrightMotor.getCurrentPosition() - contactsMiddleOdo;
+        contactsRightOdo += deltaContactsRightOdo;
+        contactsLeftOdo += deltaContactsLeftOdo;
+        contactsMiddleOdo += deltaContactsMiddleOdo;
+
+        double[] positionChange = Odometry.getPositionChange(deltaContactsRightOdo, deltaContactsLeftOdo, deltaContactsMiddleOdo, robotAngle);
         posX += positionChange[0];
         posY += positionChange[1];
-        directionAngle += positionChange[2];
+        robotAngle += positionChange[2];
+        double joystickAngle = Math.atan2(joystickX, joystickY); //we MIGHT be fucked
+        double robotMovementAngle = ToolBox.joystickToRobot(joystickAngle, robotAngle);
+
+
         //output data
         //telemetry.addData("Joystick X", side);
         //telemetry.addData("Joystick Y", forward);
         //telemetry.addData("Runtime", runtime.toString());
         telemetry.addData("Position X", posX);
         telemetry.addData("Position Y", posY);
-        telemetry.addData("Direction Angle", directionAngle);
+        telemetry.addData("Direction Angle", robotAngle);
     }
 }
