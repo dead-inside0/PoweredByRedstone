@@ -11,4 +11,8 @@ public class ToolBox {
         }
         return localAngle;
     }
+
+    public static double calculateStepInDirection(double targetDirectionAngle){
+        
+    }
 }

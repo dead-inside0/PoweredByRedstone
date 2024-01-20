@@ -11,10 +11,10 @@ import com.qualcomm.robotcore.util.Range;
 public class DriverOpMode extends OpMode {
     final private ElapsedTime runtime = new ElapsedTime();
     private MyHardwareMap hMap;
-    private DcMotor backleftMotor;
-    private DcMotor backrightMotor;
-    private DcMotor frontrightMotor;
-    private DcMotor frontleftMotor;
+    private DcMotor backLeftMotor;
+    private DcMotor backRightMotor;
+    private DcMotor frontRightMotor;
+    private DcMotor frontLeftMotor;
 
     double posX = 0;
     double posY = 0;
@@ -28,15 +28,15 @@ public class DriverOpMode extends OpMode {
     public void init() {
         //get motors from hardware map
         hMap = new MyHardwareMap(hardwareMap);
-        backleftMotor = hMap.motor1; //odo1
-        backrightMotor = hMap.motor2; //odo2
-        frontrightMotor = hMap.motor3; //odo3
-        frontleftMotor = hMap.motor4;
+        backLeftMotor = hMap.motor1; //odo1
+        backRightMotor = hMap.motor2; //odo2
+        frontRightMotor = hMap.motor3; //odo3
+        frontLeftMotor = hMap.motor4;
         //set directions
-        backleftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        backrightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontrightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontleftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
     @Override
@@ -50,16 +50,17 @@ public class DriverOpMode extends OpMode {
         double joystickY = -gamepad1.left_stick_y;
         double joystickX = gamepad1.left_stick_x;
         double rotate = gamepad2.right_stick_x;
-        //move robot
-        backleftMotor.setPower(Range.clip(joystickY - joystickX + rotate, -1.0, 1.0));
-        backrightMotor.setPower(Range.clip(joystickY + joystickX - rotate, -1.0, 1.0));
-        frontleftMotor.setPower(Range.clip(joystickY + joystickX + rotate, -1.0, 1.0));
-        frontrightMotor.setPower(Range.clip(joystickY - joystickX - rotate, -1.0, 1.0));
+        
+        //move robot in local direction
+        //backLeftMotor.setPower(Range.clip(joystickY - joystickX + rotate, -1.0, 1.0));
+        //backRightMotor.setPower(Range.clip(joystickY + joystickX - rotate, -1.0, 1.0));
+        //frontLeftMotor.setPower(Range.clip(joystickY + joystickX + rotate, -1.0, 1.0));
+        //frontRightMotor.setPower(Range.clip(joystickY - joystickX - rotate, -1.0, 1.0));
 
         //update position
-        int deltaContactsRightOdo = backrightMotor.getCurrentPosition() - contactsRightOdo;
-        int deltaContactsLeftOdo = backleftMotor.getCurrentPosition() - contactsLeftOdo;
-        int deltaContactsMiddleOdo = frontrightMotor.getCurrentPosition() - contactsMiddleOdo;
+        int deltaContactsRightOdo = backRightMotor.getCurrentPosition() - contactsRightOdo;
+        int deltaContactsLeftOdo = backLeftMotor.getCurrentPosition() - contactsLeftOdo;
+        int deltaContactsMiddleOdo = frontRightMotor.getCurrentPosition() - contactsMiddleOdo;
         contactsRightOdo += deltaContactsRightOdo;
         contactsLeftOdo += deltaContactsLeftOdo;
         contactsMiddleOdo += deltaContactsMiddleOdo;
@@ -70,7 +71,7 @@ public class DriverOpMode extends OpMode {
         robotAngle += positionChange[2];
         double joystickAngle = Math.atan2(joystickX, joystickY); //we MIGHT be fucked
         double robotMovementAngle = ToolBox.joystickToRobot(joystickAngle, robotAngle);
-
+        
 
         //output data
         //telemetry.addData("Joystick X", side);
