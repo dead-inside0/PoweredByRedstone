@@ -32,7 +32,7 @@ public class DriverOpMode extends OpMode {
         backRightMotor = hMap.motor2; //odo2
         frontRightMotor = hMap.motor3; //odo3
         frontLeftMotor = hMap.motor4;
-        //set directions
+        //set directions - not sure if this should be here if driving at specific angles
         backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -50,12 +50,14 @@ public class DriverOpMode extends OpMode {
         double joystickY = -gamepad1.left_stick_y;
         double joystickX = gamepad1.left_stick_x;
         double rotate = gamepad2.right_stick_x;
-        
+
+
         //move robot in local direction
         //backLeftMotor.setPower(Range.clip(joystickY - joystickX + rotate, -1.0, 1.0));
         //backRightMotor.setPower(Range.clip(joystickY + joystickX - rotate, -1.0, 1.0));
         //frontLeftMotor.setPower(Range.clip(joystickY + joystickX + rotate, -1.0, 1.0));
         //frontRightMotor.setPower(Range.clip(joystickY - joystickX - rotate, -1.0, 1.0));
+
 
         //update position
         int deltaContactsRightOdo = backRightMotor.getCurrentPosition() - contactsRightOdo;
@@ -64,18 +66,26 @@ public class DriverOpMode extends OpMode {
         contactsRightOdo += deltaContactsRightOdo;
         contactsLeftOdo += deltaContactsLeftOdo;
         contactsMiddleOdo += deltaContactsMiddleOdo;
-
         double[] positionChange = Odometry.getPositionChange(deltaContactsRightOdo, deltaContactsLeftOdo, deltaContactsMiddleOdo, robotAngle);
         posX += positionChange[0];
         posY += positionChange[1];
         robotAngle += positionChange[2];
+
+
+        //move robot
         double joystickAngle = Math.atan2(joystickX, joystickY); //we MIGHT be fucked
         double robotMovementAngle = ToolBox.joystickToRobot(joystickAngle, robotAngle);
-        
+        double[] motorPowers = ToolBox.getMotorPowers(robotMovementAngle);
+        //TODO Dont know how to incorporate rotation here
+        backLeftMotor.setPower(motorPowers[0]);
+        backRightMotor.setPower(motorPowers[1]);
+        frontLeftMotor.setPower(motorPowers[2]);
+        frontRightMotor.setPower(motorPowers[3]);
+
 
         //output data
-        //telemetry.addData("Joystick X", side);
-        //telemetry.addData("Joystick Y", forward);
+        //telemetry.addData("Joystick X", joystickX);
+        //telemetry.addData("Joystick Y", joystickY);
         //telemetry.addData("Runtime", runtime.toString());
         telemetry.addData("Position X", posX);
         telemetry.addData("Position Y", posY);
