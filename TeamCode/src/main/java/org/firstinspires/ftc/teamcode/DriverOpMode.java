@@ -76,11 +76,10 @@ public class DriverOpMode extends OpMode {
         double joystickAngle = Math.atan2(joystickX, joystickY); //we MIGHT be fucked
         double robotMovementAngle = ToolBox.joystickToRobot(joystickAngle, robotAngle);
         double[] motorPowers = ToolBox.getMotorPowers(robotMovementAngle);
-        //TODO add rotation
-        backLeftMotor.setPower(motorPowers[0]);
-        backRightMotor.setPower(motorPowers[1]);
-        frontLeftMotor.setPower(motorPowers[2]);
-        frontRightMotor.setPower(motorPowers[3]);
+        backLeftMotor.setPower(Range.clip(motorPowers[0]+rotate, -1, 1));
+        backRightMotor.setPower(Range.clip(motorPowers[1]+rotate, -1, 1));
+        frontLeftMotor.setPower(Range.clip(motorPowers[2]+rotate, -1, 1));
+        frontRightMotor.setPower(Range.clip(motorPowers[3]+rotate, -1, 1));
 
 
         //output data
