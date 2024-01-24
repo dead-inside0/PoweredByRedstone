@@ -15,7 +15,7 @@ public class ToolBox {
 
 
     //returns motor powers needed to go in a specific angle
-    public static double[] getMotorPowers(double targetDirectionAngle){
+    public static double[] getMotorPowersByDirection(double targetDirectionAngle){
         double[] motorPowers = {
                 Math.sin(targetDirectionAngle-Math.PI/4), //backleft
                 Math.sin(targetDirectionAngle+Math.PI/4), //backright
@@ -26,5 +26,9 @@ public class ToolBox {
 
     public static double pythagoras(double x, double y){
         return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+    }
+
+    public static double getAngleToPoint(){
+        return 0;
     }
 }
