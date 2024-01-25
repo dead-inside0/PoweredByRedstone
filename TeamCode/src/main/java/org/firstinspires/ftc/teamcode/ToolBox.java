@@ -29,6 +29,6 @@ public class ToolBox {
     }
 
     public static double getAngleToPoint(double selfX, double selfY, double targetX, double targetY){
-        return Math.atan((selfX-selfY)/(targetX-targetY));
+        return Math.atan2(selfX-targetX, selfY-targetY);
     }
 }
