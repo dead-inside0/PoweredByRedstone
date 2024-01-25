@@ -28,7 +28,7 @@ public class ToolBox {
         return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
     }
 
-    public static double getAngleToPoint(){
-        return 0;
+    public static double getAngleToPoint(double selfX, double selfY, double targetX, double targetY){
+        return Math.atan((selfX-selfY)/(targetX-targetY));
     }
 }
