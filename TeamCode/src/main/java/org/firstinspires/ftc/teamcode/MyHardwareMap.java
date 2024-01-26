@@ -8,8 +8,6 @@ public class MyHardwareMap {
 
     public DcMotor motor1,motor2,motor3,motor4;
 
-    public DcMotor encR,encL,encF;
-
     public MyHardwareMap(HardwareMap map){
         hdwMap = map;
 
