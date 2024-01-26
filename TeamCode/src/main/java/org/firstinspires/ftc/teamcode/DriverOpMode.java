@@ -32,7 +32,6 @@ public class DriverOpMode extends OpMode {
         backRightMotor = hMap.motor2; //odo2
         frontRightMotor = hMap.motor3; //odo3
         frontLeftMotor = hMap.motor4;
-        //set directions - not sure if this should be here if driving at specific angles
         backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -73,7 +72,7 @@ public class DriverOpMode extends OpMode {
 
 
         //move robot
-        double joystickAngle = Math.atan2(joystickX, joystickY); //we MIGHT be fucked
+        double joystickAngle = Math.atan2(joystickX, joystickY);
         double robotMovementAngle = ToolBox.joystickToRobot(joystickAngle, robotAngle);
         double[] motorPowers = ToolBox.getMotorPowersByDirection(robotMovementAngle);
         double magnitude = ToolBox.pythagoras(joystickX, joystickY);

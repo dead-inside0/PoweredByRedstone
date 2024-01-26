@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode;
 public class ToolBox {
     //converts the joystick angle (global) to the angle needed to move the robot (local) in that direction
     public static double joystickToRobot(double joystickAngle, double robotAngle){
-        double localAngle = joystickAngle - robotAngle; //we MIGHT be fucked too
+        double localAngle = joystickAngle - robotAngle; //we MIGHT be fucked
         if(localAngle > 2*Math.PI){
             localAngle -= 2*Math.PI;
         }
@@ -17,10 +17,11 @@ public class ToolBox {
     //returns motor powers needed to go in a specific angle
     public static double[] getMotorPowersByDirection(double targetDirectionAngle){
         double[] motorPowers = {
-                Math.sin(targetDirectionAngle-Math.PI/4), //backleft
-                Math.sin(targetDirectionAngle+Math.PI/4), //backright
-                Math.sin(targetDirectionAngle+Math.PI/4), //frontleft
-                Math.sin(targetDirectionAngle-Math.PI/4)};//frontright
+                Math.sin(targetDirectionAngle - Math.PI / 4), //backleft
+                Math.sin(targetDirectionAngle + Math.PI / 4), //backright
+                Math.sin(targetDirectionAngle + Math.PI / 4), //frontleft
+                Math.sin(targetDirectionAngle - Math.PI / 4)//frontright
+        };
         return motorPowers;
     }
 
@@ -30,5 +31,9 @@ public class ToolBox {
 
     public static double getAngleToPoint(double selfX, double selfY, double targetX, double targetY){
         return Math.atan2(selfX-targetX, selfY-targetY);
+    }
+
+    public static double[] getMotorPowersToPoint(double selfX, double selfY, double targetX, double targetY){
+        return getMotorPowersByDirection(getAngleToPoint(selfX, selfY, targetX, targetY));
     }
 }
