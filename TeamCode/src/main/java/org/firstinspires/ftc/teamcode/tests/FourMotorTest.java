@@ -43,12 +43,16 @@ public class FourMotorTest extends OpMode {
     public void loop() {
         double joystickY = -gamepad1.left_stick_y;
         double joystickX = gamepad1.left_stick_x;
-        double rotate = gamepad2.right_stick_x;
+        double rotate = gamepad1.right_stick_x;
+        double maxPower = 0.7;
+        if(gamepad1.right_trigger>0.85){
+            maxPower = 1.0;
+        }
         //move robot in local direction
-        backLeftMotor.setPower(Range.clip(joystickY - joystickX + rotate, -1.0, 1.0));
-        backRightMotor.setPower(Range.clip(joystickY + joystickX - rotate, -1.0, 1.0));
-        frontLeftMotor.setPower(Range.clip(joystickY + joystickX + rotate, -1.0, 1.0));
-        frontRightMotor.setPower(Range.clip(joystickY - joystickX - rotate, -1.0, 1.0));
+        backLeftMotor.setPower(Range.clip(joystickY - joystickX + rotate, -maxPower, maxPower));
+        backRightMotor.setPower(Range.clip(joystickY + joystickX - rotate, -maxPower, maxPower));
+        frontLeftMotor.setPower(Range.clip(joystickY + joystickX + rotate, -maxPower, maxPower));
+        frontRightMotor.setPower(Range.clip(joystickY - joystickX - rotate, -maxPower, maxPower));
         telemetry.addData("Joystick X", joystickX);
         telemetry.addData("Joystick Y", joystickY);
         telemetry.addData("Runtime", runtime.toString());
