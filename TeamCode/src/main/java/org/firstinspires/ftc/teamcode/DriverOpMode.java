@@ -94,6 +94,9 @@ public class DriverOpMode extends OpMode {
         //telemetry.addData("Runtime", runtime.toString());
         telemetry.addData("Position X", posX);
         telemetry.addData("Position Y", posY);
+        telemetry.addData("PassedContactsRightOdo", passedContactsRightOdo);
+        telemetry.addData("PassedContactsLeftOdo", passedContactsLeftOdo);
+        telemetry.addData("PassedContactsMiddleOdo", passedContactsMiddleOdo);
         telemetry.addData("Direction Angle", robotAngle);
     }
 }
