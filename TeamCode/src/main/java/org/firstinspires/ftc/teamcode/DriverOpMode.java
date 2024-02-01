@@ -71,7 +71,6 @@ public class DriverOpMode extends OpMode {
         posY += positionChange[1];
         robotAngle += positionChange[2];
 
-
         //move robot
         double joystickAngle = Math.atan2(joystickX, joystickY); //we MIGHT be fucked
         double robotMovementAngle = ToolBox.joystickToRobot(joystickAngle, robotAngle);

@@ -7,26 +7,31 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.MyHardwareMap;
 
 @TeleOp(name="Four-Motor joystick test")
-@Disabled
 public class FourMotorTest extends OpMode {
     final private ElapsedTime runtime = new ElapsedTime();
 
-    final private MyHardwareMap hMap = new MyHardwareMap(hardwareMap);
-    final private DcMotor backleftMotor = hMap.motor1;
-    final private DcMotor backrightMotor = hMap.motor2;
-    final private DcMotor frontleftMotor = hMap.motor4;
-    final private DcMotor frontrightMotor = hMap.motor3;
+    private MyHardwareMap hMap;
+    private DcMotor backLeftMotor;
+    private DcMotor backRightMotor;
+    private DcMotor frontLeftMotor;
+    private DcMotor frontRightMotor;
 
     @Override
     public void init() {
-        backleftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        backrightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontleftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        frontrightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        hMap = new MyHardwareMap(hardwareMap);
+        backLeftMotor = hMap.motor1;
+        backRightMotor = hMap.motor2;
+        frontLeftMotor = hMap.motor4;
+        frontRightMotor = hMap.motor3;
+        backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     @Override
@@ -36,14 +41,16 @@ public class FourMotorTest extends OpMode {
 
     @Override
     public void loop() {
-        final double forward = -gamepad1.left_stick_y;
-        final double rotate = gamepad1.left_stick_x;
-        backleftMotor.setPower(forward-rotate);
-        backrightMotor.setPower(forward+rotate);
-        frontleftMotor.setPower(forward-rotate);
-        frontrightMotor.setPower(forward+rotate);
-        telemetry.addData("Joystick X", rotate);
-        telemetry.addData("Joystick Y", forward);
+        double joystickY = -gamepad1.left_stick_y;
+        double joystickX = gamepad1.left_stick_x;
+        double rotate = gamepad2.right_stick_x;
+        //move robot in local direction
+        backLeftMotor.setPower(Range.clip(joystickY - joystickX + rotate, -1.0, 1.0));
+        backRightMotor.setPower(Range.clip(joystickY + joystickX - rotate, -1.0, 1.0));
+        frontLeftMotor.setPower(Range.clip(joystickY + joystickX + rotate, -1.0, 1.0));
+        frontRightMotor.setPower(Range.clip(joystickY - joystickX - rotate, -1.0, 1.0));
+        telemetry.addData("Joystick X", joystickX);
+        telemetry.addData("Joystick Y", joystickY);
         telemetry.addData("Runtime", runtime.toString());
     }
 }
