@@ -20,9 +20,9 @@ public class DriverOpMode extends OpMode {
     double posY = 0;
     double robotAngle = 0;
 
-    int contactsRightOdo = 0;
-    int contactsLeftOdo = 0;
-    int contactsMiddleOdo = 0;
+    int passedContactsRightOdo = 0;
+    int passedContactsLeftOdo = 0;
+    int passedContactsMiddleOdo = 0;
 
     @Override
     public void init() {
@@ -59,12 +59,12 @@ public class DriverOpMode extends OpMode {
 
 
         //update position
-        int deltaContactsRightOdo = backRightMotor.getCurrentPosition() - contactsRightOdo;
-        int deltaContactsLeftOdo = backLeftMotor.getCurrentPosition() - contactsLeftOdo;
-        int deltaContactsMiddleOdo = frontRightMotor.getCurrentPosition() - contactsMiddleOdo;
-        contactsRightOdo += deltaContactsRightOdo;
-        contactsLeftOdo += deltaContactsLeftOdo;
-        contactsMiddleOdo += deltaContactsMiddleOdo;
+        int deltaContactsRightOdo = backRightMotor.getCurrentPosition() - passedContactsRightOdo;
+        int deltaContactsLeftOdo = backLeftMotor.getCurrentPosition() - passedContactsLeftOdo;
+        int deltaContactsMiddleOdo = frontRightMotor.getCurrentPosition() - passedContactsMiddleOdo;
+        passedContactsRightOdo += deltaContactsRightOdo;
+        passedContactsLeftOdo += deltaContactsLeftOdo;
+        passedContactsMiddleOdo += deltaContactsMiddleOdo;
         double[] positionChange = Odometry.getPositionChange(deltaContactsRightOdo, deltaContactsLeftOdo, deltaContactsMiddleOdo, robotAngle);
         posX += positionChange[0];
         posY += positionChange[1];
@@ -75,10 +75,17 @@ public class DriverOpMode extends OpMode {
         double moveAngle = ToolBox.joystickToRobot(joystickAngle, robotAngle);
         double[] motorPowers = ToolBox.getMotorPowersByDirection(moveAngle);
         double magnitude = ToolBox.pythagoras(joystickX, joystickY);
-        backLeftMotor.setPower(Range.clip(motorPowers[0]+rotate, -1, 1) * magnitude);
-        backRightMotor.setPower(Range.clip(motorPowers[1]+rotate, -1, 1) * magnitude);
-        frontLeftMotor.setPower(Range.clip(motorPowers[2]+rotate, -1, 1) * magnitude);
-        frontRightMotor.setPower(Range.clip(motorPowers[3]+rotate, -1, 1) * magnitude);
+        double maxPower = 0.75;
+        if(gamepad1.right_trigger>0.9){
+            maxPower = 1.0;
+        } else if (gamepad1.left_trigger > 0.9) {
+            maxPower = 0.5;
+        }
+        backLeftMotor.setPower(Range.clip((motorPowers[0]+rotate) * magnitude, -maxPower, maxPower));
+        backRightMotor.setPower(Range.clip((motorPowers[1]+rotate) * magnitude, -maxPower, maxPower));
+        frontLeftMotor.setPower(Range.clip((motorPowers[2]+rotate) * magnitude, -maxPower, maxPower));
+        frontRightMotor.setPower(Range.clip((motorPowers[3]+rotate) * magnitude, -maxPower, maxPower));
+        frontRightMotor.setPower(Range.clip((motorPowers[3]+rotate) * magnitude, -maxPower, maxPower));
 
 
         //output data

@@ -30,7 +30,7 @@ public class Odometry {
         double[] positionChange = {deltaX, deltaY, directionAngle}; //x, y, angle
         return positionChange;
     }
-    double accelleration() {
+    double acceleration() {
         return 0;
     }
 }

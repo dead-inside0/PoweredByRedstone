@@ -44,9 +44,11 @@ public class FourMotorTest extends OpMode {
         double joystickY = -gamepad1.left_stick_y;
         double joystickX = gamepad1.left_stick_x;
         double rotate = gamepad1.right_stick_x;
-        double maxPower = 0.7;
-        if(gamepad1.right_trigger>0.85){
+        double maxPower = 0.75;
+        if(gamepad1.right_trigger>0.9){
             maxPower = 1.0;
+        } else if (gamepad1.left_trigger > 0.9) {
+            maxPower = 0.5;
         }
         //move robot in local direction
         backLeftMotor.setPower(Range.clip(joystickY - joystickX + rotate, -maxPower, maxPower));
