@@ -70,6 +70,7 @@ public class DriverOpMode extends OpMode {
         posY += positionChange[1];
         robotAngle += positionChange[2];
 
+
         //move robot
         double joystickAngle = Math.atan2(joystickX, joystickY);
         double moveAngle = ToolBox.joystickToRobot(joystickAngle, robotAngle);
@@ -85,7 +86,21 @@ public class DriverOpMode extends OpMode {
         backRightMotor.setPower(Range.clip((motorPowers[1]+rotate) * magnitude, -maxPower, maxPower));
         frontLeftMotor.setPower(Range.clip((motorPowers[2]+rotate) * magnitude, -maxPower, maxPower));
         frontRightMotor.setPower(Range.clip((motorPowers[3]+rotate) * magnitude, -maxPower, maxPower));
-        frontRightMotor.setPower(Range.clip((motorPowers[3]+rotate) * magnitude, -maxPower, maxPower));
+
+
+        //odometry test
+        int targetX = 0;
+        int targetY = 0;
+        double speed = 0.25;
+        if(gamepad1.triangle){
+            if(Math.abs(posX-targetX) <= 0.01 && Math.abs(posY-targetY) <= 0.01) {
+                double[] motorPowersToPoint = ToolBox.getMotorPowersToPoint(posX, posY, targetX, targetY);
+                backLeftMotor.setPower(motorPowersToPoint[0] * speed);
+                backRightMotor.setPower(motorPowersToPoint[1] * speed);
+                frontLeftMotor.setPower(motorPowersToPoint[2] * speed);
+                frontRightMotor.setPower(motorPowersToPoint[3] * speed);
+            }
+        }
 
 
         //output data
