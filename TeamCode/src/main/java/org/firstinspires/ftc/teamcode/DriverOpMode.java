@@ -16,6 +16,8 @@ public class DriverOpMode extends OpMode {
     private DcMotor frontRightMotor;
     private DcMotor frontLeftMotor;
 
+
+    double deadzone = 0.05;
     double posX = 0;
     double posY = 0;
     double robotAngle = 0;
@@ -72,20 +74,22 @@ public class DriverOpMode extends OpMode {
 
 
         //move robot
-        double joystickAngle = Math.atan2(joystickX, joystickY);
-        double moveAngle = ToolBox.joystickToRobot(joystickAngle, robotAngle);
-        double[] motorPowers = ToolBox.getMotorPowersByDirection(moveAngle);
-        double magnitude = ToolBox.pythagoras(joystickX, joystickY);
-        double maxPower = 0.75;
-        if(gamepad1.right_trigger>0.9){
-            maxPower = 1.0;
-        } else if (gamepad1.left_trigger > 0.9) {
-            maxPower = 0.5;
+        if(joystickX > deadzone || joystickY > deadzone) {
+            double joystickAngle = Math.atan2(joystickX, joystickY);
+            double moveAngle = ToolBox.joystickToRobot(joystickAngle, robotAngle);
+            double[] motorPowers = ToolBox.getMotorPowersByDirection(moveAngle);
+            double magnitude = ToolBox.pythagoras(joystickX, joystickY);
+            double maxPower = 0.75;
+            if (gamepad1.right_trigger > 0.9) {
+                maxPower = 1.0;
+            } else if (gamepad1.left_trigger > 0.9) {
+                maxPower = 0.5;
+            }
+            backLeftMotor.setPower(Range.clip((motorPowers[0] + rotate) * magnitude, -maxPower, maxPower));
+            backRightMotor.setPower(Range.clip((motorPowers[1] + rotate) * magnitude, -maxPower, maxPower));
+            frontLeftMotor.setPower(Range.clip((motorPowers[2] + rotate) * magnitude, -maxPower, maxPower));
+            frontRightMotor.setPower(Range.clip((motorPowers[3] + rotate) * magnitude, -maxPower, maxPower));
         }
-        backLeftMotor.setPower(Range.clip((motorPowers[0]+rotate) * magnitude, -maxPower, maxPower));
-        backRightMotor.setPower(Range.clip((motorPowers[1]+rotate) * magnitude, -maxPower, maxPower));
-        frontLeftMotor.setPower(Range.clip((motorPowers[2]+rotate) * magnitude, -maxPower, maxPower));
-        frontRightMotor.setPower(Range.clip((motorPowers[3]+rotate) * magnitude, -maxPower, maxPower));
 
 
         //odometry test
