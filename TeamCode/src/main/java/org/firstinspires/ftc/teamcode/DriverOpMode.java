@@ -16,12 +16,14 @@ public class DriverOpMode extends OpMode {
     private DcMotor frontRightMotor;
     private DcMotor frontLeftMotor;
 
+
+    double deadzone = 0.05;
     double posX = 0;
     double posY = 0;
     double robotAngle = 0;
 
     double timeToMaxSpeed = 1;
-    
+
     double timeOfLastFrame = 0;
 
     double timeSinceBreak = 0;
@@ -77,20 +79,47 @@ public class DriverOpMode extends OpMode {
         posX += positionChange[0];
         posY += positionChange[1];
         robotAngle += positionChange[2];
-        
+
         double deltaTime = runtime.seconds() - timeOfLastFrame;
         timeOfLastFrame = runtime.seconds();
 
-        if ((joystickX <= -0.1 || joystickX >= 0.1) && (joystickY <= -0.1 || joystickY >= 0.1)) {
+
+        //move robot
+        if((joystickX <= -deadzone || joystickX >= deadzone) && (joystickY <= -deadzone || joystickY >= deadzone)) {
             timeSinceBreak += deltaTime;
-        } else{
+            double accelerationMultiplier = ToolBox.acceleration(timeSinceBreak, timeToMaxSpeed);
+            double joystickAngle = Math.atan2(joystickX, joystickY);
+            double moveAngle = ToolBox.joystickToRobot(joystickAngle, robotAngle);
+            double[] motorPowers = ToolBox.getMotorPowersByDirection(moveAngle);
+            double magnitude = ToolBox.pythagoras(joystickX, joystickY);
+            if (gamepad1.right_trigger > 0.9) {
+                maxPower = 1.0;
+            } else if (gamepad1.left_trigger > 0.9) {
+                maxPower = 0.5;
+            }
+            backLeftMotor.setPower(Range.clip((motorPowers[0] + rotate) * magnitude * accelerationMultiplier, -maxPower, maxPower));
+            backRightMotor.setPower(Range.clip((motorPowers[1] + rotate) * magnitude * accelerationMultiplier, -maxPower, maxPower));
+            frontLeftMotor.setPower(Range.clip((motorPowers[2] + rotate) * magnitude * accelerationMultiplier, -maxPower, maxPower));
+            frontRightMotor.setPower(Range.clip((motorPowers[3] + rotate) * magnitude * accelerationMultiplier, -maxPower, maxPower));
+        }
+        else {
             timeSinceBreak = 0;
         }
 
-        double accelerationMultiplier = ToolBox.acceleration(timeSinceBreak, timeToMaxSpeed);
 
-
-        //move robot
+        //odometry test
+        int targetX = 0;
+        int targetY = 0;
+        double speed = 0.25;
+        if(gamepad1.triangle){
+            if(Math.abs(posX-targetX) >= 0.01 && Math.abs(posY-targetY) >= 0.01) {
+                double[] motorPowersToPoint = ToolBox.getMotorPowersToPoint(posX, posY, targetX, targetY);
+                backLeftMotor.setPower(motorPowersToPoint[0] * speed);
+                backRightMotor.setPower(motorPowersToPoint[1] * speed);
+                frontLeftMotor.setPower(motorPowersToPoint[2] * speed);
+                frontRightMotor.setPower(motorPowersToPoint[3] * speed);
+            }
+        }
         double joystickAngle = Math.atan2(joystickX, joystickY);
         double moveAngle = ToolBox.joystickToRobot(joystickAngle, robotAngle);
         double[] motorPowers = ToolBox.getMotorPowersByDirection(moveAngle);
