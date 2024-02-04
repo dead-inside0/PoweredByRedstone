@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.util.Range;
+
 public class ToolBox {
     //converts the joystick angle (global) to the angle needed to move the robot (local) in that direction
     public static double joystickToRobot(double joystickAngle, double robotAngle){
@@ -38,5 +40,10 @@ public class ToolBox {
     //returns motor powers to get to a certain point
     public static double[] getMotorPowersToPoint(double selfX, double selfY, double targetX, double targetY){
         return getMotorPowersByDirection(getAngleToPoint(selfX, selfY, targetX, targetY));
+    }
+
+    public static double acceleration(double deltaTime, double timeToMaxSpeed) {
+        deltaTime = Range.clip(deltaTime, 0, timeToMaxSpeed);
+        return (deltaTime * deltaTime) / (timeToMaxSpeed * timeToMaxSpeed);
     }
 }

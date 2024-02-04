@@ -20,6 +20,14 @@ public class DriverOpMode extends OpMode {
     double posY = 0;
     double robotAngle = 0;
 
+    double timeToMaxSpeed = 1;
+    
+    double timeOfLastFrame = 0;
+
+    double timeSinceBreak = 0;
+
+    double maxPower = 0.75;
+
     int passedContactsRightOdo = 0;
     int passedContactsLeftOdo = 0;
     int passedContactsMiddleOdo = 0;
@@ -69,23 +77,34 @@ public class DriverOpMode extends OpMode {
         posX += positionChange[0];
         posY += positionChange[1];
         robotAngle += positionChange[2];
+        
+        double deltaTime = runtime.seconds() - timeOfLastFrame;
+        timeOfLastFrame = runtime.seconds();
+
+        if ((joystickX <= -0.1 || joystickX >= 0.1) && (joystickY <= -0.1 || joystickY >= 0.1)) {
+            timeSinceBreak += deltaTime;
+        } else{
+            timeSinceBreak = 0;
+        }
+
+        double accelerationMultiplier = ToolBox.acceleration(timeSinceBreak, timeToMaxSpeed);
+
 
         //move robot
         double joystickAngle = Math.atan2(joystickX, joystickY);
         double moveAngle = ToolBox.joystickToRobot(joystickAngle, robotAngle);
         double[] motorPowers = ToolBox.getMotorPowersByDirection(moveAngle);
         double magnitude = ToolBox.pythagoras(joystickX, joystickY);
-        double maxPower = 0.75;
         if(gamepad1.right_trigger>0.9){
             maxPower = 1.0;
         } else if (gamepad1.left_trigger > 0.9) {
             maxPower = 0.5;
         }
-        backLeftMotor.setPower(Range.clip((motorPowers[0]+rotate) * magnitude, -maxPower, maxPower));
-        backRightMotor.setPower(Range.clip((motorPowers[1]+rotate) * magnitude, -maxPower, maxPower));
-        frontLeftMotor.setPower(Range.clip((motorPowers[2]+rotate) * magnitude, -maxPower, maxPower));
-        frontRightMotor.setPower(Range.clip((motorPowers[3]+rotate) * magnitude, -maxPower, maxPower));
-        frontRightMotor.setPower(Range.clip((motorPowers[3]+rotate) * magnitude, -maxPower, maxPower));
+        backLeftMotor.setPower(Range.clip((motorPowers[0]+rotate) * magnitude * accelerationMultiplier, -maxPower, maxPower));
+        backRightMotor.setPower(Range.clip((motorPowers[1]+rotate) * magnitude * accelerationMultiplier, -maxPower, maxPower));
+        frontLeftMotor.setPower(Range.clip((motorPowers[2]+rotate) * magnitude * accelerationMultiplier, -maxPower, maxPower));
+        frontRightMotor.setPower(Range.clip((motorPowers[3]+rotate) * magnitude * accelerationMultiplier, -maxPower, maxPower));
+        frontRightMotor.setPower(Range.clip((motorPowers[3]+rotate) * magnitude * accelerationMultiplier, -maxPower, maxPower));
 
 
         //output data
