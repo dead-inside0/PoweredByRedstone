@@ -93,7 +93,7 @@ public class DriverOpMode extends OpMode {
         int targetY = 0;
         double speed = 0.25;
         if(gamepad1.triangle){
-            if(Math.abs(posX-targetX) <= 0.01 && Math.abs(posY-targetY) <= 0.01) {
+            if(Math.abs(posX-targetX) >= 0.01 && Math.abs(posY-targetY) >= 0.01) {
                 double[] motorPowersToPoint = ToolBox.getMotorPowersToPoint(posX, posY, targetX, targetY);
                 backLeftMotor.setPower(motorPowersToPoint[0] * speed);
                 backRightMotor.setPower(motorPowersToPoint[1] * speed);
