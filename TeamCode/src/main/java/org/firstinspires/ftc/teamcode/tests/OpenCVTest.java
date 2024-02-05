@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
-import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;

@@ -80,6 +80,7 @@ public class DriverOpMode extends OpMode {
         posY += positionChange[1];
         robotAngle += positionChange[2];
 
+        //calculate delta time
         double deltaTime = runtime.seconds() - timeOfLastFrame;
         timeOfLastFrame = runtime.seconds();
 
@@ -96,6 +97,8 @@ public class DriverOpMode extends OpMode {
                 maxPower = 1.0;
             } else if (gamepad1.left_trigger > 0.9) {
                 maxPower = 0.5;
+            } else{
+                maxPower = 0.75;
             }
             backLeftMotor.setPower(Range.clip((motorPowers[0] + rotate) * magnitude * accelerationMultiplier, -maxPower, maxPower));
             backRightMotor.setPower(Range.clip((motorPowers[1] + rotate) * magnitude * accelerationMultiplier, -maxPower, maxPower));
@@ -104,6 +107,13 @@ public class DriverOpMode extends OpMode {
         }
         else {
             timeSinceBreak = 0;
+
+            //break
+            double breakingPower = 0.05;
+            backLeftMotor.setPower(breakingPower);
+            backRightMotor.setPower(breakingPower);
+            frontLeftMotor.setPower(breakingPower);
+            frontRightMotor.setPower(breakingPower);
         }
 
 
@@ -111,8 +121,8 @@ public class DriverOpMode extends OpMode {
         int targetX = 0;
         int targetY = 0;
         double speed = 0.25;
-        if(gamepad1.triangle){
-            if(Math.abs(posX-targetX) >= 0.01 && Math.abs(posY-targetY) >= 0.01) {
+        if(gamepad1.triangle) {
+            if (Math.abs(posX - targetX) >= 0.01 && Math.abs(posY - targetY) >= 0.01) {
                 double[] motorPowersToPoint = ToolBox.getMotorPowersToPoint(posX, posY, targetX, targetY);
                 backLeftMotor.setPower(motorPowersToPoint[0] * speed);
                 backRightMotor.setPower(motorPowersToPoint[1] * speed);
@@ -120,20 +130,6 @@ public class DriverOpMode extends OpMode {
                 frontRightMotor.setPower(motorPowersToPoint[3] * speed);
             }
         }
-        double joystickAngle = Math.atan2(joystickX, joystickY);
-        double moveAngle = ToolBox.joystickToRobot(joystickAngle, robotAngle);
-        double[] motorPowers = ToolBox.getMotorPowersByDirection(moveAngle);
-        double magnitude = ToolBox.pythagoras(joystickX, joystickY);
-        if(gamepad1.right_trigger>0.9){
-            maxPower = 1.0;
-        } else if (gamepad1.left_trigger > 0.9) {
-            maxPower = 0.5;
-        }
-        backLeftMotor.setPower(Range.clip((motorPowers[0]+rotate) * magnitude * accelerationMultiplier, -maxPower, maxPower));
-        backRightMotor.setPower(Range.clip((motorPowers[1]+rotate) * magnitude * accelerationMultiplier, -maxPower, maxPower));
-        frontLeftMotor.setPower(Range.clip((motorPowers[2]+rotate) * magnitude * accelerationMultiplier, -maxPower, maxPower));
-        frontRightMotor.setPower(Range.clip((motorPowers[3]+rotate) * magnitude * accelerationMultiplier, -maxPower, maxPower));
-        frontRightMotor.setPower(Range.clip((motorPowers[3]+rotate) * magnitude * accelerationMultiplier, -maxPower, maxPower));
 
 
         //output data
