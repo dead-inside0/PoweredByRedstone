@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.tests;
 import static org.opencv.core.Core.inRange;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
@@ -12,6 +13,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera2;
 import org.openftc.easyopencv.OpenCvPipeline;
 
+@TeleOp(name="OpenCV Test")
 public class OpenCVTest extends OpMode {
     OpenCvCamera phoneCam;
     @Override
