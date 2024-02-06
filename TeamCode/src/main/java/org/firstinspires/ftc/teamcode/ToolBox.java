@@ -42,8 +42,8 @@ public class ToolBox {
         return getMotorPowersByDirection(getAngleToPoint(selfX, selfY, targetX, targetY));
     }
 
-    public static double acceleration(double deltaTime, double timeToMaxSpeed) {
-        deltaTime = Range.clip(deltaTime, 0, timeToMaxSpeed);
-        return (deltaTime * deltaTime) / (timeToMaxSpeed * timeToMaxSpeed);
+    public static double acceleration(double timeAccelerating, double timeToMaxSpeed) {
+        //timeAccelerating^2 / timeToMaxSpeed^2
+        return Math.pow(Range.clip(timeAccelerating, 0, timeToMaxSpeed), 2) / Math.pow(timeToMaxSpeed, 2);
     }
 }

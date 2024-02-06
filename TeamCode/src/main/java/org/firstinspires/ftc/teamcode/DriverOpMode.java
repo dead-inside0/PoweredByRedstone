@@ -20,13 +20,16 @@ public class DriverOpMode extends OpMode {
     double deadzone = 0.05;
     double posX = 0;
     double posY = 0;
-    double robotAngle = 0;
+    double robotRotation = 0;
+    double deltaX = 0;
+    double deltaY = 0;
+    double deltaRotation = 0;
 
-    double timeToMaxSpeed = 1;
+    double timeToMaxSpeed = 0.5;
 
     double timeOfLastFrame = 0;
 
-    double timeSinceBreak = 0;
+    double timeAccelerating = 0;
 
     double maxPower = 0.75;
 
@@ -75,22 +78,26 @@ public class DriverOpMode extends OpMode {
         passedContactsRightOdo += deltaContactsRightOdo;
         passedContactsLeftOdo += deltaContactsLeftOdo;
         passedContactsMiddleOdo += deltaContactsMiddleOdo;
-        double[] positionChange = Odometry.getPositionChange(deltaContactsRightOdo, deltaContactsLeftOdo, deltaContactsMiddleOdo, robotAngle);
-        posX += positionChange[0];
-        posY += positionChange[1];
-        robotAngle += positionChange[2];
+
+        double[] positionChange = Odometry.getPositionChange(deltaContactsRightOdo, deltaContactsLeftOdo, deltaContactsMiddleOdo, robotRotation);
+        deltaX = positionChange[0];
+        deltaY = positionChange[1];
+        deltaRotation = positionChange[2];
+        posX += deltaX;
+        posY += deltaY;
+        robotRotation += deltaRotation;
 
         //calculate delta time
         double deltaTime = runtime.seconds() - timeOfLastFrame;
         timeOfLastFrame = runtime.seconds();
 
 
-        //move robot
+        //if input
         if((joystickX <= -deadzone || joystickX >= deadzone) && (joystickY <= -deadzone || joystickY >= deadzone)) {
-            timeSinceBreak += deltaTime;
-            double accelerationMultiplier = ToolBox.acceleration(timeSinceBreak, timeToMaxSpeed);
+            timeAccelerating += deltaTime;
+            double accelerationMultiplier = ToolBox.acceleration(timeAccelerating, timeToMaxSpeed);
             double joystickAngle = Math.atan2(joystickX, joystickY);
-            double moveAngle = ToolBox.joystickToRobot(joystickAngle, robotAngle);
+            double moveAngle = ToolBox.joystickToRobot(joystickAngle, robotRotation);
             double[] motorPowers = ToolBox.getMotorPowersByDirection(moveAngle);
             double magnitude = ToolBox.pythagoras(joystickX, joystickY);
             if (gamepad1.right_trigger > 0.9) {
@@ -106,14 +113,16 @@ public class DriverOpMode extends OpMode {
             frontRightMotor.setPower(Range.clip((motorPowers[3] + rotate) * magnitude * accelerationMultiplier, -maxPower, maxPower));
         }
         else {
-            timeSinceBreak = 0;
+            timeAccelerating = 0;
 
-            //break
+            //if moving break
             double breakingPower = 0.05;
-            backLeftMotor.setPower(breakingPower);
-            backRightMotor.setPower(breakingPower);
-            frontLeftMotor.setPower(breakingPower);
-            frontRightMotor.setPower(breakingPower);
+            if(deltaX > 0 || deltaY > 0 || deltaRotation > 0) {
+                backLeftMotor.setPower(breakingPower);
+                backRightMotor.setPower(breakingPower);
+                frontLeftMotor.setPower(breakingPower);
+                frontRightMotor.setPower(breakingPower);
+            }
         }
 
 
@@ -141,6 +150,6 @@ public class DriverOpMode extends OpMode {
         telemetry.addData("PassedContactsRightOdo", passedContactsRightOdo);
         telemetry.addData("PassedContactsLeftOdo", passedContactsLeftOdo);
         telemetry.addData("PassedContactsMiddleOdo", passedContactsMiddleOdo);
-        telemetry.addData("Direction Angle", robotAngle);
+        telemetry.addData("Direction Angle", robotRotation);
     }
 }
