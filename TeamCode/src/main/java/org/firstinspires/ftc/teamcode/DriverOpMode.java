@@ -25,13 +25,10 @@ public class DriverOpMode extends OpMode {
     double deltaY = 0;
     double deltaRotation = 0;
 
-    double timeToMaxSpeed = 0.5;
-
     double timeOfLastFrame = 0;
-
     double timeAccelerating = 0;
 
-    double maxPower = 0.75;
+    double maxPower;
 
     int passedContactsRightOdo = 0;
     int passedContactsLeftOdo = 0;
@@ -94,6 +91,7 @@ public class DriverOpMode extends OpMode {
 
         //if input
         if((joystickX <= -deadzone || joystickX >= deadzone) && (joystickY <= -deadzone || joystickY >= deadzone)) {
+            double timeToMaxSpeed = 0.5; //time to reach full speed in seconds
             timeAccelerating += deltaTime;
             double accelerationMultiplier = ToolBox.acceleration(timeAccelerating, timeToMaxSpeed);
             double joystickAngle = Math.atan2(joystickX, joystickY);
