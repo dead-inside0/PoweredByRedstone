@@ -3,16 +3,12 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
-
-import org.opencv.core.Mat;
 
 @TeleOp(name="Driver")
 public class DriverOpMode extends OpMode {
     final private ElapsedTime runtime = new ElapsedTime();
-    private MyHardwareMap hMap;
     private DcMotor backLeftMotor;
     private DcMotor backRightMotor;
     private DcMotor frontRightMotor;
@@ -24,7 +20,6 @@ public class DriverOpMode extends OpMode {
     double robotRotation = 0;
 
     double timeOfLastFrame = 0;
-    double timeAccelerating = 0;
 
     int passedContactsRightOdo = 0;
     int passedContactsLeftOdo = 0;
@@ -33,20 +28,14 @@ public class DriverOpMode extends OpMode {
     @Override
     public void init() {
         //get motors from hardware map
-        hMap = new MyHardwareMap(hardwareMap);
+        MyHardwareMap hMap = new MyHardwareMap(hardwareMap);
+
         backLeftMotor = hMap.backLeftMotor;
         backRightMotor = hMap.backRightMotor;
         frontLeftMotor = hMap.frontLeftMotor;
         frontRightMotor = hMap.frontRightMotor;
 
         //linearMechanismMotor = hMap.linearMechanismMotor;
-
-        backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontRightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        //linearMechanismMotor.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
     @Override
@@ -61,12 +50,6 @@ public class DriverOpMode extends OpMode {
         double joystickX = gamepad1.left_stick_x;
         double rotate = gamepad1.right_stick_x;
         //double linearMechanismInput = gamepad2.left_stick_y;
-
-        //move robot in local direction
-        //backLeftMotor.setPower(Range.clip(joystickY - joystickX + rotate, -1.0, 1.0));
-        //backRightMotor.setPower(Range.clip(joystickY + joystickX - rotate, -1.0, 1.0));
-        //frontLeftMotor.setPower(Range.clip(joystickY + joystickX + rotate, -1.0, 1.0));
-        //frontRightMotor.setPower(Range.clip(joystickY - joystickX - rotate, -1.0, 1.0));
 
         //calculate delta time
         double deltaTime = runtime.seconds() - timeOfLastFrame;
@@ -94,19 +77,14 @@ public class DriverOpMode extends OpMode {
         posX += deltaX;
         posY += deltaY;
         robotRotation += deltaRotation;
-        if(robotRotation > 2*Math.PI){
-            robotRotation -= 2* Math.PI;
-        }
-        else if(robotRotation < 0){
-            robotRotation += 2*Math.PI;
-        }
+        robotRotation = ToolBox.clampAngle(robotRotation);
 
         //if move input
         double deadzone = 0.05;
         if((joystickX <= -deadzone || joystickX >= deadzone) && (joystickY <= -deadzone || joystickY >= deadzone)) {
-            timeAccelerating += deltaTime;
             double joystickAngle = Math.atan2(joystickX, joystickY);
-            double moveAngle = ToolBox.joystickToRobot(joystickAngle, robotRotation);
+            //double moveAngle = ToolBox.joystickToRobot(joystickAngle, robotRotation);
+            double moveAngle = joystickAngle; //Test if the joystick to robot function fucks it up ot if the motor powers function is incorrect
             double[] motorPowers = ToolBox.getMotorPowersByDirection(moveAngle);
             double magnitude = ToolBox.pythagoras(joystickX, joystickY);
 
@@ -116,15 +94,17 @@ public class DriverOpMode extends OpMode {
             frontRightMotor.setPower(Range.clip((motorPowers[3] + rotate) * magnitude, -1, 1));
         }
         else {
-            timeAccelerating = 0;
-
             //if moving break
             double breakingPower = 0.05;
-            if(deltaX > 0 || deltaY > 0 || deltaRotation > 0) {
+            if(deltaX < deadzone || deltaY < deadzone || deltaRotation < deadzone) {
                 backLeftMotor.setPower(breakingPower);
                 backRightMotor.setPower(breakingPower);
                 frontLeftMotor.setPower(breakingPower);
                 frontRightMotor.setPower(breakingPower);
+                backLeftMotor.setPower(-breakingPower);
+                backRightMotor.setPower(-breakingPower);
+                frontLeftMotor.setPower(-breakingPower);
+                frontRightMotor.setPower(-breakingPower);
             }
         }
 
