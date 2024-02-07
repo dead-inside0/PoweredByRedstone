@@ -14,8 +14,7 @@ public class OneOdoTest extends OpMode {
 
     @Override
     public void init(){
-        hMap = new MyHardwareMap(hardwareMap);
-        odo = hMap.backLeftMotor;
+        odo = hardwareMap.get(DcMotor.class, "motor0");
     }
 
     @Override

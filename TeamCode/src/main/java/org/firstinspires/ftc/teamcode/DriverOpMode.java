@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.opencv.core.Mat;
+
 @TeleOp(name="Driver")
 public class DriverOpMode extends OpMode {
     final private ElapsedTime runtime = new ElapsedTime();
@@ -15,15 +17,11 @@ public class DriverOpMode extends OpMode {
     private DcMotor backRightMotor;
     private DcMotor frontRightMotor;
     private DcMotor frontLeftMotor;
+    //private DcMotor linearMechanismMotor;
 
-
-    double deadzone = 0.05;
     double posX = 0;
     double posY = 0;
     double robotRotation = 0;
-    double deltaX = 0;
-    double deltaY = 0;
-    double deltaRotation = 0;
 
     double timeOfLastFrame = 0;
     double timeAccelerating = 0;
@@ -40,10 +38,15 @@ public class DriverOpMode extends OpMode {
         backRightMotor = hMap.backRightMotor;
         frontLeftMotor = hMap.frontLeftMotor;
         frontRightMotor = hMap.frontRightMotor;
+
+        //linearMechanismMotor = hMap.linearMechanismMotor;
+
         backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        //linearMechanismMotor.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
     @Override
@@ -56,8 +59,8 @@ public class DriverOpMode extends OpMode {
         //get gamepad input
         double joystickY = -gamepad1.left_stick_y;
         double joystickX = gamepad1.left_stick_x;
-        double rotate = gamepad2.right_stick_x;
-
+        double rotate = gamepad1.right_stick_x;
+        //double linearMechanismInput = gamepad2.left_stick_y;
 
         //move robot in local direction
         //backLeftMotor.setPower(Range.clip(joystickY - joystickX + rotate, -1.0, 1.0));
@@ -83,16 +86,23 @@ public class DriverOpMode extends OpMode {
 
         //Get position change
         double[] positionChange = Odometry.getPositionChange(deltaContactsRightOdo, deltaContactsLeftOdo, deltaContactsMiddleOdo, robotRotation);
-        deltaX = positionChange[0];
-        deltaY = positionChange[1];
-        deltaRotation = positionChange[2];
+        double deltaX = positionChange[0];
+        double deltaY = positionChange[1];
+        double deltaRotation = positionChange[2];
 
         //Update position
         posX += deltaX;
         posY += deltaY;
         robotRotation += deltaRotation;
+        if(robotRotation > 2*Math.PI){
+            robotRotation -= 2* Math.PI;
+        }
+        else if(robotRotation < 0){
+            robotRotation += 2*Math.PI;
+        }
 
-        //if input
+        //if move input
+        double deadzone = 0.05;
         if((joystickX <= -deadzone || joystickX >= deadzone) && (joystickY <= -deadzone || joystickY >= deadzone)) {
             timeAccelerating += deltaTime;
             double joystickAngle = Math.atan2(joystickX, joystickY);
@@ -100,10 +110,10 @@ public class DriverOpMode extends OpMode {
             double[] motorPowers = ToolBox.getMotorPowersByDirection(moveAngle);
             double magnitude = ToolBox.pythagoras(joystickX, joystickY);
 
-            backLeftMotor.setPower(Range.clip(motorPowers[0] * magnitude + rotate, -1, 1));
-            backRightMotor.setPower(Range.clip(motorPowers[1] * magnitude + rotate, -1, 1));
-            frontLeftMotor.setPower(Range.clip(motorPowers[2] * magnitude + rotate, -1, 1));
-            frontRightMotor.setPower(Range.clip(motorPowers[3] * magnitude + rotate, -1, 1));
+            backLeftMotor.setPower(Range.clip((motorPowers[0] + rotate) * magnitude, -1, 1));
+            backRightMotor.setPower(Range.clip((motorPowers[1] + rotate) * magnitude, -1, 1));
+            frontLeftMotor.setPower(Range.clip((motorPowers[2] + rotate) * magnitude, -1, 1));
+            frontRightMotor.setPower(Range.clip((motorPowers[3] + rotate) * magnitude, -1, 1));
         }
         else {
             timeAccelerating = 0;
@@ -117,6 +127,14 @@ public class DriverOpMode extends OpMode {
                 frontRightMotor.setPower(breakingPower);
             }
         }
+
+        // if linear mechanism input
+        //if(linearMechanismInput > deadzone) {
+        //    linearMechanismMotor.setPower(linearMechanismInput);
+        //}
+        //else{
+        //    linearMechanismMotor.setPower(0);
+        //}
 
 
 

@@ -13,8 +13,7 @@ public class OneMotorTest extends OpMode {
 
     @Override
     public void init() {
-        hMap = new MyHardwareMap(hardwareMap);
-        motor = hMap.backLeftMotor;
+        motor = hardwareMap.get(DcMotor.class, "motor0");
     }
 
     @Override

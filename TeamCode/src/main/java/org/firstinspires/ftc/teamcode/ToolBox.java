@@ -6,9 +6,6 @@ public class ToolBox {
     //converts the joystick angle (global) to the angle needed to move the robot (local) in that direction
     public static double joystickToRobot(double joystickAngle, double robotAngle){
         double localAngle = joystickAngle - robotAngle; //we MIGHT be fucked
-        if(localAngle > 2*Math.PI){
-            localAngle -= 2*Math.PI;
-        }
         if(localAngle < 0){
             localAngle += 2*Math.PI;
         }
