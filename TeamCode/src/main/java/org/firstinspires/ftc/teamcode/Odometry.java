@@ -13,8 +13,14 @@ public class Odometry {
         double centerArcAngle = (rightArcLength - leftArcLength) / sideOdosDistance;
         double directionAngle  = centerArcAngle / 2;
 
-        double centerArcRadius = (360 * centerArcLength) / (centerArcAngle * 2 * Math.PI);
-        double shiftLength = Math.sqrt(2 * Math.pow(centerArcRadius, 2) - 2 * Math.pow(centerArcRadius, 2) * Math.cos(centerArcAngle));
+        double shiftLength;
+        if(centerArcAngle == 0){
+            shiftLength = centerArcLength;
+        }
+        else {
+            double centerArcRadius = centerArcAngle/centerArcLength;
+            shiftLength = Math.sqrt(2 * Math.pow(centerArcRadius, 2) - 2 * Math.pow(centerArcRadius, 2) * Math.cos(centerArcAngle));
+        }
 
         double deltaX = shiftLength * Math.cos(prevAngle + directionAngle);
         double deltaY = shiftLength * Math.sin(prevAngle + directionAngle);
