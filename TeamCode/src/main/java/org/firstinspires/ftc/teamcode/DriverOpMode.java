@@ -28,8 +28,6 @@ public class DriverOpMode extends OpMode {
     double timeOfLastFrame = 0;
     double timeAccelerating = 0;
 
-    double maxPower;
-
     int passedContactsRightOdo = 0;
     int passedContactsLeftOdo = 0;
     int passedContactsMiddleOdo = 0;
@@ -38,14 +36,14 @@ public class DriverOpMode extends OpMode {
     public void init() {
         //get motors from hardware map
         hMap = new MyHardwareMap(hardwareMap);
-        backLeftMotor = hMap.motor1; //odo1
-        backRightMotor = hMap.motor2; //odo2
-        frontRightMotor = hMap.motor3; //odo3
-        frontLeftMotor = hMap.motor4;
+        backLeftMotor = hMap.backLeftMotor;
+        backRightMotor = hMap.backRightMotor;
+        frontLeftMotor = hMap.frontLeftMotor;
+        frontRightMotor = hMap.frontRightMotor;
         backLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        frontLeftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontRightMotor.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
     @Override
@@ -69,11 +67,11 @@ public class DriverOpMode extends OpMode {
 
 
         //update position
-        int deltaContactsRightOdo = backRightMotor.getCurrentPosition() - passedContactsRightOdo;
         int deltaContactsLeftOdo = backLeftMotor.getCurrentPosition() - passedContactsLeftOdo;
-        int deltaContactsMiddleOdo = frontRightMotor.getCurrentPosition() - passedContactsMiddleOdo;
-        passedContactsRightOdo += deltaContactsRightOdo;
+        int deltaContactsRightOdo = backRightMotor.getCurrentPosition() - passedContactsRightOdo;
+        int deltaContactsMiddleOdo = frontLeftMotor.getCurrentPosition() - passedContactsMiddleOdo;
         passedContactsLeftOdo += deltaContactsLeftOdo;
+        passedContactsRightOdo += deltaContactsRightOdo;
         passedContactsMiddleOdo += deltaContactsMiddleOdo;
 
         double[] positionChange = Odometry.getPositionChange(deltaContactsRightOdo, deltaContactsLeftOdo, deltaContactsMiddleOdo, robotRotation);
@@ -91,24 +89,16 @@ public class DriverOpMode extends OpMode {
 
         //if input
         if((joystickX <= -deadzone || joystickX >= deadzone) && (joystickY <= -deadzone || joystickY >= deadzone)) {
-            double timeToMaxSpeed = 0.5; //time to reach full speed in seconds
             timeAccelerating += deltaTime;
-            double accelerationMultiplier = ToolBox.acceleration(timeAccelerating, timeToMaxSpeed);
             double joystickAngle = Math.atan2(joystickX, joystickY);
             double moveAngle = ToolBox.joystickToRobot(joystickAngle, robotRotation);
             double[] motorPowers = ToolBox.getMotorPowersByDirection(moveAngle);
             double magnitude = ToolBox.pythagoras(joystickX, joystickY);
-            if (gamepad1.right_trigger > 0.9) {
-                maxPower = 1.0;
-            } else if (gamepad1.left_trigger > 0.9) {
-                maxPower = 0.5;
-            } else{
-                maxPower = 0.75;
-            }
-            backLeftMotor.setPower(Range.clip((motorPowers[0] + rotate) * magnitude * accelerationMultiplier, -maxPower, maxPower));
-            backRightMotor.setPower(Range.clip((motorPowers[1] + rotate) * magnitude * accelerationMultiplier, -maxPower, maxPower));
-            frontLeftMotor.setPower(Range.clip((motorPowers[2] + rotate) * magnitude * accelerationMultiplier, -maxPower, maxPower));
-            frontRightMotor.setPower(Range.clip((motorPowers[3] + rotate) * magnitude * accelerationMultiplier, -maxPower, maxPower));
+
+            backLeftMotor.setPower(Range.clip(motorPowers[0] * magnitude + rotate, -1, 1));
+            backRightMotor.setPower(Range.clip(motorPowers[1] * magnitude + rotate, -1, 1));
+            frontLeftMotor.setPower(Range.clip(motorPowers[2] * magnitude + rotate, -1, 1));
+            frontRightMotor.setPower(Range.clip(motorPowers[3] * magnitude + rotate, -1, 1));
         }
         else {
             timeAccelerating = 0;

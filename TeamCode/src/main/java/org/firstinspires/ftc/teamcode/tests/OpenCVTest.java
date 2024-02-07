@@ -5,6 +5,7 @@ import static org.opencv.core.Core.inRange;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -66,9 +67,13 @@ public class OpenCVTest extends OpMode {
         Scalar lowColorBoundary = new Scalar(75, 75, 150);
         @Override
         public Mat processFrame(Mat input) {
-            Mat out = new Mat(input.rows(), input.cols(), input.type());
-            inRange(input, lowColorBoundary, highColorBoundary, out);
+            Mat rangeMat = new Mat(input.rows(), input.cols(), input.type());
+            Mat out = rangeMat;
+            inRange(input, lowColorBoundary, highColorBoundary, rangeMat);
+            Core.multiply(rangeMat, new Scalar(255, 255, 255), out);
             return out;
+
+            //return input;
         }
     }
 }

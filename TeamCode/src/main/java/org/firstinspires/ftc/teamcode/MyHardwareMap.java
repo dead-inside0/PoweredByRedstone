@@ -6,15 +6,15 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class MyHardwareMap {
     HardwareMap hdwMap = null;
 
-    public DcMotor motor1,motor2,motor3,motor4;
+    public DcMotor backLeftMotor,backRightMotor, frontLeftMotor,frontRightMotor;
 
     public MyHardwareMap(HardwareMap map){
         hdwMap = map;
 
-        motor1 = hdwMap.get(DcMotor.class, "motor1");
-        motor2 = hdwMap.get(DcMotor.class, "motor2");
-        motor3 = hdwMap.get(DcMotor.class, "motor3");
-        motor4 = hdwMap.get(DcMotor.class, "motor4");
+        backLeftMotor = hdwMap.get(DcMotor.class, "motor1");
+        backRightMotor = hdwMap.get(DcMotor.class, "motor2");
+        frontLeftMotor = hdwMap.get(DcMotor.class, "motor3");
+        frontRightMotor = hdwMap.get(DcMotor.class, "motor4");
 
     }
 }
