@@ -65,27 +65,32 @@ public class DriverOpMode extends OpMode {
         //frontLeftMotor.setPower(Range.clip(joystickY + joystickX + rotate, -1.0, 1.0));
         //frontRightMotor.setPower(Range.clip(joystickY - joystickX - rotate, -1.0, 1.0));
 
+        //calculate delta time
+        double deltaTime = runtime.seconds() - timeOfLastFrame;
 
-        //update position
+        //Update time of last frame
+        timeOfLastFrame = runtime.seconds();
+
+        //Get odo deltas
         int deltaContactsLeftOdo = backLeftMotor.getCurrentPosition() - passedContactsLeftOdo;
         int deltaContactsRightOdo = backRightMotor.getCurrentPosition() - passedContactsRightOdo;
         int deltaContactsMiddleOdo = frontLeftMotor.getCurrentPosition() - passedContactsMiddleOdo;
+
+        //Update passed odo contacts
         passedContactsLeftOdo += deltaContactsLeftOdo;
         passedContactsRightOdo += deltaContactsRightOdo;
         passedContactsMiddleOdo += deltaContactsMiddleOdo;
 
+        //Get position change
         double[] positionChange = Odometry.getPositionChange(deltaContactsRightOdo, deltaContactsLeftOdo, deltaContactsMiddleOdo, robotRotation);
         deltaX = positionChange[0];
         deltaY = positionChange[1];
         deltaRotation = positionChange[2];
+
+        //Update position
         posX += deltaX;
         posY += deltaY;
         robotRotation += deltaRotation;
-
-        //calculate delta time
-        double deltaTime = runtime.seconds() - timeOfLastFrame;
-        timeOfLastFrame = runtime.seconds();
-
 
         //if input
         if((joystickX <= -deadzone || joystickX >= deadzone) && (joystickY <= -deadzone || joystickY >= deadzone)) {
@@ -114,11 +119,13 @@ public class DriverOpMode extends OpMode {
         }
 
 
-        //odometry test
+
+
+        //odometry test - move back to origin on Y
         int targetX = 0;
         int targetY = 0;
-        double speed = 0.25;
-        if(gamepad1.triangle) {
+        double speed = 0.5;
+        if(gamepad1.y) {
             if (Math.abs(posX - targetX) >= 0.01 && Math.abs(posY - targetY) >= 0.01) {
                 double[] motorPowersToPoint = ToolBox.getMotorPowersToPoint(posX, posY, targetX, targetY);
                 backLeftMotor.setPower(motorPowersToPoint[0] * speed);
@@ -127,6 +134,8 @@ public class DriverOpMode extends OpMode {
                 frontRightMotor.setPower(motorPowersToPoint[3] * speed);
             }
         }
+
+
 
 
         //output data
