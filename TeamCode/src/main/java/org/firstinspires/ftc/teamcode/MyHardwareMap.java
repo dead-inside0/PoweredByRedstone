@@ -11,10 +11,10 @@ public class MyHardwareMap {
     public MyHardwareMap(HardwareMap map){
         hdwMap = map;
 
-        backLeftMotor = hdwMap.get(DcMotor.class, "motor1");
-        backRightMotor = hdwMap.get(DcMotor.class, "motor2");
-        frontLeftMotor = hdwMap.get(DcMotor.class, "motor3");
-        frontRightMotor = hdwMap.get(DcMotor.class, "motor4");
+        backLeftMotor = hdwMap.get(DcMotor.class, "motor0");
+        backRightMotor = hdwMap.get(DcMotor.class, "motor1");
+        frontLeftMotor = hdwMap.get(DcMotor.class, "motor2");
+        frontRightMotor = hdwMap.get(DcMotor.class, "motor3");
 
     }
 }

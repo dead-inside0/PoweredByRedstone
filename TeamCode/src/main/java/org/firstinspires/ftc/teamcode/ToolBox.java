@@ -18,6 +18,8 @@ public class ToolBox {
 
     //returns motor powers needed to go in a specific angle
     public static double[] getMotorPowersByDirection(double targetDirectionAngle){
+        targetDirectionAngle -= 90; //
+
         double[] motorPowers = {
                 Math.sin(targetDirectionAngle - Math.PI / 4), //backleft
                 Math.sin(targetDirectionAngle + Math.PI / 4), //backright
