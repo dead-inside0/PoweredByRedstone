@@ -86,14 +86,23 @@ public class DriverOpMode extends OpMode {
             //double moveAngle = ToolBox.joystickToRobot(joystickAngle, robotRotation);
             double moveAngle = joystickAngle; //Test if the joystick to robot function fucks it up ot if the motor powers function is incorrect
             double[] motorPowers = ToolBox.getMotorPowersByDirection(moveAngle);
-            double magnitude = ToolBox.pythagoras(joystickX, joystickY);
+            //double magnitude = ToolBox.pythagoras(joystickX, joystickY);
 
-            backLeftMotor.setPower(Range.clip((motorPowers[0] + rotate) * magnitude, -1, 1));
-            backRightMotor.setPower(Range.clip((motorPowers[1] + rotate) * magnitude, -1, 1));
-            frontLeftMotor.setPower(Range.clip((motorPowers[2] + rotate) * magnitude, -1, 1));
-            frontRightMotor.setPower(Range.clip((motorPowers[3] + rotate) * magnitude, -1, 1));
+            backLeftMotor.setPower(Range.clip((motorPowers[0]/* + rotate*/) /* *magnitude*/, -1, 1));
+            backRightMotor.setPower(Range.clip((motorPowers[1]/* + rotate*/) /* *magnitude*/, -1, 1));
+            frontLeftMotor.setPower(Range.clip((motorPowers[2]/* + rotate*/) /* *magnitude*/, -1, 1));
+            frontRightMotor.setPower(Range.clip((motorPowers[3]/* + rotate*/) /* *magnitude*/, -1, 1));
+
+            telemetry.addData("Motor power backleft", motorPowers[0]);
+            telemetry.addData("Motor power backright", motorPowers[1]);
+            telemetry.addData("Motor power frontleft", motorPowers[2]);
+            telemetry.addData("Motor power frontright", motorPowers[3]);
         }
         else {
+            backLeftMotor.setPower(0);
+            backRightMotor.setPower(0);
+            frontLeftMotor.setPower(0);
+            frontRightMotor.setPower(0);
             //if moving break
             //double breakingPower = 0.05;
             //if(deltaX < deadzone || deltaY < deadzone || deltaRotation < deadzone) {
@@ -137,9 +146,9 @@ public class DriverOpMode extends OpMode {
 
 
         //output data
-        //telemetry.addData("Joystick X", joystickX);
-        //telemetry.addData("Joystick Y", joystickY);
-        //telemetry.addData("Runtime", runtime.toString());
+        telemetry.addData("Joystick X", joystickX);
+        telemetry.addData("Joystick Y", joystickY);
+        telemetry.addData("Rotate joystick:", rotate);
         telemetry.addData("Position X", posX);
         telemetry.addData("Position Y", posY);
         telemetry.addData("PassedContactsRightOdo", passedContactsRightOdo);

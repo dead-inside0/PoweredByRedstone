@@ -16,10 +16,10 @@ public class ToolBox {
         //targetDirectionAngle = clampAngle(targetDirectionAngle);
 
         double[] motorPowers = {
-                Math.sin(targetDirectionAngle - Math.PI / 4), //backleft
-                Math.sin(targetDirectionAngle + Math.PI / 4), //backright
-                Math.sin(targetDirectionAngle + Math.PI / 4), //frontleft
-                Math.sin(targetDirectionAngle - Math.PI / 4)//frontright
+                Math.sin(targetDirectionAngle - (Math.PI / 4)), //backleft
+                Math.sin(targetDirectionAngle + (Math.PI / 4)), //backright
+                Math.sin(targetDirectionAngle + (Math.PI / 4)), //frontleft
+                Math.sin(targetDirectionAngle - (Math.PI / 4))//frontright
         };
         return motorPowers;
     }

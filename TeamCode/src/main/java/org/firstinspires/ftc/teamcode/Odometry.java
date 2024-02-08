@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 public class Odometry {
     public static double[] getPositionChange(int deltaContactsRightOdo, int deltaContactsLeftOdo, int deltaContactsMiddleOdo, double prevAngle){
-        final double sideOdosDistance = 305;
+        final double sideOdosDistance = 300;
         final double wheelCircumference = 60 * Math.PI;
         final double sensorResolution = 8192;
 
@@ -14,16 +14,18 @@ public class Odometry {
         double directionAngle  = centerArcAngle / 2;
 
         double shiftLength;
-        if(centerArcAngle == 0){
-            shiftLength = centerArcLength;
+        double deltaX;
+        double deltaY;
+        if(centerArcLength == 0){
+            deltaX = 0;
+            deltaY = 0;
         }
-        else {
-            double centerArcRadius = centerArcAngle/centerArcLength;
+        else{
+            double centerArcRadius = centerArcAngle / centerArcLength;
             shiftLength = Math.sqrt(2 * Math.pow(centerArcRadius, 2) - 2 * Math.pow(centerArcRadius, 2) * Math.cos(centerArcAngle));
+            deltaX = shiftLength * Math.cos(prevAngle + directionAngle);
+            deltaY = shiftLength * Math.sin(prevAngle + directionAngle);
         }
-
-        double deltaX = shiftLength * Math.cos(prevAngle + directionAngle);
-        double deltaY = shiftLength * Math.sin(prevAngle + directionAngle);
 
         double strafing = wheelCircumference * deltaContactsMiddleOdo / sensorResolution;
 
