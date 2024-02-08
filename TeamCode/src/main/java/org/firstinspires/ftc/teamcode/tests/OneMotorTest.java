@@ -23,9 +23,18 @@ public class OneMotorTest extends OpMode {
 
         if(gamepad1.a){
             motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+        if(gamepad1.b){
+            if(motor.getDirection() == DcMotorSimple.Direction.FORWARD){
+                motor.setDirection(DcMotorSimple.Direction.REVERSE);
+            }
+            else{
+                motor.setDirection(DcMotorSimple.Direction.FORWARD);
+            }
         }
 
         telemetry.addData("Encoders passed", motor.getCurrentPosition());
-        telemetry.addData("Motor revelations", motor.getCurrentPosition()/288);
+        telemetry.addData("Motor direction", motor.getDirection());
     }
 }

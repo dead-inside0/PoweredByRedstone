@@ -81,7 +81,7 @@ public class DriverOpMode extends OpMode {
 
         //if move input
         double deadzone = 0.05;
-        if((joystickX <= -deadzone || joystickX >= deadzone) && (joystickY <= -deadzone || joystickY >= deadzone)) {
+        if((joystickX <= -deadzone || joystickX >= deadzone) || (joystickY <= -deadzone || joystickY >= deadzone) || (rotate <= -deadzone || rotate >= deadzone)) {
             double joystickAngle = Math.atan2(joystickX, joystickY);
             //double moveAngle = ToolBox.joystickToRobot(joystickAngle, robotRotation);
             double moveAngle = joystickAngle; //Test if the joystick to robot function fucks it up ot if the motor powers function is incorrect
@@ -95,17 +95,17 @@ public class DriverOpMode extends OpMode {
         }
         else {
             //if moving break
-            double breakingPower = 0.05;
-            if(deltaX < deadzone || deltaY < deadzone || deltaRotation < deadzone) {
-                backLeftMotor.setPower(breakingPower);
-                backRightMotor.setPower(breakingPower);
-                frontLeftMotor.setPower(breakingPower);
-                frontRightMotor.setPower(breakingPower);
-                backLeftMotor.setPower(-breakingPower);
-                backRightMotor.setPower(-breakingPower);
-                frontLeftMotor.setPower(-breakingPower);
-                frontRightMotor.setPower(-breakingPower);
-            }
+            //double breakingPower = 0.05;
+            //if(deltaX < deadzone || deltaY < deadzone || deltaRotation < deadzone) {
+            //    backLeftMotor.setPower(breakingPower);
+            //    backRightMotor.setPower(breakingPower);
+            //    frontLeftMotor.setPower(breakingPower);
+            //    frontRightMotor.setPower(breakingPower);
+            //    backLeftMotor.setPower(-breakingPower);
+            //    backRightMotor.setPower(-breakingPower);
+            //    frontLeftMotor.setPower(-breakingPower);
+            //    frontRightMotor.setPower(-breakingPower);
+            //}
         }
 
         // if linear mechanism input
@@ -145,6 +145,6 @@ public class DriverOpMode extends OpMode {
         telemetry.addData("PassedContactsRightOdo", passedContactsRightOdo);
         telemetry.addData("PassedContactsLeftOdo", passedContactsLeftOdo);
         telemetry.addData("PassedContactsMiddleOdo", passedContactsMiddleOdo);
-        telemetry.addData("Direction Angle", robotRotation);
+        telemetry.addData("Direction Angle in PI radians", robotRotation/Math.PI);
     }
 }

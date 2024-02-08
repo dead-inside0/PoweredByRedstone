@@ -12,8 +12,8 @@ public class ToolBox {
 
     //returns motor powers needed to go in a specific angle
     public static double[] getMotorPowersByDirection(double targetDirectionAngle){
-        targetDirectionAngle -= Math.PI/2; //Because odometry is mounted sideways
-        targetDirectionAngle = clampAngle(targetDirectionAngle);
+        //targetDirectionAngle -= Math.PI/2; //Because odometry is mounted sideways
+        //targetDirectionAngle = clampAngle(targetDirectionAngle);
 
         double[] motorPowers = {
                 Math.sin(targetDirectionAngle - Math.PI / 4), //backleft
