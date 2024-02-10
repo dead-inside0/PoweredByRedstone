@@ -35,11 +35,6 @@ public class DriverOpMode extends OpMode {
         frontLeftMotor = hMap.frontLeftMotor;
         frontRightMotor = hMap.frontRightMotor;
 
-        backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
         //linearMechanismMotor = hMap.linearMechanismMotor;
     }
 
@@ -86,25 +81,31 @@ public class DriverOpMode extends OpMode {
 
 
         //Move robot
-        double joystickAngle = Math.atan2(joystickX, joystickY);
-        //double moveAngle = ToolBox.joystickToRobot(joystickAngle, robotRotation);
-        double magnitude = ToolBox.pythagoras(joystickX, joystickY);
-        double[] motorPowers = ToolBox.getMotorPowersByDirection(joystickAngle, magnitude, rotate);
+        double deadzone = 0.05;
+        if(Math.abs(joystickX) > deadzone || Math.abs(joystickY) > deadzone || Math.abs(rotate) > deadzone) {
+            double joystickAngle = Math.atan2(joystickX, joystickY);
+            //double moveAngle = ToolBox.joystickToRobot(joystickAngle, robotRotation);
+            double magnitude = ToolBox.pythagoras(joystickX, joystickY);
+            double[] motorPowers = ToolBox.getMotorPowersByDirection(joystickAngle, magnitude, rotate);
 
-        backLeftMotor.setPower(motorPowers[0]);
-        backRightMotor.setPower(motorPowers[1]);
-        frontLeftMotor.setPower(motorPowers[2]);
-        frontRightMotor.setPower(motorPowers[3]);
+            backLeftMotor.setPower(motorPowers[0]);
+            backRightMotor.setPower(motorPowers[1]);
+            frontLeftMotor.setPower(motorPowers[2]);
+            frontRightMotor.setPower(motorPowers[3]);
 
-        telemetry.addData("Motor power backleft", motorPowers[0]);
-        telemetry.addData("Motor power backright", motorPowers[1]);
-        telemetry.addData("Motor power frontleft", motorPowers[2]);
-        telemetry.addData("Motor power frontright", motorPowers[3]);
+            telemetry.addData("Motor power backleft", motorPowers[0]);
+            telemetry.addData("Motor power backright", motorPowers[1]);
+            telemetry.addData("Motor power frontleft", motorPowers[2]);
+            telemetry.addData("Motor power frontright", motorPowers[3]);
+        }
+        else {
+            //break
+        }
 
 
 
 
-        //odometry test - move back to origin on Y
+        //odometry test - move back to origin when Y pressed
         int targetX = 0;
         int targetY = 0;
         double speed = 0.5;

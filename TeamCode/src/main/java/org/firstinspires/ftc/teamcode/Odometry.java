@@ -11,7 +11,7 @@ public class Odometry {
 
         double centerArcLength = (rightArcLength + leftArcLength) / 2;
         double centerArcAngle = (rightArcLength - leftArcLength) / sideOdosDistance;
-        double directionAngle  = centerArcAngle / 2;
+        double alpha  = centerArcAngle / 2;
 
         double shiftLength;
         double deltaX;
@@ -23,19 +23,19 @@ public class Odometry {
         else{
             double centerArcRadius = centerArcAngle / centerArcLength;
             shiftLength = Math.sqrt(2 * Math.pow(centerArcRadius, 2) - 2 * Math.pow(centerArcRadius, 2) * Math.cos(centerArcAngle));
-            deltaX = shiftLength * Math.cos(prevAngle + directionAngle);
-            deltaY = shiftLength * Math.sin(prevAngle + directionAngle);
+            deltaX = shiftLength * Math.cos(prevAngle + alpha);
+            deltaY = shiftLength * Math.sin(prevAngle + alpha);
         }
 
         double strafing = wheelCircumference * deltaContactsMiddleOdo / sensorResolution;
 
-        double strafingDeltaX = strafing * Math.sin(prevAngle + directionAngle);
-        double strafingDeltaY = strafing * Math.cos(prevAngle + directionAngle);
+        double strafingDeltaX = strafing * Math.sin(prevAngle + alpha);
+        double strafingDeltaY = strafing * Math.cos(prevAngle + alpha);
 
         deltaX += strafingDeltaX;
         deltaY += strafingDeltaY;
 
-        double[] positionChange = {deltaX, deltaY, directionAngle}; //x, y, angle
+        double[] positionChange = {deltaX, deltaY, centerArcAngle}; //x, y, angle
         return positionChange;
     }
 }

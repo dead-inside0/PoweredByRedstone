@@ -33,7 +33,7 @@ public class OpenCVTest extends OpMode {
             public void onOpened()
             {
                 //Start streaming
-                phoneCam.startStreaming(640, 480, OpenCvCameraRotation.SIDEWAYS_RIGHT);
+                phoneCam.startStreaming(320, 240, OpenCvCameraRotation.SIDEWAYS_RIGHT);
             }
             @Override
             public void onError(int errorCode)
@@ -51,12 +51,7 @@ public class OpenCVTest extends OpMode {
     @Override
     public void loop(){
         //Output some telemetry data
-        telemetry.addData("Frame Count", phoneCam.getFrameCount());
         telemetry.addData("FPS", phoneCam.getFps());
-        telemetry.addData("Total frame time ms", phoneCam.getTotalFrameTimeMs());
-        telemetry.addData("Pipeline time ms", phoneCam.getPipelineTimeMs());
-        telemetry.addData("Overhead time ms", phoneCam.getOverheadTimeMs());
-        telemetry.addData("Theoretical max FPS", phoneCam.getCurrentPipelineMaxFps());
     }
 
 
@@ -67,13 +62,17 @@ public class OpenCVTest extends OpMode {
         Scalar lowColorBoundary = new Scalar(75, 75, 150);
         @Override
         public Mat processFrame(Mat input) {
-            Mat rangeMat = new Mat(input.rows(), input.cols(), input.type());
-            Mat out = rangeMat;
+            Mat rangeMat = input.clone(); //copy size might work
             inRange(input, lowColorBoundary, highColorBoundary, rangeMat);
+            Mat out = rangeMat.clone(); //copy size might work
             Core.multiply(rangeMat, new Scalar(255, 255, 255), out);
-            return out;
+            //return out;
 
-            //return input;
+            telemetry.addData("first pixel in input", input.at(input.getClass(), 0, 0));
+            telemetry.addData("first pixel in range", rangeMat.at(rangeMat.getClass(), 0, 0));
+            telemetry.addData("first pixel in output", out.at(out.getClass(), 0, 0));
+
+            return input;
         }
     }
 }
