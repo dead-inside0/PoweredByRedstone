@@ -11,16 +11,22 @@ public class ToolBox {
 
 
     //returns motor powers needed to go in a specific angle
-    public static double[] getMotorPowersByDirection(double targetDirectionAngle){
-        //targetDirectionAngle -= Math.PI/2; //Because odometry is mounted sideways
-        //targetDirectionAngle = clampAngle(targetDirectionAngle);
+    public static double[] getMotorPowersByDirection(double targetDirectionAngle, double magnitude, double rotate){
+        targetDirectionAngle -= Math.PI/2;
+        targetDirectionAngle = clampAngle(targetDirectionAngle);
 
-        double[] motorPowers = {
-                Math.sin(targetDirectionAngle - (Math.PI / 4)), //backleft
-                Math.sin(targetDirectionAngle + (Math.PI / 4)), //backright
-                Math.sin(targetDirectionAngle + (Math.PI / 4)), //frontleft
-                Math.sin(targetDirectionAngle - (Math.PI / 4))//frontright
+        double motorPowerBlue = (Math.sin(targetDirectionAngle + Math.PI / 4) * magnitude + rotate);
+        double motorPowerRed = (Math.sin(targetDirectionAngle - Math.PI / 4) * magnitude + rotate);
+
+        double maxMotorPower = Math.max(Math.max(motorPowerBlue, -motorPowerBlue), Math.max(motorPowerRed, motorPowerRed));
+
+        double[] motorPowers = { // motor powers are scaled so the max power = 1
+                motorPowerRed / maxMotorPower, //backleft
+                -motorPowerBlue / maxMotorPower, //backright
+                motorPowerRed / maxMotorPower, //frontleft
+                -motorPowerBlue / maxMotorPower//frontright
         };
+
         return motorPowers;
     }
 
@@ -48,7 +54,7 @@ public class ToolBox {
     }
 
     //returns motor powers to get to a certain point
-    public static double[] getMotorPowersToPoint(double selfX, double selfY, double targetX, double targetY){
-        return getMotorPowersByDirection(getAngleToPoint(selfX, selfY, targetX, targetY));
+    public static double[] getMotorPowersToPoint(double selfX, double selfY, double targetX, double targetY, double speed, double rotate){
+        return getMotorPowersByDirection(getAngleToPoint(selfX, selfY, targetX, targetY), speed, rotate);
     }
 }
