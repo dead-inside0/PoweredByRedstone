@@ -20,16 +20,16 @@ public class ToolBox {
 
         double maxMotorPower = Math.max(motorPowerBlue, motorPowerRed);
         double factor = 1;
-        if(maxMotorPower + rotate > 1){
-            factor = maxMotorPower + rotate;
+        if(maxMotorPower + Math.abs(rotate) > 1){
+            factor = maxMotorPower + Math.abs(rotate);
         }
 
         double[] motorPowers = { // motor powers are scaled so the max power = 1
                 //maybe the right wheels should be inverted
-                motorPowerRed / factor, //backleft
-                motorPowerBlue / factor, //backright
-                motorPowerBlue / factor, //frontleft
-                motorPowerRed / factor//frontright
+                (motorPowerRed + rotate) / factor, //backleft
+                (motorPowerBlue - rotate) / factor, //backright
+                (motorPowerBlue + rotate) / factor, //frontleft
+                (motorPowerRed - rotate) / factor//frontright
         };
 
         return motorPowers;
