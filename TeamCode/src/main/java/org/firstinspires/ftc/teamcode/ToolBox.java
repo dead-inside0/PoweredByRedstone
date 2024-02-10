@@ -15,16 +15,21 @@ public class ToolBox {
         targetDirectionAngle -= Math.PI/2;
         targetDirectionAngle = clampAngle(targetDirectionAngle);
 
-        double motorPowerBlue = (Math.sin(targetDirectionAngle + Math.PI / 4) * magnitude + rotate);
-        double motorPowerRed = (Math.sin(targetDirectionAngle - Math.PI / 4) * magnitude + rotate);
+        double motorPowerBlue = Math.sin(targetDirectionAngle + Math.PI / 4) * magnitude + rotate;
+        double motorPowerRed = Math.sin(targetDirectionAngle - Math.PI / 4) * magnitude + rotate;
 
-        double maxMotorPower = Math.max(Math.max(motorPowerBlue, -motorPowerBlue), Math.max(motorPowerRed, motorPowerRed));
+        double maxMotorPower = Math.max(motorPowerBlue, motorPowerRed);
+        double factor = 1;
+        if(maxMotorPower + rotate > 1){
+            factor = maxMotorPower + rotate;
+        }
 
         double[] motorPowers = { // motor powers are scaled so the max power = 1
-                motorPowerRed / maxMotorPower, //backleft
-                -motorPowerBlue / maxMotorPower, //backright
-                motorPowerRed / maxMotorPower, //frontleft
-                -motorPowerBlue / maxMotorPower//frontright
+                //maybe the right wheels should be inverted
+                motorPowerRed / factor, //backleft
+                motorPowerBlue / factor, //backright
+                motorPowerBlue / factor, //frontleft
+                motorPowerRed / factor//frontright
         };
 
         return motorPowers;

@@ -96,11 +96,6 @@ public class DriverOpMode extends OpMode {
         frontLeftMotor.setPower(motorPowers[2]);
         frontRightMotor.setPower(motorPowers[3]);
 
-        //backLeftMotor.setPower(Range.clip(joystickY - joystickX + rotate, -1, 1));
-        //backRightMotor.setPower(Range.clip(-(joystickY + joystickX - rotate), -1, 1));
-        //frontLeftMotor.setPower(Range.clip(joystickY + joystickX + rotate, -1, 1));
-        //frontRightMotor.setPower(Range.clip(-(joystickY - joystickX - rotate), -1, 1));
-
         telemetry.addData("Motor power backleft", motorPowers[0]);
         telemetry.addData("Motor power backright", motorPowers[1]);
         telemetry.addData("Motor power frontleft", motorPowers[2]);
