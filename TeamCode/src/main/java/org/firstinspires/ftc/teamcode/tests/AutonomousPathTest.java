@@ -46,6 +46,7 @@ public class AutonomousPathTest extends LinearOpMode{
         frontLeftMotor = hMap.frontLeftMotor;
         frontRightMotor = hMap.frontRightMotor;
         for (int i = 0; i < path.length; i++) {
+            telemetry.addData("Next point: ", "X: %d, Y: %d, R: %d", path[i][0], path[i][1], path[i][2]);
             while(!checkIfAtPosition(posX, posY, path[i][0], path[i][1])){
                 int deltaContactsLeftOdo = backLeftMotor.getCurrentPosition() - passedContactsLeftOdo;
                 int deltaContactsRightOdo = backRightMotor.getCurrentPosition() - passedContactsRightOdo;
