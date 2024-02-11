@@ -34,9 +34,10 @@ public class AutonomousPathTest extends LinearOpMode{
     int passedContactsLeftOdo = 0;
     int passedContactsMiddleOdo = 0;
 
-    private boolean checkIfAtPosition(double selfX, double selfY, double targetX, double targetY) {
+    private boolean checkIfAtPosition(double selfX, double selfY, double targetX, double targetY,double selfRot,double targetRot){
         double tolerance = 10;
-        return Math.abs(selfX - targetX) < tolerance && Math.abs(selfY - targetY) < tolerance;
+        double rotTolerance = Math.PI/40;
+        return Math.abs(selfX - targetX) < tolerance && Math.abs(selfY - targetY) < tolerance && Math.abs(selfRot - targetRot) < rotTolerance;
     }
     public void runOpMode() {
         MyHardwareMap hMap = new MyHardwareMap(hardwareMap);
@@ -47,7 +48,7 @@ public class AutonomousPathTest extends LinearOpMode{
         frontRightMotor = hMap.frontRightMotor;
         for (int i = 0; i < path.length; i++) {
             telemetry.addData("Next point: ", "X: %d, Y: %d, R: %d", path[i][0], path[i][1], path[i][2]);
-            while(!checkIfAtPosition(posX, posY, path[i][0], path[i][1])){
+            while(!checkIfAtPosition(posX, posY, path[i][0], path[i][1], robotRotation, path[i][2])){
                 int deltaContactsLeftOdo = backLeftMotor.getCurrentPosition() - passedContactsLeftOdo;
                 int deltaContactsRightOdo = backRightMotor.getCurrentPosition() - passedContactsRightOdo;
                 int deltaContactsMiddleOdo = frontLeftMotor.getCurrentPosition() - passedContactsMiddleOdo;
