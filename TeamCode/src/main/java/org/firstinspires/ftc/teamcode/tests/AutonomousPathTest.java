@@ -36,7 +36,7 @@ public class AutonomousPathTest extends LinearOpMode{
 
     private boolean checkIfAtPosition(double selfX, double selfY, double targetX, double targetY,double selfRot,double targetRot){
         double tolerance = 10;
-        double rotTolerance = Math.PI/40;
+        double rotTolerance = Math.PI/180;
         return Math.abs(selfX - targetX) < tolerance && Math.abs(selfY - targetY) < tolerance && Math.abs(selfRot - targetRot) < rotTolerance;
     }
     public void runOpMode() {
