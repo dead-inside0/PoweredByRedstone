@@ -57,20 +57,34 @@ public class OpenCVTest extends OpMode {
 
     //Pipeline
     class TestPipeline extends OpenCvPipeline {
-        //BGR COLOR FORMAT!!!
+        //BGR COLOR FORMAT!!! might be hsv tbh but i cant find it anywhere
         Scalar highColorBoundary = new Scalar(0, 0, 255);
         Scalar lowColorBoundary = new Scalar(75, 75, 150);
         @Override
         public Mat processFrame(Mat input) {
-            Mat rangeMat = input.clone(); //copy size might work
+            Mat rangeMat = new Mat();
             inRange(input, lowColorBoundary, highColorBoundary, rangeMat);
-            Mat out = rangeMat.clone(); //copy size might work
-            Core.multiply(rangeMat, new Scalar(255, 255, 255), out);
             //return out;
 
             telemetry.addData("first pixel in input", input.at(input.getClass(), 0, 0));
             telemetry.addData("first pixel in range", rangeMat.at(rangeMat.getClass(), 0, 0));
-            telemetry.addData("first pixel in output", out.at(out.getClass(), 0, 0));
+            telemetry.addData("pixels matching color", Core.countNonZero(rangeMat));
+
+            Mat m = new Mat();
+            Core.extractChannel(rangeMat, m, 0);
+            telemetry.addData("pixels matching color in channel 0", Core.countNonZero(m));
+
+            m = new Mat();
+            Core.extractChannel(rangeMat, m, 1);
+            telemetry.addData("pixels matching color in channel 1", Core.countNonZero(m));
+
+            m = new Mat();
+            Core.extractChannel(rangeMat, m, 2);
+            telemetry.addData("pixels matching color in channel 2", Core.countNonZero(m));
+
+            m = new Mat();
+            Core.extractChannel(rangeMat, m, 3);
+            telemetry.addData("pixels matching color in channel 3", Core.countNonZero(m));
 
             return input;
         }
