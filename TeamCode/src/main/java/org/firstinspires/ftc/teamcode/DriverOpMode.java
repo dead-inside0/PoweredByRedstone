@@ -105,23 +105,6 @@ public class DriverOpMode extends OpMode {
 
 
 
-        //odometry test - move back to origin when Y pressed
-        int targetX = 0;
-        int targetY = 0;
-        double speed = 0.5;
-        if(gamepad1.y) {
-            if (Math.abs(posX - targetX) >= 0.01 && Math.abs(posY - targetY) >= 0.01) {
-                double[] motorPowersToPoint = ToolBox.getMotorPowersToPoint(posX, posY, targetX, targetY, speed,0);
-                backLeftMotor.setPower(motorPowersToPoint[0] * speed);
-                backRightMotor.setPower(motorPowersToPoint[1] * speed);
-                frontLeftMotor.setPower(motorPowersToPoint[2] * speed);
-                frontRightMotor.setPower(motorPowersToPoint[3] * speed);
-            }
-        }
-
-
-
-
         //output data
         telemetry.addData("Joystick X", joystickX);
         telemetry.addData("Joystick Y", joystickY);

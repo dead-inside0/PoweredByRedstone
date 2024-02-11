@@ -35,6 +35,12 @@ public class ToolBox {
         return motorPowers;
     }
 
+    public static double[] getMotorPowersToPoint(double currentX, double currentY, double targetX, double targetY, double currentRot, double targetRot, double speed){
+        double angleToTarget = Math.atan2(currentX-targetX, currentY-targetY);
+
+        return getMotorPowersByDirection(angleToTarget, speed, 0);
+    }
+
     //pythagoras theorem
     public static double pythagoras(double x, double y){
         return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
@@ -51,15 +57,5 @@ public class ToolBox {
         else{
             return angle;
         }
-    }
-
-    //returns the angle between two points
-    public static double getAngleToPoint(double selfX, double selfY, double targetX, double targetY){
-        return Math.atan2(selfX-targetX, selfY-targetY);
-    }
-
-    //returns motor powers to get to a certain point
-    public static double[] getMotorPowersToPoint(double selfX, double selfY, double targetX, double targetY, double speed, double rotate){
-        return getMotorPowersByDirection(getAngleToPoint(selfX, selfY, targetX, targetY), speed, rotate);
     }
 }
