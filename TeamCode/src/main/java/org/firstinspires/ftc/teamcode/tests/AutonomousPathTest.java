@@ -30,11 +30,6 @@ public class AutonomousPathTest extends LinearOpMode{
     int passedContactsLeftOdo = 0;
     int passedContactsMiddleOdo = 0;
 
-    private boolean checkIfAtPosition(double selfX, double selfY, double targetX, double targetY,double selfRot,double targetRot){
-        double tolerance = 5;
-        double rotTolerance = Math.PI/180;
-        return Math.abs(selfX - targetX) < tolerance && Math.abs(selfY - targetY) < tolerance && Math.abs(selfRot - targetRot) < rotTolerance;
-    }
     public void runOpMode() {
         MyHardwareMap hMap = new MyHardwareMap(hardwareMap);
 
@@ -42,10 +37,10 @@ public class AutonomousPathTest extends LinearOpMode{
         DcMotor backRightMotor = hMap.backRightMotor;
         DcMotor frontLeftMotor = hMap.frontLeftMotor;
         DcMotor frontRightMotor = hMap.frontRightMotor;
-        for (double[] doubles : path) {
-            telemetry.addData("Next point: ", "X: %f, Y: %f, R: %f", doubles[0], doubles[1], doubles[2]);
+        for (double[] point : path) {
+            telemetry.addData("Next point: ", "X: %f, Y: %f, R: %f", point[0], point[1], point[2]);
             telemetry.update();
-            while (!checkIfAtPosition(posX, posY, doubles[0], doubles[1], robotRotation, doubles[2])) {
+            while (!(Math.abs(posX - point[0]) < ToolBox.movementTolerance && Math.abs(posY - point[1]) < ToolBox.movementTolerance && Math.abs(robotRotation - point[2]) < ToolBox.rotateTolerance)) {
                 int deltaContactsLeftOdo = backLeftMotor.getCurrentPosition() - passedContactsLeftOdo;
                 int deltaContactsRightOdo = backRightMotor.getCurrentPosition() - passedContactsRightOdo;
                 int deltaContactsMiddleOdo = frontLeftMotor.getCurrentPosition() - passedContactsMiddleOdo;
@@ -67,7 +62,7 @@ public class AutonomousPathTest extends LinearOpMode{
                 robotRotation += deltaRotation;
                 robotRotation = ToolBox.clampAngle(robotRotation);
 
-                double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, doubles[0], doubles[1], robotRotation, doubles[2], 0.5);
+                double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, point[0], point[1], robotRotation, point[2], 0.5);
 
                 backLeftMotor.setPower(motorPowers[0]);
                 backRightMotor.setPower(motorPowers[1]);
