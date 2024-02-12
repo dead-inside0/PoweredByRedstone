@@ -3,6 +3,9 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.util.Range;
 
 public class ToolBox {
+    public static double movementTolerance = 5;
+    public static double rotateTolerance = Math.PI/90;
+
     //converts the joystick angle (global) to the angle needed to move the robot (local) in that direction
     public static double joystickToRobot(double joystickAngle, double robotAngle){
         double localAngle = joystickAngle - robotAngle; //we MIGHT be fucked
@@ -24,7 +27,7 @@ public class ToolBox {
             factor = Math.abs(maxMotorPower) + rotate;
         }
 
-        double[] motorPowers = { // motor powers are scaled so the max power = 1
+        double[] motorPowers = { // motor powers are scaled so the max power < 1
                 (motorPowerRed + rotate) / factor, //backleft
                 (-motorPowerBlue + rotate) / factor, //backright
                 (motorPowerBlue + rotate) / factor, //frontleft
@@ -37,7 +40,14 @@ public class ToolBox {
     public static double[] getMotorPowersToPoint(double currentX, double currentY, double targetX, double targetY, double currentRot, double targetRot, double speed){
         double angleToTarget = Math.atan2(currentX-targetX, currentY-targetY);
 
-        return getMotorPowersByDirection(angleToTarget, speed, 0);
+        double rotate = 0;
+        if(clampAngle(currentRot - targetRot) > rotateTolerance){
+            rotate = 0.75;
+        }
+
+        //TODO: Better rotating based on which way is closer
+
+        return getMotorPowersByDirection(angleToTarget, speed, rotate);
     }
 
     //pythagoras theorem
