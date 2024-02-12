@@ -59,8 +59,8 @@ public class DriverOpMode extends OpMode {
 
         //Get odo deltas
         int deltaContactsLeftOdo = backLeftMotor.getCurrentPosition() - passedContactsLeftOdo;
-        int deltaContactsRightOdo = backRightMotor.getCurrentPosition() - passedContactsRightOdo;
-        int deltaContactsMiddleOdo = frontLeftMotor.getCurrentPosition() - passedContactsMiddleOdo;
+        int deltaContactsRightOdo = -backRightMotor.getCurrentPosition() - passedContactsRightOdo;
+        int deltaContactsMiddleOdo = -frontLeftMotor.getCurrentPosition() - passedContactsMiddleOdo;
 
         //Update passed odo contacts
         passedContactsLeftOdo += deltaContactsLeftOdo;
@@ -83,8 +83,8 @@ public class DriverOpMode extends OpMode {
         //Move robot
         double deadzone = 0.05;
         if(Math.abs(joystickX) > deadzone || Math.abs(joystickY) > deadzone || Math.abs(rotate) > deadzone) {
-            double joystickAngle = Math.atan2(joystickX, joystickY);
-            //double moveAngle = ToolBox.joystickToRobot(joystickAngle, robotRotation);
+            double joystickAngle = Math.atan2(-joystickX, joystickY);
+            double moveAngle = ToolBox.joystickToRobot(joystickAngle, robotRotation);
             double magnitude = ToolBox.pythagoras(joystickX, joystickY);
             double[] motorPowers = ToolBox.getMotorPowersByDirection(joystickAngle, magnitude, rotate);
 
@@ -92,28 +92,45 @@ public class DriverOpMode extends OpMode {
             backRightMotor.setPower(motorPowers[1]);
             frontLeftMotor.setPower(motorPowers[2]);
             frontRightMotor.setPower(motorPowers[3]);
-
-            telemetry.addData("Motor power backleft", motorPowers[0]);
-            telemetry.addData("Motor power backright", motorPowers[1]);
-            telemetry.addData("Motor power frontleft", motorPowers[2]);
-            telemetry.addData("Motor power frontright", motorPowers[3]);
         }
         else {
-            //break
+            double breakingPower = 0.01;
+            if(Math.abs(deltaX) > 1 || Math.abs(deltaY) > 1 || Math.abs(deltaRotation) > 1){
+                //break
+                frontLeftMotor.setPower(breakingPower);
+                frontRightMotor.setPower(breakingPower);
+                backLeftMotor.setPower(breakingPower);
+                backRightMotor.setPower(breakingPower);
+
+                frontLeftMotor.setPower(-breakingPower);
+                frontRightMotor.setPower(-breakingPower);
+                backLeftMotor.setPower(-breakingPower);
+                backRightMotor.setPower(-breakingPower);
+
+                frontLeftMotor.setPower(breakingPower);
+                frontRightMotor.setPower(breakingPower);
+                backLeftMotor.setPower(breakingPower);
+                backRightMotor.setPower(breakingPower);
+
+                frontLeftMotor.setPower(-breakingPower);
+                frontRightMotor.setPower(-breakingPower);
+                backLeftMotor.setPower(-breakingPower);
+                backRightMotor.setPower(-breakingPower);
+            }
         }
 
 
 
 
         //output data
-        telemetry.addData("Joystick X", joystickX);
-        telemetry.addData("Joystick Y", joystickY);
-        telemetry.addData("Rotate joystick:", rotate);
+        //telemetry.addData("Joystick X", joystickX);
+        //telemetry.addData("Joystick Y", joystickY);
+        //telemetry.addData("Rotate joystick", rotate);
         telemetry.addData("Position X", posX);
         telemetry.addData("Position Y", posY);
+        telemetry.addData("Direction Angle in PI radians", robotRotation/Math.PI);
         telemetry.addData("PassedContactsRightOdo", passedContactsRightOdo);
         telemetry.addData("PassedContactsLeftOdo", passedContactsLeftOdo);
         telemetry.addData("PassedContactsMiddleOdo", passedContactsMiddleOdo);
-        telemetry.addData("Direction Angle in PI radians", robotRotation/Math.PI);
     }
 }
