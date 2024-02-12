@@ -14,15 +14,11 @@ public class AutonomousPathTest extends LinearOpMode{
 
     final private ElapsedTime runtime = new ElapsedTime();
 
-    private DcMotor backLeftMotor;
-    private DcMotor backRightMotor;
-    private DcMotor frontRightMotor;
-    private DcMotor frontLeftMotor;
-    private double[][] path = {
-            {500, 0, 0},
-            {500,1000, 0},
-            {-500,1000,0},
-            {-500,0,0},
+    final private double[][] path = {
+            {50, 0, 0},
+            {50,100, 0},
+            {-50,100,0},
+            {-50,0,0},
             {0,0,0}
     };
 
@@ -42,14 +38,14 @@ public class AutonomousPathTest extends LinearOpMode{
     public void runOpMode() {
         MyHardwareMap hMap = new MyHardwareMap(hardwareMap);
 
-        backLeftMotor = hMap.backLeftMotor;
-        backRightMotor = hMap.backRightMotor;
-        frontLeftMotor = hMap.frontLeftMotor;
-        frontRightMotor = hMap.frontRightMotor;
-        for (int i = 0; i < path.length; i++) {
-            telemetry.addData("Next point: ", "X: %f, Y: %f, R: %f", path[i][0], path[i][1], path[i][2]);
+        DcMotor backLeftMotor = hMap.backLeftMotor;
+        DcMotor backRightMotor = hMap.backRightMotor;
+        DcMotor frontLeftMotor = hMap.frontLeftMotor;
+        DcMotor frontRightMotor = hMap.frontRightMotor;
+        for (double[] doubles : path) {
+            telemetry.addData("Next point: ", "X: %f, Y: %f, R: %f", doubles[0], doubles[1], doubles[2]);
             telemetry.update();
-            while(!checkIfAtPosition(posX, posY, path[i][0], path[i][1], robotRotation, path[i][2])){
+            while (!checkIfAtPosition(posX, posY, doubles[0], doubles[1], robotRotation, doubles[2])) {
                 int deltaContactsLeftOdo = backLeftMotor.getCurrentPosition() - passedContactsLeftOdo;
                 int deltaContactsRightOdo = backRightMotor.getCurrentPosition() - passedContactsRightOdo;
                 int deltaContactsMiddleOdo = frontLeftMotor.getCurrentPosition() - passedContactsMiddleOdo;
@@ -71,7 +67,7 @@ public class AutonomousPathTest extends LinearOpMode{
                 robotRotation += deltaRotation;
                 robotRotation = ToolBox.clampAngle(robotRotation);
 
-                double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, path[i][0], path[i][1], robotRotation, path[i][2], 0.25);
+                double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, doubles[0], doubles[1], robotRotation, doubles[2], 0.5);
 
                 backLeftMotor.setPower(motorPowers[0]);
                 backRightMotor.setPower(motorPowers[1]);
