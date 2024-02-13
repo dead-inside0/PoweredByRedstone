@@ -11,6 +11,6 @@ public class MyHardwareMap {
         backRightMotor = map.get(DcMotor.class, "motor1");
         frontLeftMotor = map.get(DcMotor.class, "motor2");
         frontRightMotor = map.get(DcMotor.class, "motor3");
-        //linearMechanismMotor = map.get(DcMotor.class, "motor4");
+        linearMechanismMotor = map.get(DcMotor.class, "motor4");
     }
 }

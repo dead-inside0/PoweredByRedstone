@@ -12,7 +12,7 @@ public class DriverOpMode extends OpMode {
     private DcMotor backRightMotor;
     private DcMotor frontRightMotor;
     private DcMotor frontLeftMotor;
-    //private DcMotor linearMechanismMotor;
+    private DcMotor linearMechanismMotor;
 
     double posX = 0;
     double posY = 0;
@@ -34,7 +34,11 @@ public class DriverOpMode extends OpMode {
         frontLeftMotor = hMap.frontLeftMotor;
         frontRightMotor = hMap.frontRightMotor;
 
-        //linearMechanismMotor = hMap.linearMechanismMotor;
+        linearMechanismMotor = hMap.linearMechanismMotor;
+
+        passedContactsRightOdo = -backRightMotor.getCurrentPosition();
+        passedContactsLeftOdo = -backLeftMotor.getCurrentPosition();
+        passedContactsMiddleOdo = -frontLeftMotor.getCurrentPosition();
     }
 
     @Override
@@ -47,8 +51,8 @@ public class DriverOpMode extends OpMode {
         //get gamepad input
         double joystickY = -gamepad1.left_stick_y;
         double joystickX = gamepad1.left_stick_x;
-        double rotate = gamepad1.right_stick_x;
-        //double linearMechanismInput = gamepad2.left_stick_y;
+        double rotate = gamepad2.right_stick_x;
+        double linearMechanismInput = gamepad2.left_stick_y;
 
         //calculate delta time
         double deltaTime = runtime.seconds() - timeOfLastFrame;
@@ -57,9 +61,9 @@ public class DriverOpMode extends OpMode {
         timeOfLastFrame = runtime.seconds();
 
         //Get odo deltas
-        int deltaContactsLeftOdo = backLeftMotor.getCurrentPosition() - passedContactsLeftOdo;
-        int deltaContactsRightOdo = -backRightMotor.getCurrentPosition() - passedContactsRightOdo;
-        int deltaContactsMiddleOdo = -frontLeftMotor.getCurrentPosition() - passedContactsMiddleOdo;
+        int deltaContactsLeftOdo = -backLeftMotor.getCurrentPosition() + passedContactsLeftOdo;
+        int deltaContactsRightOdo = -backRightMotor.getCurrentPosition() + passedContactsRightOdo;
+        int deltaContactsMiddleOdo = -frontLeftMotor.getCurrentPosition() + passedContactsMiddleOdo;
 
         //Update passed odo contacts
         passedContactsLeftOdo += deltaContactsLeftOdo;
@@ -85,7 +89,7 @@ public class DriverOpMode extends OpMode {
             double joystickAngle = Math.atan2(-joystickX, joystickY);
             double moveAngle = ToolBox.joystickToRobot(joystickAngle, robotRotation);
             double magnitude = ToolBox.pythagoras(joystickX, joystickY);
-            double[] motorPowers = ToolBox.getMotorPowersByDirection(joystickAngle, magnitude, rotate);
+            double[] motorPowers = ToolBox.getMotorPowersByDirection(moveAngle, magnitude, rotate);
 
             backLeftMotor.setPower(motorPowers[0]);
             backRightMotor.setPower(motorPowers[1]);
@@ -117,6 +121,8 @@ public class DriverOpMode extends OpMode {
                 backRightMotor.setPower(-breakingPower);
             }
         }
+
+        linearMechanismMotor.setPower(linearMechanismInput);
 
 
 
