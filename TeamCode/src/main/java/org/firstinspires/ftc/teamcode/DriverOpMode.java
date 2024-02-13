@@ -37,7 +37,7 @@ public class DriverOpMode extends OpMode {
         linearMechanismMotor = hMap.linearMechanismMotor;
 
         //TODO: change +/-
-        passedContactsRightOdo = backRightMotor.getCurrentPosition();
+        passedContactsRightOdo = -backRightMotor.getCurrentPosition();
         passedContactsLeftOdo = backLeftMotor.getCurrentPosition();
         passedContactsMiddleOdo = frontLeftMotor.getCurrentPosition();
     }
@@ -64,7 +64,7 @@ public class DriverOpMode extends OpMode {
         //Get odo deltas
         //TODO: add minus before entire bracket like this -(backLeftMotor.getCurrentPosition() - passedContactsLeftOdo)
         int deltaContactsLeftOdo = backLeftMotor.getCurrentPosition() - passedContactsLeftOdo;
-        int deltaContactsRightOdo = backRightMotor.getCurrentPosition() - passedContactsRightOdo;
+        int deltaContactsRightOdo = -(backRightMotor.getCurrentPosition() - passedContactsRightOdo);
         int deltaContactsMiddleOdo = frontLeftMotor.getCurrentPosition() - passedContactsMiddleOdo;
 
         //Update passed odo contacts
