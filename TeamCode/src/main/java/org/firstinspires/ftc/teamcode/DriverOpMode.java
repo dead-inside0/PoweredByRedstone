@@ -36,7 +36,6 @@ public class DriverOpMode extends OpMode {
 
         linearMechanismMotor = hMap.linearMechanismMotor;
 
-        //TODO: change +/-
         passedContactsRightOdo = backRightMotor.getCurrentPosition();
         passedContactsLeftOdo = backLeftMotor.getCurrentPosition();
         passedContactsMiddleOdo = frontLeftMotor.getCurrentPosition();
@@ -62,7 +61,6 @@ public class DriverOpMode extends OpMode {
         timeOfLastFrame += deltaTime;
 
         //Get odo deltas
-        //TODO: add minus before entire bracket like this -(backLeftMotor.getCurrentPosition() - passedContactsLeftOdo)
         int deltaContactsLeftOdo = backLeftMotor.getCurrentPosition() - passedContactsLeftOdo;
         int deltaContactsRightOdo = backRightMotor.getCurrentPosition() - passedContactsRightOdo;
         int deltaContactsMiddleOdo = frontLeftMotor.getCurrentPosition() - passedContactsMiddleOdo;
@@ -73,7 +71,7 @@ public class DriverOpMode extends OpMode {
         passedContactsMiddleOdo += deltaContactsMiddleOdo;
 
         //Get position change
-        double[] positionChange = Odometry.getPositionChange(deltaContactsRightOdo, deltaContactsLeftOdo, deltaContactsMiddleOdo, robotRotation);
+        double[] positionChange = Odometry.getPositionChange(-deltaContactsRightOdo, deltaContactsLeftOdo, -deltaContactsMiddleOdo, robotRotation);
         double deltaX = positionChange[0];
         double deltaY = positionChange[1];
         double deltaRotation = positionChange[2];
@@ -93,7 +91,7 @@ public class DriverOpMode extends OpMode {
             telemetry.addData("Joystick angle", joystickAngle);
             telemetry.addData("Move angle", moveAngle);
             double magnitude = ToolBox.pythagoras(joystickX, joystickY);
-            double[] motorPowers = ToolBox.getMotorPowersByDirection(moveAngle, magnitude, rotate);
+            double[] motorPowers = ToolBox.getMotorPowersByDirection(joystickAngle, magnitude, rotate);
 
             backLeftMotor.setPower(motorPowers[0]);
             backRightMotor.setPower(motorPowers[1]);
@@ -128,8 +126,8 @@ public class DriverOpMode extends OpMode {
         telemetry.addData("Position X", posX);
         telemetry.addData("Position Y", posY);
         telemetry.addData("Direction Angle in PI radians", robotRotation/Math.PI);
-        telemetry.addData("PassedContactsRightOdo", passedContactsRightOdo);
+        telemetry.addData("PassedContactsRightOdo", -passedContactsRightOdo);
         telemetry.addData("PassedContactsLeftOdo", passedContactsLeftOdo);
-        telemetry.addData("PassedContactsMiddleOdo", passedContactsMiddleOdo);
+        telemetry.addData("PassedContactsMiddleOdo", -passedContactsMiddleOdo);
     }
 }

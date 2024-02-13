@@ -66,25 +66,24 @@ public class OpenCVTest extends OpMode {
             inRange(input, lowColorBoundary, highColorBoundary, rangeMat);
             //return out;
 
-            telemetry.addData("first pixel in input", input.at(input.getClass(), 0, 0));
-            telemetry.addData("first pixel in range", rangeMat.at(rangeMat.getClass(), 0, 0));
-            telemetry.addData("pixels matching color", Core.countNonZero(rangeMat));
+            telemetry.addLine("pixels matching color" + Core.countNonZero(rangeMat));
+            telemetry.update();
 
-            Mat m = new Mat();
-            Core.extractChannel(rangeMat, m, 0);
-            telemetry.addData("pixels matching color in channel 0", Core.countNonZero(m));
+            //Mat m = new Mat();
+            //Core.extractChannel(rangeMat, m, 0);
+            //telemetry.addData("pixels matching color in channel 0", Core.countNonZero(m));
 
-            m = new Mat();
-            Core.extractChannel(rangeMat, m, 1);
-            telemetry.addData("pixels matching color in channel 1", Core.countNonZero(m));
+            //m = new Mat();
+            //Core.extractChannel(rangeMat, m, 1);
+            //telemetry.addData("pixels matching color in channel 1", Core.countNonZero(m));
 
-            m = new Mat();
-            Core.extractChannel(rangeMat, m, 2);
-            telemetry.addData("pixels matching color in channel 2", Core.countNonZero(m));
+            //m = new Mat();
+            //Core.extractChannel(rangeMat, m, 2);
+            //telemetry.addData("pixels matching color in channel 2", Core.countNonZero(m));
 
-            m = new Mat();
-            Core.extractChannel(rangeMat, m, 3);
-            telemetry.addData("pixels matching color in channel 3", Core.countNonZero(m));
+            //m = new Mat();
+            //Core.extractChannel(rangeMat, m, 3);
+            //telemetry.addData("pixels matching color in channel 3", Core.countNonZero(m));
 
             return input;
         }

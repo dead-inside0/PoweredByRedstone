@@ -10,6 +10,7 @@ public class Odometry {
         double leftArcLength = wheelCircumference * (deltaContactsLeftOdo / sensorResolution);
 
         double centerArcLength = (rightArcLength + leftArcLength) / 2;
+        //TODO: somehow invert this maybe add a minus infront not sure if itll work
         double centerArcAngle = (rightArcLength - leftArcLength) / sideOdosDistance;
         double alpha = centerArcAngle / 2;
 
