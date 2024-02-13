@@ -36,9 +36,10 @@ public class DriverOpMode extends OpMode {
 
         linearMechanismMotor = hMap.linearMechanismMotor;
 
-        passedContactsRightOdo = -backRightMotor.getCurrentPosition();
-        passedContactsLeftOdo = -backLeftMotor.getCurrentPosition();
-        passedContactsMiddleOdo = -frontLeftMotor.getCurrentPosition();
+        //TODO: change +/-
+        passedContactsRightOdo = backRightMotor.getCurrentPosition();
+        passedContactsLeftOdo = backLeftMotor.getCurrentPosition();
+        passedContactsMiddleOdo = frontLeftMotor.getCurrentPosition();
     }
 
     @Override
@@ -58,12 +59,13 @@ public class DriverOpMode extends OpMode {
         double deltaTime = runtime.seconds() - timeOfLastFrame;
 
         //Update time of last frame
-        timeOfLastFrame = runtime.seconds();
+        timeOfLastFrame += deltaTime;
 
         //Get odo deltas
-        int deltaContactsLeftOdo = -backLeftMotor.getCurrentPosition() + passedContactsLeftOdo;
-        int deltaContactsRightOdo = -backRightMotor.getCurrentPosition() + passedContactsRightOdo;
-        int deltaContactsMiddleOdo = -frontLeftMotor.getCurrentPosition() + passedContactsMiddleOdo;
+        //TODO: add minus before entire bracket like this -(backLeftMotor.getCurrentPosition() - passedContactsLeftOdo)
+        int deltaContactsLeftOdo = backLeftMotor.getCurrentPosition() - passedContactsLeftOdo;
+        int deltaContactsRightOdo = backRightMotor.getCurrentPosition() - passedContactsRightOdo;
+        int deltaContactsMiddleOdo = frontLeftMotor.getCurrentPosition() - passedContactsMiddleOdo;
 
         //Update passed odo contacts
         passedContactsLeftOdo += deltaContactsLeftOdo;
@@ -88,6 +90,8 @@ public class DriverOpMode extends OpMode {
         if(Math.abs(joystickX) > deadzone || Math.abs(joystickY) > deadzone || Math.abs(rotate) > deadzone) {
             double joystickAngle = Math.atan2(-joystickX, joystickY);
             double moveAngle = ToolBox.joystickToRobot(joystickAngle, robotRotation);
+            telemetry.addData("Joystick angle", joystickAngle);
+            telemetry.addData("Move angle", moveAngle);
             double magnitude = ToolBox.pythagoras(joystickX, joystickY);
             double[] motorPowers = ToolBox.getMotorPowersByDirection(moveAngle, magnitude, rotate);
 
@@ -98,18 +102,8 @@ public class DriverOpMode extends OpMode {
         }
         else {
             double breakingPower = 0.01;
-            if(Math.abs(deltaX) > 1 || Math.abs(deltaY) > 1 || Math.abs(deltaRotation) > 1){
+            if(Math.abs(deltaX) > ToolBox.movementTolerance || Math.abs(deltaY) > ToolBox.movementTolerance || Math.abs(deltaRotation) > ToolBox.rotateTolerance){
                 //break
-                frontLeftMotor.setPower(breakingPower);
-                frontRightMotor.setPower(breakingPower);
-                backLeftMotor.setPower(breakingPower);
-                backRightMotor.setPower(breakingPower);
-
-                frontLeftMotor.setPower(-breakingPower);
-                frontRightMotor.setPower(-breakingPower);
-                backLeftMotor.setPower(-breakingPower);
-                backRightMotor.setPower(-breakingPower);
-
                 frontLeftMotor.setPower(breakingPower);
                 frontRightMotor.setPower(breakingPower);
                 backLeftMotor.setPower(breakingPower);

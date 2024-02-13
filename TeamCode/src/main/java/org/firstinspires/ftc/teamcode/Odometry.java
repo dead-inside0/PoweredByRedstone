@@ -4,13 +4,13 @@ public class Odometry {
     public static double[] getPositionChange(int deltaContactsRightOdo, int deltaContactsLeftOdo, int deltaContactsMiddleOdo, double prevAngle){
         final double sideOdosDistance = 300;
         final double wheelCircumference = 60 * Math.PI;
-        final double sensorResolution = 8192;
+        final double sensorResolution = 2048;
 
         double rightArcLength = wheelCircumference * (deltaContactsRightOdo / sensorResolution);
         double leftArcLength = wheelCircumference * (deltaContactsLeftOdo / sensorResolution);
 
-        double centerArcLength = (rightArcLength + leftArcLength) / 2;
-        double centerArcAngle = (rightArcLength - leftArcLength) / sideOdosDistance;
+        double centerArcLength = (leftArcLength + rightArcLength) / 2;
+        double centerArcAngle = (leftArcLength - rightArcLength) / sideOdosDistance;
         double alpha = centerArcAngle / 2;
 
         double shiftLength;
@@ -40,7 +40,7 @@ public class Odometry {
         deltaX += strafingDeltaX;
         deltaY += strafingDeltaY;
 
-        double[] positionChange = {deltaX, deltaY, -centerArcAngle}; //x, y, angle
+        double[] positionChange = {deltaX, deltaY, centerArcAngle}; //x, y, angle
         return positionChange;
     }
 }
