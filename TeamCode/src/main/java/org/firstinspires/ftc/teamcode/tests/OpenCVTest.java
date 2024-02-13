@@ -1,18 +1,22 @@
 package org.firstinspires.ftc.teamcode.tests;
 
-import static org.opencv.core.Core.inRange;
+import android.annotation.SuppressLint;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.Point;
 import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera2;
 import org.openftc.easyopencv.OpenCvPipeline;
+
+import java.util.Arrays;
 
 @TeleOp(name="OpenCV Test")
 public class OpenCVTest extends OpMode {
@@ -33,7 +37,7 @@ public class OpenCVTest extends OpMode {
             public void onOpened()
             {
                 //Start streaming
-                phoneCam.startStreaming(320, 240, OpenCvCameraRotation.SIDEWAYS_RIGHT);
+                phoneCam.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
             }
             @Override
             public void onError(int errorCode)
@@ -49,43 +53,28 @@ public class OpenCVTest extends OpMode {
     }
 
     @Override
-    public void loop(){
-        //Output some telemetry data
-        telemetry.addData("FPS", phoneCam.getFps());
-    }
-
+    public void loop(){}
 
     //Pipeline
     class TestPipeline extends OpenCvPipeline {
-        //BGR COLOR FORMAT!!! might be hsv tbh but i cant find it anywhere
-        Scalar highColorBoundary = new Scalar(0, 0, 255);
-        Scalar lowColorBoundary = new Scalar(75, 75, 150);
+        //BGR COLOR FORMAT!!!
+        Scalar highColorBoundary = new Scalar(255, 255, 255, 255);
+        Scalar lowColorBoundary = new Scalar(120, 120, 120, 255);
+
         @Override
         public Mat processFrame(Mat input) {
             Mat rangeMat = new Mat();
-            inRange(input, lowColorBoundary, highColorBoundary, rangeMat);
-            //return out;
+            Core.inRange(input, lowColorBoundary, highColorBoundary, rangeMat);
 
-            telemetry.addLine("pixels matching color" + Core.countNonZero(rangeMat));
-            telemetry.update();
+            String text = String.format("# nonzero: %d, nonzero percentage %f", Core.countNonZero(rangeMat), 100.0 * Core.countNonZero(rangeMat) / (640*480));
+            Point position = new Point(10, 440);
+            Scalar textColor = new Scalar(0, 0, 255);
+            int font = Imgproc.FONT_HERSHEY_SIMPLEX;
+            double scale = 0.5;
+            int thickness = 1;
+            Imgproc.putText(input, text, position, font, scale, textColor, thickness);
 
-            //Mat m = new Mat();
-            //Core.extractChannel(rangeMat, m, 0);
-            //telemetry.addData("pixels matching color in channel 0", Core.countNonZero(m));
-
-            //m = new Mat();
-            //Core.extractChannel(rangeMat, m, 1);
-            //telemetry.addData("pixels matching color in channel 1", Core.countNonZero(m));
-
-            //m = new Mat();
-            //Core.extractChannel(rangeMat, m, 2);
-            //telemetry.addData("pixels matching color in channel 2", Core.countNonZero(m));
-
-            //m = new Mat();
-            //Core.extractChannel(rangeMat, m, 3);
-            //telemetry.addData("pixels matching color in channel 3", Core.countNonZero(m));
-
-            return input;
+            return rangeMat;
         }
     }
 }
