@@ -40,7 +40,7 @@ public class Odometry {
         deltaX += strafingDeltaX;
         deltaY += strafingDeltaY;
 
-        double[] positionChange = {deltaX, deltaY, centerArcAngle}; //x, y, angle
+        double[] positionChange = {deltaX, deltaY, -centerArcAngle}; //x, y, angle
         return positionChange;
     }
 }
