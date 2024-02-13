@@ -9,8 +9,8 @@ public class Odometry {
         double rightArcLength = wheelCircumference * (deltaContactsRightOdo / sensorResolution);
         double leftArcLength = wheelCircumference * (deltaContactsLeftOdo / sensorResolution);
 
-        double centerArcLength = (leftArcLength + rightArcLength) / 2;
-        double centerArcAngle = (leftArcLength - rightArcLength) / sideOdosDistance;
+        double centerArcLength = (rightArcLength + leftArcLength) / 2;
+        double centerArcAngle = (rightArcLength - leftArcLength) / sideOdosDistance;
         double alpha = centerArcAngle / 2;
 
         double shiftLength;
