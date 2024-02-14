@@ -71,7 +71,7 @@ public class DriverOpMode extends OpMode {
         passedContactsMiddleOdo += deltaContactsMiddleOdo;
 
         //Get position change
-        double[] positionChange = Odometry.getPositionChange(-deltaContactsRightOdo, deltaContactsLeftOdo, -deltaContactsMiddleOdo);
+        double[] positionChange = Odometry.getPositionChange(-deltaContactsRightOdo, deltaContactsLeftOdo, -deltaContactsMiddleOdo, robotRotation);
         double deltaX = positionChange[0];
         double deltaY = positionChange[1];
         double deltaRotation = positionChange[2];
