@@ -88,10 +88,8 @@ public class DriverOpMode extends OpMode {
         if(Math.abs(joystickX) > deadzone || Math.abs(joystickY) > deadzone || Math.abs(rotate) > deadzone) {
             double joystickAngle = Math.atan2(-joystickX, joystickY);
             double moveAngle = ToolBox.joystickToRobot(joystickAngle, robotRotation);
-            telemetry.addData("Joystick angle", joystickAngle);
-            telemetry.addData("Move angle", moveAngle);
             double magnitude = ToolBox.pythagoras(joystickX, joystickY);
-            double[] motorPowers = ToolBox.getMotorPowersByDirection(joystickAngle, magnitude, rotate);
+            double[] motorPowers = ToolBox.getMotorPowersByDirection(moveAngle, magnitude, rotate);
 
             backLeftMotor.setPower(motorPowers[0]);
             backRightMotor.setPower(motorPowers[1]);
@@ -100,7 +98,7 @@ public class DriverOpMode extends OpMode {
         }
         else {
             double breakingPower = 0.01;
-            if(Math.abs(deltaX) > ToolBox.movementTolerance || Math.abs(deltaY) > ToolBox.movementTolerance || Math.abs(deltaRotation) > ToolBox.rotateTolerance){
+            if(Math.abs(deltaX) > 0.5 || Math.abs(deltaY) > 0.5 || Math.abs(deltaRotation) > Math.PI/360){
                 //break
                 frontLeftMotor.setPower(breakingPower);
                 frontRightMotor.setPower(breakingPower);
@@ -114,7 +112,9 @@ public class DriverOpMode extends OpMode {
             }
         }
 
-        linearMechanismMotor.setPower(linearMechanismInput);
+        if(linearMechanismMotor.getCurrentPosition() > 100 && linearMechanismMotor.getCurrentPosition() < 1900) {
+            linearMechanismMotor.setPower(linearMechanismInput);
+        }
 
 
 

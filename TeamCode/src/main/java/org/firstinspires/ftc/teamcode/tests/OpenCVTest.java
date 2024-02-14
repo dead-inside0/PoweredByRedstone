@@ -57,10 +57,15 @@ public class OpenCVTest extends OpMode {
 
     //Pipeline
     class TestPipeline extends OpenCvPipeline {
+        public int countPixelsOfColor(Mat in, Scalar lowerBound, Scalar upperBound){
+            int count = 0;
+
+            return count;
+        }
+
         //BGR COLOR FORMAT!!!
         Scalar highColorBoundary = new Scalar(255, 255, 255, 255);
         Scalar lowColorBoundary = new Scalar(120, 120, 120, 255);
-
         @Override
         public Mat processFrame(Mat input) {
             Mat rangeMat = new Mat();

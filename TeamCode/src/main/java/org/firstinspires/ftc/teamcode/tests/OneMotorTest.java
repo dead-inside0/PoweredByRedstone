@@ -14,7 +14,6 @@ public class OneMotorTest extends OpMode {
     @Override
     public void init() {
         motor = hardwareMap.get(DcMotor.class, "motor0");
-        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     @Override
@@ -22,16 +21,6 @@ public class OneMotorTest extends OpMode {
         double joystickY = -gamepad1.left_stick_y;
         motor.setPower(joystickY);
 
-        if(gamepad1.b){
-            if(motor.getDirection() == DcMotorSimple.Direction.FORWARD){
-                motor.setDirection(DcMotorSimple.Direction.REVERSE);
-            }
-            else{
-                motor.setDirection(DcMotorSimple.Direction.FORWARD);
-            }
-        }
-
         telemetry.addData("Encoders passed", motor.getCurrentPosition());
-        telemetry.addData("Motor direction", motor.getDirection());
     }
 }

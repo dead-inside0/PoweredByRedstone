@@ -16,6 +16,7 @@ public class Odometry {
         double shiftLength;
         double deltaX;
         double deltaY;
+        //TODO: something wrong here idk what
         if(centerArcLength == 0){
             deltaX = 0;
             deltaY = 0;
