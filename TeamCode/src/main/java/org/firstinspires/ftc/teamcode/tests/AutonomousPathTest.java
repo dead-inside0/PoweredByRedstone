@@ -54,7 +54,7 @@ public class AutonomousPathTest extends LinearOpMode{
                 passedContactsLeftOdo += deltaContactsLeftOdo;
                 passedContactsMiddleOdo += deltaContactsMiddleOdo;
                 //Get position change
-                double[] positionChange = Odometry.getPositionChange(deltaContactsRightOdo, deltaContactsLeftOdo, deltaContactsMiddleOdo, robotRotation);
+                double[] positionChange = Odometry.getPositionChange(deltaContactsRightOdo, deltaContactsLeftOdo, deltaContactsMiddleOdo);
                 double deltaX = positionChange[0];
                 double deltaY = positionChange[1];
                 double deltaRotation = positionChange[2];
@@ -63,7 +63,7 @@ public class AutonomousPathTest extends LinearOpMode{
                 posX += deltaX;
                 posY += deltaY;
                 robotRotation += deltaRotation;
-                robotRotation = ToolBox.clampAngle(robotRotation);
+                robotRotation = ToolBox.scaleAngle(robotRotation);
 
                 double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, point[0], point[1], 0, 0, 0.5);
 

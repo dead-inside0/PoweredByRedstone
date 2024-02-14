@@ -71,7 +71,7 @@ public class DriverOpMode extends OpMode {
         passedContactsMiddleOdo += deltaContactsMiddleOdo;
 
         //Get position change
-        double[] positionChange = Odometry.getPositionChange(-deltaContactsRightOdo, deltaContactsLeftOdo, -deltaContactsMiddleOdo, robotRotation);
+        double[] positionChange = Odometry.getPositionChange(-deltaContactsRightOdo, deltaContactsLeftOdo, -deltaContactsMiddleOdo);
         double deltaX = positionChange[0];
         double deltaY = positionChange[1];
         double deltaRotation = positionChange[2];
@@ -80,7 +80,7 @@ public class DriverOpMode extends OpMode {
         posX += deltaX;
         posY += deltaY;
         robotRotation += deltaRotation;
-        robotRotation = ToolBox.clampAngle(robotRotation);
+        robotRotation = ToolBox.scaleAngle(robotRotation);
 
 
         //Move robot
@@ -114,6 +114,17 @@ public class DriverOpMode extends OpMode {
 
         if(linearMechanismMotor.getCurrentPosition() > 100 && linearMechanismMotor.getCurrentPosition() < 1900) {
             linearMechanismMotor.setPower(linearMechanismInput);
+        }
+
+
+        //odo test - drive back to zero on y
+        if(gamepad1.a){
+            double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, 0, 0, robotRotation, 0, 0.5);
+
+            backLeftMotor.setPower(motorPowers[0]);
+            backRightMotor.setPower(motorPowers[1]);
+            frontLeftMotor.setPower(motorPowers[2]);
+            frontRightMotor.setPower(motorPowers[3]);
         }
 
 

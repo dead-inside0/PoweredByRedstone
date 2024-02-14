@@ -8,15 +8,15 @@ public class ToolBox {
 
     //converts the joystick angle (global) to the angle needed to move the robot (local) in that direction
     public static double joystickToRobot(double joystickAngle, double robotAngle){
-        double localAngle = joystickAngle - robotAngle; //we MIGHT be fucked
-        return clampAngle(localAngle);
+        double localAngle = joystickAngle - robotAngle;
+        return scaleAngle(localAngle);
     }
 
 
     //returns motor powers needed to go in a specific angle
     public static double[] getMotorPowersByDirection(double targetDirectionAngle, double magnitude, double rotate){
         targetDirectionAngle -= Math.PI/2;
-        targetDirectionAngle = clampAngle(targetDirectionAngle);
+        targetDirectionAngle = scaleAngle(targetDirectionAngle);
 
         double motorPowerBlue = Math.sin(targetDirectionAngle + Math.PI / 4) * magnitude;
         double motorPowerRed = Math.sin(targetDirectionAngle - Math.PI / 4) * magnitude;
@@ -41,8 +41,12 @@ public class ToolBox {
         double angleToTarget = Math.atan2(currentX-targetX, currentY-targetY);
 
         double rotate = 0;
-        if(clampAngle(currentRot - targetRot) > rotateTolerance){
-            rotate = 0.75;
+        if(Math.abs(scaleAngle(currentRot - targetRot)) > rotateTolerance){
+            rotate = 0.5;
+        }
+
+        if(Math.abs(currentX - targetX) < ToolBox.movementTolerance && Math.abs(currentY - targetY) < ToolBox.movementTolerance){
+            speed = 0;
         }
 
         //TODO: Better rotating based on which way is closer
@@ -56,7 +60,7 @@ public class ToolBox {
     }
 
     //Makes sure angle is between 0 and 2PI
-    public static double clampAngle(double angle){
+    public static double scaleAngle(double angle){
         if(angle > 2*Math.PI){
             return angle - 2* Math.PI;
         }
