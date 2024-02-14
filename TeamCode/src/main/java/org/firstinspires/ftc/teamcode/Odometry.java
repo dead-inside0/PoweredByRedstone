@@ -17,21 +17,15 @@ public class Odometry {
         double deltaX;
         double deltaY;
         //TODO: something wrong here idk what
-        if(centerArcLength == 0){
-            deltaX = 0;
-            deltaY = 0;
+        if(centerArcAngle == 0){
+            shiftLength = centerArcLength;
         }
         else{
-            if(centerArcAngle == 0){
-                shiftLength = centerArcLength;
-            }
-            else{
-                double centerArcRadius = centerArcAngle / centerArcLength;
-                shiftLength = Math.sqrt(2 * Math.pow(centerArcRadius, 2) - 2 * Math.pow(centerArcRadius, 2) * Math.cos(centerArcAngle));
-            }
-            deltaX = shiftLength * Math.cos(alpha);
-            deltaY = shiftLength * Math.sin(alpha);
+            double centerArcRadius = centerArcAngle / centerArcLength;
+            shiftLength = Math.sqrt(2 * Math.pow(centerArcRadius, 2) - 2 * Math.pow(centerArcRadius, 2) * Math.cos(centerArcAngle));
         }
+        deltaX = shiftLength * Math.cos(alpha);
+        deltaY = shiftLength * Math.sin(alpha);
 
         double strafing = wheelCircumference * deltaContactsMiddleOdo / sensorResolution;
 
