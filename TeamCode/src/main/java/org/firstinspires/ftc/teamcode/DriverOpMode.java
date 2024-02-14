@@ -125,7 +125,7 @@ public class DriverOpMode extends OpMode {
         //telemetry.addData("Rotate joystick", rotate);
         telemetry.addData("Position X", posX);
         telemetry.addData("Position Y", posY);
-        telemetry.addData("Direction Angle in PI radians", robotRotation/Math.PI);
+        telemetry.addData("Robot direction in PI radians", robotRotation/Math.PI);
         telemetry.addData("PassedContactsRightOdo", -passedContactsRightOdo);
         telemetry.addData("PassedContactsLeftOdo", passedContactsLeftOdo);
         telemetry.addData("PassedContactsMiddleOdo", -passedContactsMiddleOdo);
