@@ -92,7 +92,7 @@ public class DriverOpMode extends OpMode {
         double deadzone = 0.05;
         if(Math.abs(joystickX) > deadzone || Math.abs(joystickY) > deadzone || Math.abs(rotate) > deadzone) {
             double joystickAngle = Math.atan2(joystickX, joystickY);
-            double moveAngle = ToolBox.joystickToRobot(joystickAngle, robotRotation);
+            double moveAngle = ToolBox.globalToRobot(joystickAngle, robotRotation);
             double magnitude = ToolBox.pythagoras(joystickX, joystickY);
             double[] motorPowers = ToolBox.getMotorPowersByDirection(moveAngle, magnitude, rotate);
 
@@ -139,7 +139,7 @@ public class DriverOpMode extends OpMode {
             posY = 0;
         }
 
-
+        //shoot drone
         if(gamepad2.a) {
             droneServo.setPosition(0);
         }

@@ -7,7 +7,7 @@ public class ToolBox {
     public static double rotateTolerance = Math.PI/90;
 
     //converts the joystick angle (global) to the angle needed to move the robot (local) in that direction
-    public static double joystickToRobot(double joystickAngle, double robotAngle){
+    public static double globalToRobot(double joystickAngle, double robotAngle){
         double localAngle = joystickAngle - robotAngle;
         return scaleAngle(localAngle);
     }
@@ -39,6 +39,7 @@ public class ToolBox {
 
     public static double[] getMotorPowersToPoint(double currentX, double currentY, double targetX, double targetY, double currentRot, double targetRot, double speed){
         double angleToTarget = Math.atan2(currentX-targetX, currentY-targetY);
+        angleToTarget = globalToRobot(angleToTarget, currentRot);
 
         //TODO: Rotate while moving
         double rotate = 0;
