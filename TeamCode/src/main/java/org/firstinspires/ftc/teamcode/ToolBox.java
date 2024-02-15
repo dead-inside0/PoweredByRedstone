@@ -3,11 +3,11 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.util.Range;
 
 public class ToolBox {
-    public static double movementTolerance = 5;
+    public static double movementTolerance = 10;
     public static double rotateTolerance = Math.PI/90;
 
     //converts the joystick angle (global) to the angle needed to move the robot (local) in that direction
-    public static double joystickToRobot(double joystickAngle, double robotAngle){
+    public static double globalToRobot(double joystickAngle, double robotAngle){
         double localAngle = joystickAngle - robotAngle;
         return scaleAngle(localAngle);
     }
@@ -15,7 +15,7 @@ public class ToolBox {
 
     //returns motor powers needed to go in a specific angle
     public static double[] getMotorPowersByDirection(double targetDirectionAngle, double magnitude, double rotate){
-        targetDirectionAngle -= Math.PI/2;
+        targetDirectionAngle += Math.PI/2;
         targetDirectionAngle = scaleAngle(targetDirectionAngle);
 
         double motorPowerBlue = Math.sin(targetDirectionAngle + Math.PI / 4) * magnitude;
@@ -28,10 +28,10 @@ public class ToolBox {
         }
 
         double[] motorPowers = { // motor powers are scaled so the max power < 1
-                (motorPowerRed + rotate) / factor, //backleft
-                (-motorPowerBlue + rotate) / factor, //backright
-                (motorPowerBlue + rotate) / factor, //frontleft
-                (-motorPowerRed + rotate) / factor //frontright
+                (motorPowerBlue + rotate) / factor, //backleft
+                (-motorPowerRed + rotate) / factor, //backright
+                (motorPowerRed + rotate) / factor, //frontleft
+                (-motorPowerBlue + rotate) / factor //frontright
         };
 
         return motorPowers;
@@ -39,17 +39,17 @@ public class ToolBox {
 
     public static double[] getMotorPowersToPoint(double currentX, double currentY, double targetX, double targetY, double currentRot, double targetRot, double speed){
         double angleToTarget = Math.atan2(currentX-targetX, currentY-targetY);
+        angleToTarget = globalToRobot(angleToTarget, currentRot);
 
+        //TODO: Rotate while moving
         double rotate = 0;
-        if(Math.abs(scaleAngle(currentRot - targetRot)) > rotateTolerance){
-            rotate = 0.5;
-        }
+        //if(Math.abs(scaleAngle(currentRot - targetRot)) > rotateTolerance){
+        //    rotate = 0.5;
+        //}
 
-        if(Math.abs(currentX - targetX) < ToolBox.movementTolerance && Math.abs(currentY - targetY) < ToolBox.movementTolerance){
+        if(Math.abs(currentX - targetX) < movementTolerance && Math.abs(currentY - targetY) < movementTolerance){
             speed = 0;
         }
-
-        //TODO: Better rotating based on which way is closer
 
         return getMotorPowersByDirection(angleToTarget, speed, rotate);
     }
