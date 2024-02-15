@@ -132,6 +132,7 @@ public class DriverOpMode extends OpMode {
             frontRightMotor.setPower(motorPowers[3]);
         }
 
+        //Reset position and rotation on y
         if(gamepad1.y){
             robotRotation = 0;
             posX = 0;

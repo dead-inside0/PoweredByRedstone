@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.util.Range;
 
 public class ToolBox {
-    public static double movementTolerance = 5;
+    public static double movementTolerance = 10;
     public static double rotateTolerance = Math.PI/90;
 
     //converts the joystick angle (global) to the angle needed to move the robot (local) in that direction
@@ -28,10 +28,10 @@ public class ToolBox {
         }
 
         double[] motorPowers = { // motor powers are scaled so the max power < 1
-                (motorPowerRed + rotate) / factor, //backleft
-                (-motorPowerBlue + rotate) / factor, //backright
-                (motorPowerBlue + rotate) / factor, //frontleft
-                (-motorPowerRed + rotate) / factor //frontright
+                (motorPowerBlue + rotate) / factor, //backleft
+                (-motorPowerRed + rotate) / factor, //backright
+                (motorPowerRed + rotate) / factor, //frontleft
+                (-motorPowerBlue + rotate) / factor //frontright
         };
 
         return motorPowers;
@@ -46,7 +46,7 @@ public class ToolBox {
         //    rotate = 0.5;
         //}
 
-        if(Math.abs(currentX - targetX) < ToolBox.movementTolerance && Math.abs(currentY - targetY) < ToolBox.movementTolerance){
+        if(Math.abs(currentX - targetX) < movementTolerance && Math.abs(currentY - targetY) < movementTolerance){
             speed = 0;
         }
 
