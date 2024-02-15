@@ -86,7 +86,7 @@ public class DriverOpMode extends OpMode {
         //Move robot
         double deadzone = 0.05;
         if(Math.abs(joystickX) > deadzone || Math.abs(joystickY) > deadzone || Math.abs(rotate) > deadzone) {
-            double joystickAngle = Math.atan2(-joystickX, joystickY);
+            double joystickAngle = Math.atan2(joystickX, joystickY);
             double moveAngle = ToolBox.joystickToRobot(joystickAngle, robotRotation);
             double magnitude = ToolBox.pythagoras(joystickX, joystickY);
             double[] motorPowers = ToolBox.getMotorPowersByDirection(moveAngle, magnitude, rotate);
@@ -112,12 +112,12 @@ public class DriverOpMode extends OpMode {
             }
         }
 
-        if(linearMechanismMotor.getCurrentPosition() > 100 && linearMechanismMotor.getCurrentPosition() < 1900) {
+        if(linearMechanismMotor.getCurrentPosition() <= 1900) {
             linearMechanismMotor.setPower(linearMechanismInput);
         }
 
 
-        //odo test - drive back to zero on y
+        //odo test - drive back to zero on a
         if(gamepad1.a){
             double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, 0, 0, robotRotation, 0, 0.5);
 
@@ -125,6 +125,12 @@ public class DriverOpMode extends OpMode {
             backRightMotor.setPower(motorPowers[1]);
             frontLeftMotor.setPower(motorPowers[2]);
             frontRightMotor.setPower(motorPowers[3]);
+        }
+
+        if(gamepad1.y){
+            robotRotation = 0;
+            posX = 0;
+            posY = 0;
         }
 
 

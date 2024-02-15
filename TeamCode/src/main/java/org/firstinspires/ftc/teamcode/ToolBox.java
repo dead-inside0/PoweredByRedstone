@@ -15,7 +15,7 @@ public class ToolBox {
 
     //returns motor powers needed to go in a specific angle
     public static double[] getMotorPowersByDirection(double targetDirectionAngle, double magnitude, double rotate){
-        targetDirectionAngle -= Math.PI/2;
+        targetDirectionAngle += Math.PI/2;
         targetDirectionAngle = scaleAngle(targetDirectionAngle);
 
         double motorPowerBlue = Math.sin(targetDirectionAngle + Math.PI / 4) * magnitude;
@@ -40,16 +40,15 @@ public class ToolBox {
     public static double[] getMotorPowersToPoint(double currentX, double currentY, double targetX, double targetY, double currentRot, double targetRot, double speed){
         double angleToTarget = Math.atan2(currentX-targetX, currentY-targetY);
 
+        //TODO: Rotate while moving
         double rotate = 0;
-        if(Math.abs(scaleAngle(currentRot - targetRot)) > rotateTolerance){
-            rotate = 0.5;
-        }
+        //if(Math.abs(scaleAngle(currentRot - targetRot)) > rotateTolerance){
+        //    rotate = 0.5;
+        //}
 
         if(Math.abs(currentX - targetX) < ToolBox.movementTolerance && Math.abs(currentY - targetY) < ToolBox.movementTolerance){
             speed = 0;
         }
-
-        //TODO: Better rotating based on which way is closer
 
         return getMotorPowersByDirection(angleToTarget, speed, rotate);
     }
