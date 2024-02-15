@@ -24,9 +24,7 @@ public class Odometry {
 
         //If didn't move
         if(centerArcLength == 0){
-            //Deltas = 0
-            deltaX = 0;
-            deltaY = 0;
+            shiftLength = 0;
         }
         else {
             //If drove straight
