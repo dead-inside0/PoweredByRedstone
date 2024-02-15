@@ -62,10 +62,18 @@ public class ToolBox {
     //Makes sure angle is between 0 and 2PI
     public static double scaleAngle(double angle){
         if(angle > 2*Math.PI){
-            return angle - 2* Math.PI;
+            double newAngle = angle;
+            while(newAngle > 2*Math.PI){
+                newAngle -= 2*Math.PI;
+            }
+            return newAngle;
         }
         else if(angle < 0){
-            return angle + 2*Math.PI;
+            double newAngle = angle;
+            while(newAngle < 0){
+                newAngle += 2*Math.PI;
+            }
+            return newAngle;
         }
         else{
             return angle;

@@ -4,7 +4,7 @@ public class Odometry {
     public static double[] getPositionChange(int deltaContactsRightOdo, int deltaContactsLeftOdo, int deltaContactsMiddleOdo){
         final double sideOdosDistance = 300;
         final double wheelCircumference = 60 * Math.PI;
-        final double sensorResolution = 8192;
+        final double sensorResolution = 2048;
 
         double rightArcLength = wheelCircumference * (deltaContactsRightOdo / sensorResolution);
         double leftArcLength = wheelCircumference * (deltaContactsLeftOdo / sensorResolution);
@@ -14,8 +14,6 @@ public class Odometry {
         double alpha = centerArcAngle / 2;
 
         double shiftLength;
-        double deltaX;
-        double deltaY;
         //TODO: something wrong here idk what
         if(centerArcAngle == 0){
             shiftLength = centerArcLength;
@@ -24,8 +22,8 @@ public class Odometry {
             double centerArcRadius = centerArcAngle / centerArcLength;
             shiftLength = Math.sqrt(2 * Math.pow(centerArcRadius, 2) - 2 * Math.pow(centerArcRadius, 2) * Math.cos(centerArcAngle));
         }
-        deltaX = shiftLength * Math.cos(alpha);
-        deltaY = shiftLength * Math.sin(alpha);
+        double deltaX = shiftLength * Math.cos(alpha);
+        double deltaY = shiftLength * Math.sin(alpha);
 
         double strafing = wheelCircumference * deltaContactsMiddleOdo / sensorResolution;
 
