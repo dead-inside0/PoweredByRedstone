@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name="Driver")
@@ -13,6 +14,7 @@ public class DriverOpMode extends OpMode {
     private DcMotor frontRightMotor;
     private DcMotor frontLeftMotor;
     private DcMotor linearMechanismMotor;
+    private Servo droneServo;
 
     double posX = 0;
     double posY = 0;
@@ -34,6 +36,8 @@ public class DriverOpMode extends OpMode {
         frontLeftMotor = hMap.frontLeftMotor;
         frontRightMotor = hMap.frontRightMotor;
 
+        droneServo = hMap.droneServo;
+
         linearMechanismMotor = hMap.linearMechanismMotor;
 
         passedContactsRightOdo = backRightMotor.getCurrentPosition();
@@ -44,6 +48,7 @@ public class DriverOpMode extends OpMode {
     @Override
     public void start() {
         runtime.reset();
+        droneServo.setPosition(1);
     }
 
     @Override
@@ -134,6 +139,12 @@ public class DriverOpMode extends OpMode {
         }
 
 
+        if(gamepad2.a) {
+            droneServo.setPosition(0);
+        }
+        else if(gamepad2.b) {
+            droneServo.setPosition(1);
+        }
 
 
         //output data
