@@ -117,9 +117,10 @@ public class DriverOpMode extends OpMode {
             }
         }
 
-        if(linearMechanismMotor.getCurrentPosition() <= 1900) {
-            linearMechanismMotor.setPower(linearMechanismInput);
-        }
+        // Move arm
+        linearMechanismMotor.setPower(linearMechanismInput);
+
+
 
 
         //odo test - drive back to zero on a
@@ -131,6 +132,10 @@ public class DriverOpMode extends OpMode {
             frontLeftMotor.setPower(motorPowers[2]);
             frontRightMotor.setPower(motorPowers[3]);
         }
+
+
+
+
 
         //Reset position and rotation on y
         if(gamepad1.y){

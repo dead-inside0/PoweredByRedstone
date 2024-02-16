@@ -5,7 +5,7 @@ public class Odometry {
         //Set known variables
         final double sideOdosDistance = 300;
         final double wheelCircumference = 60 * Math.PI;
-        final double sensorResolution = 2048;
+        final double sensorResolution = 8192;
 
         //Distance traveled by either odo wheel
         double rightArcLength = wheelCircumference * (deltaContactsRightOdo / sensorResolution);
@@ -29,19 +29,18 @@ public class Odometry {
         else {
             //If drove straight
             if (deltaRotation == 0) {
-                //Distance car center middle and after
+                //Distance between car center before and after
                 shiftLength = centerArcLength;
             }
             else {
                 double centerArcRadius = deltaRotation / centerArcLength;
                 shiftLength = Math.sqrt(2 * Math.pow(centerArcRadius, 2) - 2 * Math.pow(centerArcRadius, 2) * Math.cos(deltaRotation));
             }
-            deltaX = shiftLength * Math.cos(prevAngle + alpha);
-            deltaY = shiftLength * Math.sin(prevAngle + alpha);
         }
-        deltaX = shiftLength * Math.cos(alpha);
-        deltaY = shiftLength * Math.sin(alpha);
+        deltaX = shiftLength * Math.cos(prevAngle + alpha);
+        deltaY = shiftLength * Math.sin(prevAngle + alpha);
 
+        //Distance traveled by middle odo
         double strafing = wheelCircumference * deltaContactsMiddleOdo / sensorResolution;
 
         double strafingDeltaX = strafing * Math.sin(prevAngle + alpha);

@@ -37,6 +37,7 @@ public class ToolBox {
         return motorPowers;
     }
 
+    //Get motor powers to drive to a specific point
     public static double[] getMotorPowersToPoint(double currentX, double currentY, double targetX, double targetY, double currentRot, double targetRot, double speed){
         double angleToTarget = Math.atan2(currentX-targetX, currentY-targetY);
         angleToTarget = globalToRobot(angleToTarget, currentRot);
