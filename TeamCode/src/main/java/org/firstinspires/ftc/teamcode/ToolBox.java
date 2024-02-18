@@ -14,12 +14,12 @@ public class ToolBox {
 
 
     //returns motor powers needed to go in a specific angle
-    public static double[] getMotorPowersByDirection(double targetDirectionAngle, double magnitude, double rotate){
+    public static double[] getMotorPowersByDirection(double targetDirectionAngle, double moveSpeed, double rotate){
         targetDirectionAngle += Math.PI/2;
         targetDirectionAngle = scaleAngle(targetDirectionAngle);
 
-        double motorPowerBlue = Math.sin(targetDirectionAngle + Math.PI / 4) * magnitude;
-        double motorPowerRed = Math.sin(targetDirectionAngle - Math.PI / 4) * magnitude;
+        double motorPowerBlue = Math.sin(targetDirectionAngle + Math.PI / 4) * moveSpeed;
+        double motorPowerRed = Math.sin(targetDirectionAngle - Math.PI / 4) * moveSpeed;
 
         double maxMotorPower = Math.max(motorPowerBlue, motorPowerRed);
         double factor = 1;
