@@ -77,6 +77,7 @@ public class DriverOpMode extends OpMode {
 
         //Get position change
         double[] positionChange = Odometry.getPositionChange(-deltaContactsRightOdo, deltaContactsLeftOdo, -deltaContactsMiddleOdo, robotRotation);
+        //double[] positionChange = Odometry._getPositionChange(-deltaContactsRightOdo, deltaContactsLeftOdo, -deltaContactsMiddleOdo, robotRotation);
         double deltaX = positionChange[0];
         double deltaY = positionChange[1];
         double deltaRotation = positionChange[2];
@@ -137,6 +138,9 @@ public class DriverOpMode extends OpMode {
             robotRotation = 0;
             posX = 0;
             posY = 0;
+            passedContactsLeftOdo = 0;
+            passedContactsRightOdo = 0;
+            passedContactsMiddleOdo = 0;
         }
 
         //shoot drone
