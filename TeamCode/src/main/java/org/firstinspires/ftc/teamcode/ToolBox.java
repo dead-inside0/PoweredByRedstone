@@ -41,7 +41,7 @@ public class ToolBox {
     public static double[] getMotorPowersToPoint(double currentX, double currentY, double targetX, double targetY, double currentRot, double targetRot, double speed){
         double xDirection = Range.clip(targetX - currentX, -1, 1);
         double yDirection = Range.clip(targetY - currentY, -1, 1);
-        double angleToTarget = Math.atan2(currentX-targetX, currentY-targetY);
+        double angleToTarget = Math.atan2(xDirection, yDirection);
 
         double rotate = 0;
         double rotateSpeed = 0.5;
