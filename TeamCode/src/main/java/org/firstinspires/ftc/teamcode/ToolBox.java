@@ -39,12 +39,15 @@ public class ToolBox {
 
     //Get motor powers to drive to a specific point
     public static double[] getMotorPowersToPoint(double currentX, double currentY, double targetX, double targetY, double currentRot, double targetRot, double speed){
+        double xDirection = Range.clip(targetX - currentX, -1, 1);
+        double yDirection = Range.clip(targetY - currentY, -1, 1);
         double angleToTarget = Math.atan2(currentX-targetX, currentY-targetY);
 
         double rotate = 0;
-        //if(Math.abs(scaleAngle(currentRot - targetRot)) > rotateTolerance){
-        //    rotate = 0.5 * scaleAngle(currentRot - targetRot) / Math.abs(scaleAngle(currentRot - targetRot));
-        //}
+        double rotateSpeed = 0.5;
+        if(scaleAngle(currentRot - targetRot) > rotateTolerance){
+            rotate = scaleAngle(currentRot- targetRot) < 0 ? -rotateSpeed : rotateSpeed;
+        }
 
         if(Math.abs(currentX - targetX) < movementTolerance && Math.abs(currentY - targetY) < movementTolerance){
             speed = 0;
