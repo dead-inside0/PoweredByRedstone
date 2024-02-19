@@ -144,13 +144,6 @@ public class DriverOpMode extends OpMode {
             robotRotation = 0;
             posX = 0;
             posY = 0;
-        } else if (gamepad1.x) {
-            robotRotation = 0;
-            posX = 0;
-            posY = 0;
-            passedContactsLeftOdo = 0;
-            passedContactsMiddleOdo = 0;
-            passedContactsRightOdo = 0;
         }
 
         //shoot drone
