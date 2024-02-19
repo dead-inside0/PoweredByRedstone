@@ -56,12 +56,15 @@ public class OpenCVTest extends OpMode {
     class TestPipeline extends OpenCvPipeline {
         int countInRange(Mat frame, Scalar highColor, Scalar lowColor){
             int count = 0;
+            double[] lowColorArr = lowColor.val;
+            double[] highColorArr = highColor.val;
 
             for( int i = 0; i < frame.rows(); ++i) {
                 for( int j = 0; j < frame.cols(); ++j) {
-                    if(frame.get(i, j)[0] <= highColor.val[0] && frame.get(i, j)[0] >= lowColor.val[0]
-                    && frame.get(i, j)[1] <= highColor.val[1] && frame.get(i, j)[1] >= lowColor.val[1]
-                    && frame.get(i, j)[2] <= highColor.val[2] && frame.get(i, j)[2] >= lowColor.val[2]){
+                    double[] pixel = frame.get(i, j);
+                    if(pixel[0] <= highColorArr[0] && pixel[0] >= lowColorArr[0]
+                    && pixel[1] <= highColorArr[1] && pixel[1] >= lowColorArr[1]
+                    && pixel[2] <= highColorArr[2] && pixel[2] >= lowColorArr[2]){
                         count++;
                     }
                 }
@@ -70,39 +73,34 @@ public class OpenCVTest extends OpMode {
         }
 
 
-        Scalar highColor = new Scalar(140, 255, 255);
-        Scalar lowColor = new Scalar(100, 100, 20);
+        Scalar highColor = new Scalar(145, 255, 255);
+        Scalar lowColor = new Scalar(95, 50, 25);
         @Override
         public Mat processFrame(Mat frame) {
             Imgproc.cvtColor(frame,frame,Imgproc.COLOR_RGB2HSV);
 
-            Rect topRect = new Rect(new Point(0,0), new Point(320, 480));
-            Rect bottomRect = new Rect(new Point(320, 0), new Point(640, 480));
+            Rect topRect = new Rect(0,0, 480, 320);
+            Rect bottomRect = new Rect(0, 320,480, 320);
 
-            //Mat topMask = new Mat();
-            //Mat bottomMask = new Mat();
+            Mat topMask = new Mat();
+            Mat bottomMask = new Mat();
 
-            //Core.inRange(frame.submat(topRect), lowColor, highColor, topMask);
-            //Core.inRange(frame.submat(bottomRect), lowColor, highColor, bottomMask);
+            Core.inRange(frame.submat(topRect), lowColor, highColor, topMask);
+            Core.inRange(frame.submat(bottomRect), lowColor, highColor, bottomMask);
 
-            String text;
-            //if(Core.countNonZero(topMask) > Core.countNonZero(bottomMask)){
-            //    text = "top";
-            //}
-            //else{
-            //    text = "bottom";
-            //}
+            double topPercentage = ((double) Core.countNonZero(topMask)) / (topRect.height * topRect.width);
+            double bottomPercentage = ((double) Core.countNonZero(bottomMask)) / (bottomRect.height * bottomRect.width);
 
-            if(countInRange(frame.submat(topRect), lowColor, highColor) > countInRange(frame.submat(bottomRect), lowColor, highColor)){
-                text = "top";
+            if(Core.countNonZero(topMask)/(topRect.height * topRect.width) > Core.countNonZero(bottomMask)/(bottomRect.height * bottomRect.width)){
+                Imgproc.rectangle(frame, topRect, new Scalar(120, 255, 255), 25);
             }
             else{
-                text = "bottom";
+                Imgproc.rectangle(frame, bottomRect, new Scalar(120, 255, 255), 25);
             }
 
-            Imgproc.putText(frame, text, new Point(25, 200), Imgproc.FONT_HERSHEY_COMPLEX, 0.75, new Scalar(0, 0, 0));
 
             //Core.inRange(frame, lowColor, highColor, frame);
+            Imgproc.cvtColor(frame, frame, Imgproc.COLOR_HSV2RGB);
             return frame;
         }
     }
