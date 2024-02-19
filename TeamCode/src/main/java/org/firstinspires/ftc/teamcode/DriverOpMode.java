@@ -48,7 +48,6 @@ public class DriverOpMode extends OpMode {
     @Override
     public void start() {
         runtime.reset();
-        droneServo.setPosition(1);
     }
 
     @Override
@@ -77,7 +76,7 @@ public class DriverOpMode extends OpMode {
 
         //Get position change
         double[] positionChange = Odometry.getPositionChange(-deltaContactsRightOdo, deltaContactsLeftOdo, -deltaContactsMiddleOdo, robotRotation);
-        //double[] positionChange = Odometry._getPositionChange(-deltaContactsRightOdo, deltaContactsLeftOdo, -deltaContactsMiddleOdo, robotRotation);
+
         double deltaX = positionChange[0];
         double deltaY = positionChange[1];
         double deltaRotation = positionChange[2];
@@ -128,6 +127,8 @@ public class DriverOpMode extends OpMode {
         if(gamepad1.a){
             double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, 0, 0, robotRotation, 0, 0.5);
 
+            telemetry.addData("angle to 0", Math.atan2(posX-0, posY-0));
+
             backLeftMotor.setPower(motorPowers[0]);
             backRightMotor.setPower(motorPowers[1]);
             frontLeftMotor.setPower(motorPowers[2]);
@@ -143,9 +144,13 @@ public class DriverOpMode extends OpMode {
             robotRotation = 0;
             posX = 0;
             posY = 0;
+        } else if (gamepad1.x) {
+            robotRotation = 0;
+            posX = 0;
+            posY = 0;
             passedContactsLeftOdo = 0;
-            passedContactsRightOdo = 0;
             passedContactsMiddleOdo = 0;
+            passedContactsRightOdo = 0;
         }
 
         //shoot drone

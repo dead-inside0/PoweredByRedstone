@@ -2,6 +2,31 @@ package org.firstinspires.ftc.teamcode;
 
 public class Odometry {
     public static double[] getPositionChange(int deltaContactsRightOdo, int deltaContactsLeftOdo, int deltaContactsMiddleOdo, double prevAngle){
+        final double sideOdosDistance = 300;
+        final double wheelCircumference = 60 * Math.PI;
+        final double sensorResolution = 8192;
+        final double middleOdoDistance = 190;
+
+        double deltaLeftOdo = (deltaContactsLeftOdo * wheelCircumference) / sensorResolution;
+        double deltaRightOdo = (deltaContactsRightOdo * wheelCircumference) / sensorResolution;
+        double deltaMiddleOdo = (deltaContactsMiddleOdo * wheelCircumference) / sensorResolution;
+
+        double deltaAngle = (deltaRightOdo - deltaLeftOdo) / sideOdosDistance;
+
+        double centerXDisplacement = (deltaRightOdo + deltaLeftOdo) / 2;
+        double horizontalDisplacement = deltaMiddleOdo - (deltaAngle * middleOdoDistance);
+
+        double deltaX = centerXDisplacement * Math.cos(deltaAngle + prevAngle) - horizontalDisplacement * Math.sin(deltaAngle + prevAngle);
+        double deltaY = centerXDisplacement * Math.sin(deltaAngle + prevAngle) + horizontalDisplacement * Math.cos(deltaAngle + prevAngle);
+
+        double[] positionChange = {deltaX, deltaY, deltaAngle};
+
+        return positionChange;
+
+    }
+
+    //REDUNDANT - POSX NOT WORKING !!!
+    public static double[] _getPositionChange(int deltaContactsRightOdo, int deltaContactsLeftOdo, int deltaContactsMiddleOdo, double prevAngle){
         //Set known variables
         final double sideOdosDistance = 300;
         final double wheelCircumference = 60 * Math.PI;
@@ -52,29 +77,5 @@ public class Odometry {
 
         double[] positionChange = {deltaX, deltaY, deltaRotation}; //x, y, angle
         return positionChange;
-    }
-
-    public static double[] _getPositionChange(int deltaContactsRightOdo, int deltaContactsLeftOdo, int deltaContactsMiddleOdo, double prevAngle){
-        final double sideOdosDistance = 300;
-        final double wheelCircumference = 60 * Math.PI;
-        final double sensorResolution = 2048;
-        final double middleOdoDistance = 300;
-
-        double deltaLeftOdo = (deltaContactsLeftOdo * wheelCircumference) / sensorResolution;
-        double deltaRightOdo = (deltaContactsRightOdo * wheelCircumference) / sensorResolution;
-        double deltaMiddleOdo = (deltaContactsMiddleOdo * wheelCircumference) / sensorResolution;
-
-        double deltaAngle = (deltaRightOdo - deltaLeftOdo) / sideOdosDistance;
-
-        double centerXDisplacement = (deltaRightOdo + deltaLeftOdo) / 2;
-        double horizontalDisplacement = deltaMiddleOdo - (deltaAngle * middleOdoDistance);
-
-        double deltaX = centerXDisplacement * Math.cos(deltaAngle + prevAngle) - horizontalDisplacement * Math.sin(deltaAngle + prevAngle);
-        double deltaY = centerXDisplacement * Math.sin(deltaAngle + prevAngle) + horizontalDisplacement * Math.cos(deltaAngle + prevAngle);
-
-        double[] positionChange = {deltaX, deltaY, deltaAngle};
-
-        return positionChange;
-
     }
 }

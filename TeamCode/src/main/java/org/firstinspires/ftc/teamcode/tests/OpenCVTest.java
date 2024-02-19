@@ -88,10 +88,10 @@ public class OpenCVTest extends OpMode {
             Core.inRange(frame.submat(topRect), lowColor, highColor, topMask);
             Core.inRange(frame.submat(bottomRect), lowColor, highColor, bottomMask);
 
-            double topPercentage = ((double) Core.countNonZero(topMask)) / (topRect.height * topRect.width);
-            double bottomPercentage = ((double) Core.countNonZero(bottomMask)) / (bottomRect.height * bottomRect.width);
+            double topPercentage = (float)Core.countNonZero(topMask) / (float)(topRect.height * topRect.width);
+            double bottomPercentage = (float)Core.countNonZero(bottomMask) / (float)(bottomRect.height * bottomRect.width);
 
-            if(Core.countNonZero(topMask)/(topRect.height * topRect.width) > Core.countNonZero(bottomMask)/(bottomRect.height * bottomRect.width)){
+            if(topPercentage > bottomPercentage){
                 Imgproc.rectangle(frame, topRect, new Scalar(120, 255, 255), 25);
             }
             else{
