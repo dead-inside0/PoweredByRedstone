@@ -95,7 +95,6 @@ public class AutonomousPathTest extends LinearOpMode{
 
                 telemetry.addData("Next point: ", "X: %f, Y: %f, R: %f", point[0], point[1], point[2]);
                 telemetry.addData("Current position: ", "X: %f, Y: %f, R: %f", posX, posY, robotRotation);
-                telemetry.addData("test",passedContactsMiddleOdo);
                 telemetry.update();
             }
         }
