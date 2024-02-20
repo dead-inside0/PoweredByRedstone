@@ -79,28 +79,35 @@ public class OpenCVTest extends OpMode {
         public Mat processFrame(Mat frame) {
             Imgproc.cvtColor(frame,frame,Imgproc.COLOR_RGB2HSV);
 
-            Rect topRect = new Rect(0,0, 480, 320);
-            Rect bottomRect = new Rect(0, 320,480, 320);
+            Rect rect1 = new Rect(0,0, 480, 200);
+            Rect rect2 = new Rect(0, 200,480, 240);
+            Rect rect3 = new Rect(0, 440, 480, 200);
 
-            Mat topMask = new Mat();
-            Mat bottomMask = new Mat();
+            Mat mask1 = new Mat();
+            Mat mask2 = new Mat();
+            Mat mask3 = new Mat();
 
-            Core.inRange(frame.submat(topRect), lowColor, highColor, topMask);
-            Core.inRange(frame.submat(bottomRect), lowColor, highColor, bottomMask);
+            Core.inRange(frame.submat(rect1), lowColor, highColor, mask1);
+            Core.inRange(frame.submat(rect2), lowColor, highColor, mask2);
+            Core.inRange(frame.submat(rect3), lowColor, highColor, mask3);
 
-            double topPercentage = (float)Core.countNonZero(topMask) / (float)(topRect.height * topRect.width);
-            double bottomPercentage = (float)Core.countNonZero(bottomMask) / (float)(bottomRect.height * bottomRect.width);
+            double percentage1 = (float)Core.countNonZero(mask1) / (float)(rect1.height * rect1.width);
+            double percentage2 = (float)Core.countNonZero(mask2) / (float)(rect2.height * rect2.width);
+            double percentage3 = (float)Core.countNonZero(mask3) / (float)(rect3.height * rect3.width);
 
-            if(topPercentage > bottomPercentage){
-                Imgproc.rectangle(frame, topRect, new Scalar(120, 255, 255), 25);
+            if(percentage1 > percentage2 && percentage1 > percentage3){
+                Imgproc.rectangle(frame, rect1, new Scalar(120, 255, 255), 5);
+            }
+            else if(percentage2 > percentage3){
+                Imgproc.rectangle(frame, rect2, new Scalar(120, 255, 255), 5);
             }
             else{
-                Imgproc.rectangle(frame, bottomRect, new Scalar(120, 255, 255), 25);
+                Imgproc.rectangle(frame, rect3, new Scalar(120, 255, 255), 5);
             }
 
 
-            //Core.inRange(frame, lowColor, highColor, frame);
-            Imgproc.cvtColor(frame, frame, Imgproc.COLOR_HSV2RGB);
+            Core.inRange(frame, lowColor, highColor, frame);
+            //Imgproc.cvtColor(frame, frame, Imgproc.COLOR_HSV2RGB);
             return frame;
         }
     }
