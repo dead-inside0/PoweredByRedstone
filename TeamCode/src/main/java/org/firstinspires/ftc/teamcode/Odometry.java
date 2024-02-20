@@ -19,7 +19,7 @@ public class Odometry {
         double deltaX = centerXDisplacement * Math.cos(deltaAngle + prevAngle) - horizontalDisplacement * Math.sin(deltaAngle + prevAngle);
         double deltaY = centerXDisplacement * Math.sin(deltaAngle + prevAngle) + horizontalDisplacement * Math.cos(deltaAngle + prevAngle);
 
-        double[] positionChange = {deltaX, deltaY, deltaAngle};
+        double[] positionChange = {-deltaX, deltaY, deltaAngle};
 
         return positionChange;
 
