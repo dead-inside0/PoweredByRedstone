@@ -75,13 +75,15 @@ public class OpenCVTest extends OpMode {
 
         Scalar highColor = new Scalar(145, 255, 255);
         Scalar lowColor = new Scalar(95, 50, 25);
+        int lastResult;
         @Override
         public Mat processFrame(Mat frame) {
+
             Imgproc.cvtColor(frame,frame,Imgproc.COLOR_RGB2HSV);
 
-            Rect rect1 = new Rect(0,0, 480, 200);
-            Rect rect2 = new Rect(0, 200,480, 240);
-            Rect rect3 = new Rect(0, 440, 480, 200);
+            Rect rect1 = new Rect(80,0, 240, 200);
+            Rect rect2 = new Rect(80, 200,240, 240);
+            Rect rect3 = new Rect(80, 440, 240, 200);
 
             Mat mask1 = new Mat();
             Mat mask2 = new Mat();
@@ -97,18 +99,25 @@ public class OpenCVTest extends OpMode {
 
             if(percentage1 > percentage2 && percentage1 > percentage3){
                 Imgproc.rectangle(frame, rect1, new Scalar(120, 255, 255), 5);
+                lastResult = 1;
             }
             else if(percentage2 > percentage3){
                 Imgproc.rectangle(frame, rect2, new Scalar(120, 255, 255), 5);
+                lastResult = 2;
             }
             else{
                 Imgproc.rectangle(frame, rect3, new Scalar(120, 255, 255), 5);
+                lastResult = 3;
             }
 
 
-            //Core.inRange(frame, lowColor, highColor, frame);
+            //Core.inRange(frame, lowColor, highColor, fr
             Imgproc.cvtColor(frame, frame, Imgproc.COLOR_HSV2RGB);
             return frame;
+        }
+
+        int getLastResult(){
+            return lastResult;
         }
     }
 }
