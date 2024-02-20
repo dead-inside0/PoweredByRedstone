@@ -125,9 +125,9 @@ public class DriverOpMode extends OpMode {
 
         //odo test - drive back to zero on a
         if(gamepad1.a){
-            double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, 0, 0, robotRotation, 0, 0.5);
+            double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, 0, 0, robotRotation, 0, 1);
 
-            telemetry.addData("angle to 0", Math.atan2(posX-0, posY-0));
+            telemetry.addData("angle to 0 in PI radians", Math.atan2(-posX, -posY)/Math.PI);
 
             backLeftMotor.setPower(motorPowers[0]);
             backRightMotor.setPower(motorPowers[1]);
@@ -135,16 +135,18 @@ public class DriverOpMode extends OpMode {
             frontRightMotor.setPower(motorPowers[3]);
         }
 
-
-
-
-
         //Reset position and rotation on y
         if(gamepad1.y){
             robotRotation = 0;
             posX = 0;
             posY = 0;
         }
+
+
+
+
+
+
 
         //shoot drone
         if(gamepad2.a) {
