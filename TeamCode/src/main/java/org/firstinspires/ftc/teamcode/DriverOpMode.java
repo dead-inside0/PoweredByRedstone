@@ -9,15 +9,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @TeleOp(name="Driver")
 public class DriverOpMode extends OpMode {
     final private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor backLeftMotor;
-    private DcMotor backRightMotor;
-    private DcMotor frontRightMotor;
-    private DcMotor frontLeftMotor;
-    private DcMotor linearMechanismMotor;
-    private Servo droneServo;
-    private DcMotor leftOdo;
-    private DcMotor middleOdo;
-    private DcMotor rightOdo;
+    public DcMotor backLeftMotor,backRightMotor, frontLeftMotor,frontRightMotor, linearMechanismMotor, pickUpMotor, hookMotor, leftOdo, rightOdo, middleOdo;
+    public Servo droneServo, placeServo, hookServo;
 
     double posX = 0;
     double posY = 0;
@@ -39,9 +32,13 @@ public class DriverOpMode extends OpMode {
         frontLeftMotor = hMap.frontLeftMotor;
         frontRightMotor = hMap.frontRightMotor;
 
-        droneServo = hMap.droneServo;
-
         linearMechanismMotor = hMap.linearMechanismMotor;
+        pickUpMotor = hMap.pickUpMotor;
+        hookMotor = hMap.hookMotor;
+
+        droneServo = hMap.droneServo;
+        placeServo = hMap.placeServo;
+        hookServo = hMap.hookServo;
 
         leftOdo = hMap.leftOdo;
         middleOdo = hMap.middleOdo;
@@ -50,6 +47,8 @@ public class DriverOpMode extends OpMode {
         passedContactsRightOdo = rightOdo.getCurrentPosition();
         passedContactsLeftOdo = leftOdo.getCurrentPosition();
         passedContactsMiddleOdo = middleOdo.getCurrentPosition();
+
+        hookMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     @Override
@@ -62,8 +61,9 @@ public class DriverOpMode extends OpMode {
         //get gamepad input
         double joystickY = -gamepad1.left_stick_y;
         double joystickX = gamepad1.left_stick_x;
-        double rotate = gamepad2.right_stick_x;
-        double linearMechanismInput = gamepad2.left_stick_y;
+        double rotate = gamepad1.right_stick_x;
+        double linearMechanismInput = gamepad2.right_stick_y;
+        double pickUpInput = gamepad2.left_stick_y;
 
         //calculate delta time
         double deltaTime = runtime.seconds() - timeOfLastFrame;
@@ -124,12 +124,6 @@ public class DriverOpMode extends OpMode {
             }
         }
 
-        // Move arm
-        linearMechanismMotor.setPower(linearMechanismInput);
-
-
-
-
         //odo test - drive back to zero on a
         if(gamepad1.a){
             double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, 0, 0, robotRotation, 0, 1);
@@ -151,17 +145,47 @@ public class DriverOpMode extends OpMode {
 
 
 
+        // Move arm
+        linearMechanismMotor.setPower(linearMechanismInput);
 
+        //Pickup
+        pickUpMotor.setPower(pickUpInput);
 
-
-
-        //shoot drone
-        if(gamepad2.a) {
-            droneServo.setPosition(0);
+        //Pull hook
+        if(gamepad2.dpad_up){
+            hookMotor.setPower(1);
         }
-        else if(gamepad2.b) {
-            droneServo.setPosition(1);
+        //Release hook
+        else if (gamepad2.dpad_down) {
+            hookMotor.setPower(-0.5);
         }
+
+        //Shoot drone
+        if(gamepad2.b) {
+            //hold
+            if(gamepad2.left_bumper) {
+                droneServo.setPosition(1);
+            }
+            //let go
+            else {
+                droneServo.setPosition(0);
+            }
+        }
+
+        //Place hook
+        if(gamepad2.y){
+            //hide hook
+            if(gamepad2.left_bumper) {
+                hookServo.setPosition(1);
+            }
+            //place hook
+            else{
+                hookServo.setPosition(0);
+            }
+        }
+
+
+        //TODO:Place pixel
 
 
         //output data
