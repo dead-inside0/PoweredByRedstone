@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class MyHardwareMap {
-    public DcMotor backLeftMotor,backRightMotor, frontLeftMotor,frontRightMotor, linearMechanismMotor;
+    public DcMotor backLeftMotor,backRightMotor, frontLeftMotor,frontRightMotor, linearMechanismMotor, leftOdo, rightOdo, middleOdo;
     public Servo droneServo;
 
     public MyHardwareMap(HardwareMap map){
@@ -15,6 +15,10 @@ public class MyHardwareMap {
         frontRightMotor = map.get(DcMotor.class, "motor3");
         linearMechanismMotor = map.get(DcMotor.class, "motor4");
         droneServo = map.get(Servo.class, "servo0");
+
+        leftOdo = map.get(DcMotor.class, "motor0");
+        middleOdo = map.get(DcMotor.class, "motor1");
+        rightOdo = map.get(DcMotor.class, "motor4");
 
     }
 }

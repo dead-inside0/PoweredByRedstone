@@ -45,14 +45,30 @@ public class AutonomousPathTest extends LinearOpMode{
         int passedContactsLeftOdo = backLeftMotor.getCurrentPosition();
         int passedContactsMiddleOdo = frontLeftMotor.getCurrentPosition();
 
+        DcMotor leftOdo = hMap.leftOdo;
+        DcMotor middleOdo = hMap.middleOdo;
+        DcMotor rightOdo = hMap.rightOdo;
+
+        passedContactsRightOdo = rightOdo.getCurrentPosition();
+        passedContactsLeftOdo = leftOdo.getCurrentPosition();
+        passedContactsMiddleOdo = middleOdo.getCurrentPosition();
+
+
+
+
+        waitForStart();
+
+
+
+
         for (double[] point : path) {
             telemetry.addData("Next point: ", "X: %f, Y: %f, R: %f", point[0], point[1], point[2]);
             telemetry.addData("Current position: ", "X: %f, Y: %f, R: %f", posX, posY, robotRotation);
             telemetry.update();
             while (!(Math.abs(posX - point[0]) < ToolBox.movementTolerance && Math.abs(posY - point[1]) < ToolBox.movementTolerance && Math.abs(robotRotation - point[2]) < ToolBox.rotateTolerance)) {
-                int deltaContactsLeftOdo = backLeftMotor.getCurrentPosition() - passedContactsLeftOdo;
-                int deltaContactsRightOdo = backRightMotor.getCurrentPosition() - passedContactsRightOdo;
-                int deltaContactsMiddleOdo = frontLeftMotor.getCurrentPosition() - passedContactsMiddleOdo;
+                int deltaContactsLeftOdo = leftOdo.getCurrentPosition() - passedContactsLeftOdo;
+                int deltaContactsRightOdo = rightOdo.getCurrentPosition() - passedContactsRightOdo;
+                int deltaContactsMiddleOdo = middleOdo.getCurrentPosition() - passedContactsMiddleOdo;
 
                 //Update passed odo contacts
                 passedContactsRightOdo += deltaContactsRightOdo;

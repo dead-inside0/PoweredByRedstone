@@ -15,6 +15,9 @@ public class DriverOpMode extends OpMode {
     private DcMotor frontLeftMotor;
     private DcMotor linearMechanismMotor;
     private Servo droneServo;
+    private DcMotor leftOdo;
+    private DcMotor middleOdo;
+    private DcMotor rightOdo;
 
     double posX = 0;
     double posY = 0;
@@ -40,9 +43,13 @@ public class DriverOpMode extends OpMode {
 
         linearMechanismMotor = hMap.linearMechanismMotor;
 
-        passedContactsRightOdo = backRightMotor.getCurrentPosition();
-        passedContactsLeftOdo = backLeftMotor.getCurrentPosition();
-        passedContactsMiddleOdo = frontLeftMotor.getCurrentPosition();
+        leftOdo = hMap.leftOdo;
+        middleOdo = hMap.middleOdo;
+        rightOdo = hMap.rightOdo;
+
+        passedContactsRightOdo = rightOdo.getCurrentPosition();
+        passedContactsLeftOdo = leftOdo.getCurrentPosition();
+        passedContactsMiddleOdo = middleOdo.getCurrentPosition();
     }
 
     @Override
@@ -65,9 +72,9 @@ public class DriverOpMode extends OpMode {
         timeOfLastFrame += deltaTime;
 
         //Get odo deltas
-        int deltaContactsLeftOdo = backLeftMotor.getCurrentPosition() - passedContactsLeftOdo;
-        int deltaContactsRightOdo = backRightMotor.getCurrentPosition() - passedContactsRightOdo;
-        int deltaContactsMiddleOdo = frontLeftMotor.getCurrentPosition() - passedContactsMiddleOdo;
+        int deltaContactsLeftOdo = leftOdo.getCurrentPosition() - passedContactsLeftOdo;
+        int deltaContactsRightOdo = rightOdo.getCurrentPosition() - passedContactsRightOdo;
+        int deltaContactsMiddleOdo = middleOdo.getCurrentPosition() - passedContactsMiddleOdo;
 
         //Update passed odo contacts
         passedContactsLeftOdo += deltaContactsLeftOdo;
