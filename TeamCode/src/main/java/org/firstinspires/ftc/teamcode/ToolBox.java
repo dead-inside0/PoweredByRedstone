@@ -45,8 +45,8 @@ public class ToolBox {
 
         double rotate = 0;
         double rotateSpeed = 0.5;
-        if(scaleAngle(currentRot - targetRot) > rotateTolerance){
-            rotate = scaleAngle(currentRot- targetRot) < 0 ? -rotateSpeed : rotateSpeed;
+        if(Math.abs(currentRot - targetRot) > rotateTolerance){
+            rotate = (currentRot- targetRot) < 0 ? -rotateSpeed : rotateSpeed;
         }
 
         if(Math.abs(currentX - targetX) < movementTolerance && Math.abs(currentY - targetY) < movementTolerance){
