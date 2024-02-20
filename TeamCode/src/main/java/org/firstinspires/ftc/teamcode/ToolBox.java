@@ -42,14 +42,14 @@ public class ToolBox {
         double angleToTarget = Math.atan2(targetX - currentX, targetY - currentY);
 
         double rotate = 0;
-        //double rotateSpeed = 0.5;
-        //if(scaleAngle(currentRot - targetRot) > rotateTolerance){
-        //    rotate = scaleAngle(currentRot- targetRot) < 0 ? -rotateSpeed : rotateSpeed;
-        //}
+        if(Math.abs(currentRot - targetRot) > rotateTolerance){
+            double rotDiff = currentRot - targetRot > Math.PI ? currentRot - targetRot - 2*Math.PI : currentRot - targetRot;
+            rotate = rotDiff/Math.PI;
+        }
 
-        //if(Math.abs(currentX - targetX) < movementTolerance && Math.abs(currentY - targetY) < movementTolerance){
-        //    speed = 0;
-        //}
+        if(Math.abs(currentX - targetX) < movementTolerance && Math.abs(currentY - targetY) < movementTolerance){
+            speed = 0;
+        }
 
         return getMotorPowersByDirection(angleToTarget, speed, rotate);
     }
