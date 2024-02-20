@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.util.Range;
 
 public class ToolBox {
     public static double movementTolerance = 10;
+
+    public static double movementDecelerationDistance = 300;
     public static double rotateTolerance = Math.PI/90;
 
     //converts the joystick angle (global) to the angle needed to move the robot (local) in that direction
@@ -42,13 +44,16 @@ public class ToolBox {
         double angleToTarget = Math.atan2(targetX - currentX, targetY - currentY);
 
         double rotate = 0;
-        if(Math.abs(currentRot - targetRot) > rotateTolerance){
+        if(Math.abs(currentRot - targetRot) >= rotateTolerance){
             double rotDiff = currentRot - targetRot > Math.PI ? currentRot - targetRot - 2*Math.PI : currentRot - targetRot;
             rotate = rotDiff/Math.PI;
         }
 
-        if(Math.abs(currentX - targetX) < movementTolerance && Math.abs(currentY - targetY) < movementTolerance){
-            speed = 0;
+        //if(Math.abs(currentX - targetX) < movementTolerance && Math.abs(currentY - targetY) < movementTolerance){
+        //   speed = 0;
+        //}
+        if(pythagoras(currentX - targetX, currentY - targetY) <= movementDecelerationDistance){
+            speed = pythagoras(currentX - targetX, currentY - targetY) / movementDecelerationDistance;
         }
 
         return getMotorPowersByDirection(angleToTarget, speed, rotate);
