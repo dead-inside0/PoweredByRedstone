@@ -32,14 +32,14 @@ public class AutonomousPathTest extends LinearOpMode{
     public void runOpMode() {
         MyHardwareMap hMap = new MyHardwareMap(hardwareMap);
 
-        DcMotor backLeftMotor = hMap.backLeftMotor;
-        DcMotor backRightMotor = hMap.backRightMotor;
-        DcMotor frontLeftMotor = hMap.frontLeftMotor;
-        DcMotor frontRightMotor = hMap.frontRightMotor;
+        DcMotor backLeftMotor = hMap.backLeftMotor,
+        backRightMotor = hMap.backRightMotor,
+        frontLeftMotor = hMap.frontLeftMotor,
+        frontRightMotor = hMap.frontRightMotor,
+        linearMechanismMotor = hMap.linearMechanismMotor,
+        pickUpMotor = hMap.pickUpMotor;
 
         Servo droneServo = hMap.droneServo;
-
-        DcMotor linearMechanismMotor = hMap.linearMechanismMotor;
 
         int passedContactsRightOdo = backRightMotor.getCurrentPosition();
         int passedContactsLeftOdo = backLeftMotor.getCurrentPosition();

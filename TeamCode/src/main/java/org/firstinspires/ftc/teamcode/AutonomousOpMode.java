@@ -34,17 +34,13 @@ public class AutonomousOpMode extends LinearOpMode{
 
         DcMotor linearMechanismMotor = hMap.linearMechanismMotor;
 
-        int passedContactsRightOdo = backRightMotor.getCurrentPosition();
-        int passedContactsLeftOdo = backLeftMotor.getCurrentPosition();
-        int passedContactsMiddleOdo = frontLeftMotor.getCurrentPosition();
-
         DcMotor leftOdo = hMap.leftOdo;
         DcMotor middleOdo = hMap.middleOdo;
         DcMotor rightOdo = hMap.rightOdo;
 
-        passedContactsRightOdo = rightOdo.getCurrentPosition();
-        passedContactsLeftOdo = leftOdo.getCurrentPosition();
-        passedContactsMiddleOdo = middleOdo.getCurrentPosition();
+        int passedContactsRightOdo = rightOdo.getCurrentPosition();
+        int passedContactsLeftOdo = leftOdo.getCurrentPosition();
+        int passedContactsMiddleOdo = middleOdo.getCurrentPosition();
 
 
 
