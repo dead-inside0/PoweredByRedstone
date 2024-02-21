@@ -62,33 +62,33 @@ public class OpenCVTest extends OpMode {
 
             Imgproc.cvtColor(frame,frame,Imgproc.COLOR_RGB2HSV);
 
-            Rect rect1 = new Rect(80,0, 240, 200);
-            Rect rect2 = new Rect(80, 200,240, 240);
-            Rect rect3 = new Rect(80, 440, 240, 200);
+            Rect rect0 = new Rect(80,0, 240, 200);
+            Rect rect1 = new Rect(80, 200,240, 240);
+            Rect rect2 = new Rect(80, 440, 240, 200);
 
+            Mat mask0 = new Mat();
             Mat mask1 = new Mat();
             Mat mask2 = new Mat();
-            Mat mask3 = new Mat();
 
+            Core.inRange(frame.submat(rect0), lowColor, highColor, mask0);
             Core.inRange(frame.submat(rect1), lowColor, highColor, mask1);
             Core.inRange(frame.submat(rect2), lowColor, highColor, mask2);
-            Core.inRange(frame.submat(rect3), lowColor, highColor, mask3);
 
-            double percentage1 = (float)Core.countNonZero(mask1) / (float)(rect1.height * rect1.width);
-            double percentage2 = (float)Core.countNonZero(mask2) / (float)(rect2.height * rect2.width);
-            double percentage3 = (float)Core.countNonZero(mask3) / (float)(rect3.height * rect3.width);
+            double percentage1 = (float)Core.countNonZero(mask0) / (float)(rect0.height * rect0.width);
+            double percentage2 = (float)Core.countNonZero(mask1) / (float)(rect1.height * rect1.width);
+            double percentage3 = (float)Core.countNonZero(mask2) / (float)(rect2.height * rect2.width);
 
             if(percentage1 > percentage2 && percentage1 > percentage3){
+                Imgproc.rectangle(frame, rect0, new Scalar(60, 255, 255), 5);
+                lastResult = 0;
+            }
+            else if(percentage2 > percentage3){
                 Imgproc.rectangle(frame, rect1, new Scalar(60, 255, 255), 5);
                 lastResult = 1;
             }
-            else if(percentage2 > percentage3){
+            else{
                 Imgproc.rectangle(frame, rect2, new Scalar(60, 255, 255), 5);
                 lastResult = 2;
-            }
-            else{
-                Imgproc.rectangle(frame, rect3, new Scalar(60, 255, 255), 5);
-                lastResult = 3;
             }
 
 
