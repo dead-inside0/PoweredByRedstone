@@ -201,11 +201,11 @@ public class DriverOpMode extends OpMode {
 
 
         //Pull hook
-        if(gamepad2.dpad_up && gamepad2.left_bumper && gamepad2.right_bumper){
+        if(gamepad2.dpad_up){
             hookMotor.setPower(1);
         }
         //Release hook
-        else if (gamepad2.dpad_down && gamepad2.left_bumper && gamepad2.right_bumper) {
+        else if (gamepad2.dpad_down) {
             hookMotor.setPower(-0.5);
         }
         //Stop motor
@@ -214,16 +214,16 @@ public class DriverOpMode extends OpMode {
         }
 
         //Shoot drone
-        //if(gamepad2.b && gamepad2.left_bumper && gamepad2.right_bumper) {
-        //    //hold
-        //    if(gamepad2.left_trigger > triggerDeadzone) {
-        //        droneServo.setPosition(1);
-        //    }
-        //    //let go
-        //    else {
-        //        droneServo.setPosition(0);
-        //    }
-        //}
+        if(gamepad2.b && gamepad2.left_bumper && gamepad2.right_bumper) {
+            //hold
+            if(gamepad2.left_trigger > triggerDeadzone) {
+                droneServo.setPosition(1);
+            }
+            //let go
+            else {
+                droneServo.setPosition(0);
+            }
+        }
 
         //Place hook
         if(gamepad2.y){
@@ -239,16 +239,16 @@ public class DriverOpMode extends OpMode {
 
 
         //Place pixel
-        //if(gamepad2.b){
-        //    //hide placement mechanism
-        //    if(gamepad2.left_bumper) {
-        //        placeServo.setPosition(0);
-        //    }
-        //    //place pixel
-        //    else{
-        //        placeServo.setPosition(1);
-        //    }
-        //}
+        if(gamepad2.b){
+            //hide placement mechanism
+            if(gamepad2.left_bumper) {
+                placeServo.setPosition(0);
+            }
+            //place pixel
+            else{
+                placeServo.setPosition(1);
+            }
+        }
 
 
         //output data
