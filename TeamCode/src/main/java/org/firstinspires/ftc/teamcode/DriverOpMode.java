@@ -52,6 +52,7 @@ public class DriverOpMode extends OpMode {
         passedContactsMiddleOdo = middleOdo.getCurrentPosition();
 
         hookMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        linearMechanismMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     @Override
@@ -228,12 +229,12 @@ public class DriverOpMode extends OpMode {
         //Place hook
         if(gamepad2.y){
             //hide hook
-            if(gamepad2.left_bumper) {
-                hookServo.setPosition(0);
+            if(gamepad2.left_trigger > triggerDeadzone) {
+                hookServo.setPosition(1);
             }
             //place hook
             else{
-                hookServo.setPosition(1);
+                hookServo.setPosition(0.6);
             }
         }
 
@@ -241,7 +242,7 @@ public class DriverOpMode extends OpMode {
         //Place pixel
         if(gamepad2.b){
             //hide placement mechanism
-            if(gamepad2.left_bumper) {
+            if(gamepad2.left_trigger > triggerDeadzone) {
                 placeServo.setPosition(0);
             }
             //place pixel
