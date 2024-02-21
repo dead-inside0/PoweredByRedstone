@@ -3,10 +3,10 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.util.Range;
 
 public class ToolBox {
-    public static double movementTolerance = 10;
+    public static double movementTolerance = 50;
 
     public static double movementDecelerationDistance = 300;
-    public static double rotateTolerance = Math.PI/90;
+    public static double rotateTolerance = Math.PI/36;
 
     //converts the joystick angle (global) to the angle needed to move the robot (local) in that direction
     public static double globalToRobot(double joystickAngle, double robotAngle){
