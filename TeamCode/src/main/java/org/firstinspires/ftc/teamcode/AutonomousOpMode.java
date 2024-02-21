@@ -49,6 +49,8 @@ public class AutonomousOpMode extends LinearOpMode{
 
         DcMotor linearMechanismMotor = hMap.linearMechanismMotor;
 
+        DcMotor pickupMotor = hMap.pickUpMotor;
+
         DcMotor leftOdo = hMap.leftOdo;
         DcMotor middleOdo = hMap.middleOdo;
         DcMotor rightOdo = hMap.rightOdo;
@@ -102,12 +104,66 @@ public class AutonomousOpMode extends LinearOpMode{
         }
         elementLocation = (int) Math.round(runningSum/framesProcessed);
 
+        double[] elementPosition;
+
+        switch (elementLocation){
+            case 0:
+                elementPosition = new double[]{-200,100,-Math.PI/2};
+                break;
+            case 1:
+                elementPosition = new double[]{0,100,-Math.PI/2};
+                break;
+            case 2:
+                elementPosition = new double[]{200,100,-Math.PI/2};
+                break;
+            default:
+                elementPosition = new double[]{0,0,0};
+                break;
+        }
+
+        while (!(Math.abs(elementPosition[0] - posX) < ToolBox.movementTolerance && Math.abs(elementPosition[1] - posY) < ToolBox.movementTolerance && Math.abs(elementPosition[2]-robotRotation) < ToolBox.rotateTolerance)) {
+            int deltaContactsLeftOdo = leftOdo.getCurrentPosition() - passedContactsLeftOdo;
+            int deltaContactsRightOdo = rightOdo.getCurrentPosition() - passedContactsRightOdo;
+            int deltaContactsMiddleOdo = middleOdo.getCurrentPosition() - passedContactsMiddleOdo;
+
+            //Update passed odo contacts
+            passedContactsRightOdo += deltaContactsRightOdo;
+            passedContactsLeftOdo += deltaContactsLeftOdo;
+            passedContactsMiddleOdo += deltaContactsMiddleOdo;
+            //Get position change
+            double[] positionChange = Odometry.getPositionChange(-deltaContactsRightOdo, deltaContactsLeftOdo, -deltaContactsMiddleOdo, robotRotation);
+            double deltaX = positionChange[0];
+            double deltaY = positionChange[1];
+            double deltaRotation = positionChange[2];
+
+            //Update position
+            posX += deltaX;
+            posY += deltaY;
+            robotRotation += deltaRotation;
+            robotRotation = ToolBox.scaleAngle(robotRotation);
+
+            double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, elementPosition[0], elementPosition[1], robotRotation, elementPosition[2], 0.5);
+
+            backLeftMotor.setPower(motorPowers[0]);
+            backRightMotor.setPower(motorPowers[1]);
+            frontLeftMotor.setPower(motorPowers[2]);
+            frontRightMotor.setPower(motorPowers[3]);
+
+            pickupMotor.setPower(-1);
+
+            telemetry.addData("Next point: ", "X: %f, Y: %f, R: %f", elementPosition[0], elementPosition[1], elementPosition[2]);
+            telemetry.addData("Current position: ", "X: %f, Y: %f, R: %f", posX, posY, robotRotation);
+            telemetry.update();
+        }
+
+
+
 
         for (double[] point : path) {
             telemetry.addData("Next point: ", "X: %f, Y: %f, R: %f", point[0], point[1], point[2]);
             telemetry.addData("Current position: ", "X: %f, Y: %f, R: %f", posX, posY, robotRotation);
             telemetry.update();
-            while (!(Math.abs(posX - point[0]) < ToolBox.movementTolerance && Math.abs(posY - point[1]) < ToolBox.movementTolerance && Math.abs(robotRotation - point[2]) < ToolBox.rotateTolerance)) {
+            while (!(Math.abs(point[0] - posX) < ToolBox.movementTolerance && Math.abs(point[1] - posY) < ToolBox.movementTolerance && Math.abs(point[2]-robotRotation) < ToolBox.rotateTolerance)) {
                 int deltaContactsLeftOdo = leftOdo.getCurrentPosition() - passedContactsLeftOdo;
                 int deltaContactsRightOdo = rightOdo.getCurrentPosition() - passedContactsRightOdo;
                 int deltaContactsMiddleOdo = middleOdo.getCurrentPosition() - passedContactsMiddleOdo;
