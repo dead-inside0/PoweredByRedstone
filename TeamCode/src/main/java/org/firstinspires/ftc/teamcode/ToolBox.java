@@ -44,20 +44,21 @@ public class ToolBox {
         double angleToTarget = Math.atan2(targetX - currentX, targetY - currentY);
 
         double rotate = 0;
-        double rotateFactor = 0.5;
+        double rotateFactor = 1;
         if(Math.abs(currentRot - targetRot) >= rotateTolerance){
-            double rotDiff = currentRot - targetRot > Math.PI ? currentRot - targetRot - 2*Math.PI : currentRot - targetRot < -Math.PI ? currentRot - targetRot + 2*Math.PI : currentRot - targetRot;
+            double rotDiff = scaleAngle(targetRot - currentRot) - Math.PI;
             rotate = rotDiff/Math.PI * rotateFactor;
         }
 
         //if(Math.abs(currentX - targetX) < movementTolerance && Math.abs(currentY - targetY) < movementTolerance){
         //   speed = 0;
         //}
+        double modifiedSpeed = speed;
         if(pythagoras(currentX - targetX, currentY - targetY) <= movementDecelerationDistance){
-            speed = pythagoras(currentX - targetX, currentY - targetY) / movementDecelerationDistance;
+            modifiedSpeed = pythagoras(currentX - targetX, currentY - targetY) / movementDecelerationDistance;
         }
 
-        return getMotorPowersByDirection(angleToTarget, speed, rotate);
+        return getMotorPowersByDirection(angleToTarget, modifiedSpeed, rotate);
     }
 
     //pythagoras theorem
