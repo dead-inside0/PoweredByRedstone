@@ -230,11 +230,11 @@ public class DriverOpMode extends OpMode {
         if(gamepad2.y){
             //hide hook
             if(gamepad2.left_trigger > triggerDeadzone) {
-                hookServo.setPosition(1);
+                hookServo.setPosition(0);
             }
             //place hook
             else{
-                hookServo.setPosition(0.6);
+                hookServo.setPosition(1);
             }
         }
 
