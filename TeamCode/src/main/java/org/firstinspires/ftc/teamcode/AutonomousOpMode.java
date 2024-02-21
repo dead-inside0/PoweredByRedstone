@@ -108,13 +108,13 @@ public class AutonomousOpMode extends LinearOpMode{
 
         switch (elementLocation){
             case 0:
-                elementPosition = new double[]{-200,0,-Math.PI/2};
+                elementPosition = new double[]{-200,100,-Math.PI/2};
                 break;
             case 1:
-                elementPosition = new double[]{0,-200,-Math.PI/2};
+                elementPosition = new double[]{0,100,-Math.PI/2};
                 break;
             case 2:
-                elementPosition = new double[]{200,0,-Math.PI/2};
+                elementPosition = new double[]{200,100,-Math.PI/2};
                 break;
             default:
                 elementPosition = new double[]{0,0,0};
