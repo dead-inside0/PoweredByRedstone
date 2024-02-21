@@ -22,6 +22,9 @@ public class DriverOpMode extends OpMode {
     int passedContactsLeftOdo = 0;
     int passedContactsMiddleOdo = 0;
 
+    boolean useGlobalPos = true;
+    double speedMultiplier = 0.8;
+
     @Override
     public void init() {
         //get motors from hardware map
@@ -36,9 +39,9 @@ public class DriverOpMode extends OpMode {
         pickUpMotor = hMap.pickUpMotor;
         hookMotor = hMap.hookMotor;
 
-        droneServo = hMap.droneServo;
-        placeServo = hMap.placeServo;
         hookServo = hMap.hookServo;
+        //droneServo = hMap.droneServo;
+        placeServo = hMap.placeServo;
 
         leftOdo = hMap.leftOdo;
         middleOdo = hMap.middleOdo;
@@ -63,7 +66,6 @@ public class DriverOpMode extends OpMode {
         double joystickX = gamepad1.left_stick_x;
         double rotate = gamepad1.right_stick_x;
         double linearMechanismInput = gamepad2.right_stick_y;
-        double pickUpInput = gamepad2.left_stick_y;
 
         //calculate delta time
         double deltaTime = runtime.seconds() - timeOfLastFrame;
@@ -99,9 +101,13 @@ public class DriverOpMode extends OpMode {
         double deadzone = 0.05;
         if(Math.abs(joystickX) > deadzone || Math.abs(joystickY) > deadzone || Math.abs(rotate) > deadzone) {
             double joystickAngle = Math.atan2(joystickX, joystickY);
-            double moveAngle = ToolBox.globalToRobot(joystickAngle, robotRotation);
+            double moveAngle = joystickAngle;
+            if(useGlobalPos){
+                moveAngle = ToolBox.globalToRobot(joystickAngle, robotRotation);
+
+            }
             double magnitude = ToolBox.pythagoras(joystickX, joystickY);
-            double[] motorPowers = ToolBox.getMotorPowersByDirection(moveAngle, magnitude, rotate);
+            double[] motorPowers = ToolBox.getMotorPowersByDirection(moveAngle, magnitude * speedMultiplier, rotate);
 
             backLeftMotor.setPower(motorPowers[0]);
             backRightMotor.setPower(motorPowers[1]);
@@ -124,6 +130,9 @@ public class DriverOpMode extends OpMode {
             }
         }
 
+
+
+
         //odo test - drive back to zero on a
         if(gamepad1.a){
             double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, 0, 0, robotRotation, 0, 1);
@@ -136,62 +145,117 @@ public class DriverOpMode extends OpMode {
             frontRightMotor.setPower(motorPowers[3]);
         }
 
-        //Reset position and rotation on y
-        if(gamepad1.y){
+
+        //GAMEPAD 1
+        double triggerDeadzone = 0.8;
+
+        //Reset position and rotation
+        if(gamepad1.y && gamepad1.left_bumper && gamepad1.right_bumper){
             robotRotation = 0;
             posX = 0;
             posY = 0;
         }
 
+        //Toggle global position use
+        if(gamepad1.x && gamepad1.left_bumper && gamepad1.right_bumper){
+            if(useGlobalPos){
+                useGlobalPos = false;
+            }
+            else{
+                useGlobalPos = true;
+            }
+        }
+        
+        //Change speed multiplier
+        if(gamepad1.left_trigger > triggerDeadzone){
+            speedMultiplier = 0.5;
+        }
+        else if (gamepad1.right_trigger > triggerDeadzone) {
+            speedMultiplier = 1;
+        }
+        else{
+            speedMultiplier = 0.8;
+        }
 
+
+        //GAMEPAD 2
 
         // Move arm
         linearMechanismMotor.setPower(linearMechanismInput);
 
-        //Pickup
-        pickUpMotor.setPower(pickUpInput);
+        //Pick up pixel
+        if(gamepad2.a){
+            //spit out pixel
+            if(gamepad2.left_trigger > triggerDeadzone) {
+                pickUpMotor.setPower(-1);
+            }
+            //pick up pixel
+            else {
+                pickUpMotor.setPower(1);
+            }
+        }
+        //Stop motor
+        else{
+            pickUpMotor.setPower(0);
+        }
+
 
         //Pull hook
-        if(gamepad2.dpad_up){
+        if(gamepad2.dpad_up && gamepad2.left_bumper && gamepad2.right_bumper){
             hookMotor.setPower(1);
         }
         //Release hook
-        else if (gamepad2.dpad_down) {
+        else if (gamepad2.dpad_down && gamepad2.left_bumper && gamepad2.right_bumper) {
             hookMotor.setPower(-0.5);
+        }
+        //Stop motor
+        else{
+            hookMotor.setPower(0);
         }
 
         //Shoot drone
-        if(gamepad2.b) {
-            //hold
-            if(gamepad2.left_bumper) {
-                droneServo.setPosition(1);
-            }
-            //let go
-            else {
-                droneServo.setPosition(0);
-            }
-        }
+        //if(gamepad2.b && gamepad2.left_bumper && gamepad2.right_bumper) {
+        //    //hold
+        //    if(gamepad2.left_trigger > triggerDeadzone) {
+        //        droneServo.setPosition(1);
+        //    }
+        //    //let go
+        //    else {
+        //        droneServo.setPosition(0);
+        //    }
+        //}
 
         //Place hook
         if(gamepad2.y){
             //hide hook
             if(gamepad2.left_bumper) {
-                hookServo.setPosition(1);
+                hookServo.setPosition(0);
             }
             //place hook
             else{
-                hookServo.setPosition(0);
+                hookServo.setPosition(1);
             }
         }
 
 
-        //TODO:Place pixel
+        //Place pixel
+        //if(gamepad2.b){
+        //    //hide placement mechanism
+        //    if(gamepad2.left_bumper) {
+        //        placeServo.setPosition(0);
+        //    }
+        //    //place pixel
+        //    else{
+        //        placeServo.setPosition(1);
+        //    }
+        //}
 
 
         //output data
         //telemetry.addData("Joystick X", joystickX);
         //telemetry.addData("Joystick Y", joystickY);
         //telemetry.addData("Rotate joystick", rotate);
+        telemetry.addData("Using global position", useGlobalPos);
         telemetry.addData("Position X", posX);
         telemetry.addData("Position Y", posY);
         telemetry.addData("Robot direction in PI radians", robotRotation/Math.PI);

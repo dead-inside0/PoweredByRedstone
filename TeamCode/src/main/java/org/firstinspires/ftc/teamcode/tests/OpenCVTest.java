@@ -54,27 +54,8 @@ public class OpenCVTest extends OpMode {
 
     //Pipeline
     class TestPipeline extends OpenCvPipeline {
-        int countInRange(Mat frame, Scalar highColor, Scalar lowColor){
-            int count = 0;
-            double[] lowColorArr = lowColor.val;
-            double[] highColorArr = highColor.val;
-
-            for( int i = 0; i < frame.rows(); ++i) {
-                for( int j = 0; j < frame.cols(); ++j) {
-                    double[] pixel = frame.get(i, j);
-                    if(pixel[0] <= highColorArr[0] && pixel[0] >= lowColorArr[0]
-                    && pixel[1] <= highColorArr[1] && pixel[1] >= lowColorArr[1]
-                    && pixel[2] <= highColorArr[2] && pixel[2] >= lowColorArr[2]){
-                        count++;
-                    }
-                }
-            }
-            return count;
-        }
-
-
-        Scalar highColor = new Scalar(145, 255, 255);
-        Scalar lowColor = new Scalar(95, 50, 25);
+        Scalar highColor = new Scalar(10, 255, 255);
+        Scalar lowColor = new Scalar(0, 150, 30);
         int lastResult;
         @Override
         public Mat processFrame(Mat frame) {
@@ -98,20 +79,20 @@ public class OpenCVTest extends OpMode {
             double percentage3 = (float)Core.countNonZero(mask3) / (float)(rect3.height * rect3.width);
 
             if(percentage1 > percentage2 && percentage1 > percentage3){
-                Imgproc.rectangle(frame, rect1, new Scalar(120, 255, 255), 5);
+                Imgproc.rectangle(frame, rect1, new Scalar(60, 255, 255), 5);
                 lastResult = 1;
             }
             else if(percentage2 > percentage3){
-                Imgproc.rectangle(frame, rect2, new Scalar(120, 255, 255), 5);
+                Imgproc.rectangle(frame, rect2, new Scalar(60, 255, 255), 5);
                 lastResult = 2;
             }
             else{
-                Imgproc.rectangle(frame, rect3, new Scalar(120, 255, 255), 5);
+                Imgproc.rectangle(frame, rect3, new Scalar(60, 255, 255), 5);
                 lastResult = 3;
             }
 
 
-            //Core.inRange(frame, lowColor, highColor, fr
+            //Core.inRange(frame, lowColor, highColor, frame);
             Imgproc.cvtColor(frame, frame, Imgproc.COLOR_HSV2RGB);
             return frame;
         }

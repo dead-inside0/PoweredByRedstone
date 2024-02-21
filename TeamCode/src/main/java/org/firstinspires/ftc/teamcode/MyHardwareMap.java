@@ -18,9 +18,9 @@ public class MyHardwareMap {
         pickUpMotor = map.get(DcMotor.class, "motor5");
         hookMotor = map.get(DcMotor.class, "motor6");
 
-        droneServo = map.get(Servo.class, "servo0");
-        placeServo = map.get(Servo.class, "servo1");
-        hookServo = map.get(Servo.class, "servo2");
+        hookServo = map.get(Servo.class, "servo0");
+        //droneServo = map.get(Servo.class, "servo1");
+        //placeServo = map.get(Servo.class, "servo2");
 
         leftOdo = map.get(DcMotor.class, "motor0");
         middleOdo = map.get(DcMotor.class, "motor1");
