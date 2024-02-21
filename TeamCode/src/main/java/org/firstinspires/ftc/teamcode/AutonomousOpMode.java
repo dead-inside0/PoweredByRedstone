@@ -104,6 +104,9 @@ public class AutonomousOpMode extends LinearOpMode{
         }
         elementLocation = (int) Math.round(runningSum/framesProcessed);
 
+        phoneCam.stopStreaming();
+        phoneCam.closeCameraDevice();
+
         double[] elementPosition;
 
         switch (elementLocation){
