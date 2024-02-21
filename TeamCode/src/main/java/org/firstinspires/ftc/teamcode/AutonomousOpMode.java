@@ -121,7 +121,7 @@ public class AutonomousOpMode extends LinearOpMode{
                 break;
         }
 
-        while (!(Math.abs(elementPosition[0] - posX) < ToolBox.movementTolerance && Math.abs(elementPosition[1] - posY) < ToolBox.movementTolerance && Math.abs(elementPosition[2]-robotRotation) < ToolBox.rotateTolerance)) {
+        while (!(ToolBox.pythagoras(elementPosition[0]-posX,elementPosition[1]-posY) < ToolBox.movementTolerance && Math.abs(elementPosition[2]-robotRotation) < ToolBox.rotateTolerance)) {
             int deltaContactsLeftOdo = leftOdo.getCurrentPosition() - passedContactsLeftOdo;
             int deltaContactsRightOdo = rightOdo.getCurrentPosition() - passedContactsRightOdo;
             int deltaContactsMiddleOdo = middleOdo.getCurrentPosition() - passedContactsMiddleOdo;
