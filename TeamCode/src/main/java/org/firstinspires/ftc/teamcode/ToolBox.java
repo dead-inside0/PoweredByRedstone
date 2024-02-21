@@ -44,9 +44,10 @@ public class ToolBox {
         double angleToTarget = Math.atan2(targetX - currentX, targetY - currentY);
 
         double rotate = 0;
+        double rotateFactor = 0.5;
         if(Math.abs(currentRot - targetRot) >= rotateTolerance){
-            double rotDiff = currentRot - targetRot > Math.PI ? currentRot - targetRot - 2*Math.PI : currentRot - targetRot;
-            rotate = rotDiff/Math.PI;
+            double rotDiff = currentRot - targetRot > Math.PI ? currentRot - targetRot - 2*Math.PI : currentRot - targetRot < -Math.PI ? currentRot - targetRot + 2*Math.PI : currentRot - targetRot;
+            rotate = rotDiff/Math.PI * rotateFactor;
         }
 
         //if(Math.abs(currentX - targetX) < movementTolerance && Math.abs(currentY - targetY) < movementTolerance){

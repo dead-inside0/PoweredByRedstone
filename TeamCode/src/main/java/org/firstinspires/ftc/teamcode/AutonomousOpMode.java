@@ -25,7 +25,7 @@ public class AutonomousOpMode extends LinearOpMode{
 
     final private ElapsedTime runtime = new ElapsedTime();
 
-    private double[][] path;
+    static double[][] path;
 
     double posX = 0;
     double posY = 0;
@@ -33,6 +33,9 @@ public class AutonomousOpMode extends LinearOpMode{
     OpenCvCamera phoneCam;
 
 
+    public double[][] getPath() {
+        return path;
+    }
 
     public void runOpMode() {
         MyHardwareMap hMap = new MyHardwareMap(hardwareMap);
@@ -67,6 +70,7 @@ public class AutonomousOpMode extends LinearOpMode{
         ColorDetect pipeline = new ColorDetect(highColor, lowColor);
         phoneCam.setPipeline(pipeline);
 
+        path = getPath();
         //Open camera
         phoneCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
