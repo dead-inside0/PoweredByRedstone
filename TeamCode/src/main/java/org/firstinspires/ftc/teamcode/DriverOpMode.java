@@ -105,7 +105,6 @@ public class DriverOpMode extends OpMode {
             double moveAngle = joystickAngle;
             if(useGlobalPos){
                 moveAngle = ToolBox.globalToRobot(joystickAngle, robotRotation);
-
             }
             double magnitude = ToolBox.pythagoras(joystickX, joystickY);
             double[] motorPowers = ToolBox.getMotorPowersByDirection(moveAngle, magnitude * speedMultiplier, rotate);

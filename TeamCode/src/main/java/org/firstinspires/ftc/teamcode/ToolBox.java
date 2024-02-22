@@ -41,7 +41,7 @@ public class ToolBox {
 
     //Get motor powers to drive to a specific point
     public static double[] getMotorPowersToPoint(double currentX, double currentY, double targetX, double targetY, double currentRot, double targetRot, double speed){
-        double angleToTarget = Math.atan2(targetX - currentX, targetY - currentY);
+        double angleToTarget = globalToRobot(Math.atan2(targetX - currentX, targetY - currentY), currentRot);
 
         double rotate = 0;
         double rotateFactor = 1;
@@ -56,7 +56,7 @@ public class ToolBox {
         //}
         double modifiedSpeed = speed;
         if(pythagoras(currentX - targetX, currentY - targetY) <= movementDecelerationDistance){
-            modifiedSpeed = pythagoras(currentX - targetX, currentY - targetY) / movementDecelerationDistance;
+            modifiedSpeed = Range.clip(pythagoras(currentX - targetX, currentY - targetY) / movementDecelerationDistance,0.3,1);
         }
 
         return getMotorPowersByDirection(angleToTarget, modifiedSpeed, rotate);

@@ -124,7 +124,7 @@ public class AutonomousOpMode extends LinearOpMode{
                 break;
         }
 
-        while (!(ToolBox.pythagoras(elementPosition[0]-posX,elementPosition[1]-posY) < ToolBox.movementTolerance && Math.abs(elementPosition[2]-robotRotation) < ToolBox.rotateTolerance)) {
+        while (!(ToolBox.pythagoras(elementPosition[0]-posX,elementPosition[1]-posY) < ToolBox.movementTolerance /*&& Math.abs(elementPosition[2]-robotRotation) < ToolBox.rotateTolerance*/)) {
             int deltaContactsLeftOdo = leftOdo.getCurrentPosition() - passedContactsLeftOdo;
             int deltaContactsRightOdo = rightOdo.getCurrentPosition() - passedContactsRightOdo;
             int deltaContactsMiddleOdo = middleOdo.getCurrentPosition() - passedContactsMiddleOdo;
@@ -145,7 +145,7 @@ public class AutonomousOpMode extends LinearOpMode{
             robotRotation += deltaRotation;
             robotRotation = ToolBox.scaleAngle(robotRotation);
 
-            double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, elementPosition[0], elementPosition[1], robotRotation, elementPosition[2], 0.5);
+            double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, elementPosition[0], elementPosition[1], robotRotation, robotRotation, 0.5);
 
             backLeftMotor.setPower(motorPowers[0]);
             backRightMotor.setPower(motorPowers[1]);
@@ -166,7 +166,7 @@ public class AutonomousOpMode extends LinearOpMode{
             telemetry.addData("Next point: ", "X: %f, Y: %f, R: %f", point[0], point[1], point[2]);
             telemetry.addData("Current position: ", "X: %f, Y: %f, R: %f", posX, posY, robotRotation);
             telemetry.update();
-            while (!(ToolBox.pythagoras(point[0]-posX,point[1]-posY) < ToolBox.movementTolerance && Math.abs(point[2]-robotRotation) < ToolBox.rotateTolerance)) {
+            while (!(ToolBox.pythagoras(point[0]-posX,point[1]-posY) < ToolBox.movementTolerance /*&& Math.abs(point[2]-robotRotation) < ToolBox.rotateTolerance*/)) {
                 int deltaContactsLeftOdo = leftOdo.getCurrentPosition() - passedContactsLeftOdo;
                 int deltaContactsRightOdo = rightOdo.getCurrentPosition() - passedContactsRightOdo;
                 int deltaContactsMiddleOdo = middleOdo.getCurrentPosition() - passedContactsMiddleOdo;
@@ -187,7 +187,7 @@ public class AutonomousOpMode extends LinearOpMode{
                 robotRotation += deltaRotation;
                 robotRotation = ToolBox.scaleAngle(robotRotation);
 
-                double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, point[0], point[1], robotRotation, point[2], 0.5);
+                double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, point[0], point[1], robotRotation, robotRotation, 0.5);
 
                 backLeftMotor.setPower(motorPowers[0]);
                 backRightMotor.setPower(motorPowers[1]);
