@@ -46,7 +46,10 @@ public class ToolBox {
         double rotate = 0;
         double rotateFactor = 1;
         if(Math.abs(currentRot - targetRot) >= rotateTolerance){
-            double rotDiff = scaleAngle(targetRot - currentRot) - Math.PI;
+            double rotDiff = scaleAngle(targetRot - currentRot);
+            if(rotDiff > Math.PI) {
+                rotDiff -= 2*Math.PI;
+            }
             rotate = rotDiff/Math.PI * rotateFactor;
             rotate = Range.clip(Math.abs(rotate),0.3,1) * rotate / Math.abs(rotate);
         }

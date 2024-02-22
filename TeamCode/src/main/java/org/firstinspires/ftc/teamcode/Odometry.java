@@ -13,11 +13,11 @@ public class Odometry {
 
         double deltaAngle = (deltaRightOdo - deltaLeftOdo) / sideOdosDistance;
 
-        double centerXDisplacement = (deltaRightOdo + deltaLeftOdo) / 2;
+        double centerDisplacement = (deltaRightOdo + deltaLeftOdo) / 2;
         double horizontalDisplacement = deltaMiddleOdo - (deltaAngle * middleOdoDistance);
 
-        double deltaX = centerXDisplacement * Math.cos(deltaAngle + prevAngle) - horizontalDisplacement * Math.sin(deltaAngle + prevAngle);
-        double deltaY = centerXDisplacement * Math.sin(deltaAngle + prevAngle) + horizontalDisplacement * Math.cos(deltaAngle + prevAngle);
+        double deltaX = centerDisplacement * Math.cos(deltaAngle + prevAngle) - horizontalDisplacement * Math.sin(deltaAngle + prevAngle);
+        double deltaY = centerDisplacement * Math.sin(deltaAngle + prevAngle) + horizontalDisplacement * Math.cos(deltaAngle + prevAngle);
 
         double[] positionChange = {deltaX, deltaY, deltaAngle};
 
