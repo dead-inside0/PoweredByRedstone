@@ -45,18 +45,19 @@ public class ToolBox {
 
         double rotate = 0;
         double rotateFactor = 1;
+        //Rotate either - or + based on difference in angles
         if(Math.abs(currentRot - targetRot) >= rotateTolerance){
             double rotDiff = scaleAngle(targetRot - currentRot);
             if(rotDiff > Math.PI) {
                 rotDiff -= 2*Math.PI;
             }
+            //Rotate less if closer to target
             rotate = rotDiff/Math.PI * rotateFactor;
+            //Clip from 0.3 to 1 or from -1 to -0.3 respectively (less than 0.3 does not move)
             rotate = Range.clip(Math.abs(rotate),0.3,1) * rotate / Math.abs(rotate);
         }
 
-        //if(Math.abs(currentX - targetX) < movementTolerance && Math.abs(currentY - targetY) < movementTolerance){
-        //   speed = 0;
-        //}
+        //Slow down if closer to target
         double modifiedSpeed = speed;
         if(pythagoras(currentX - targetX, currentY - targetY) <= movementDecelerationDistance){
             modifiedSpeed = Range.clip(pythagoras(currentX - targetX, currentY - targetY) / movementDecelerationDistance,0.3,1);

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.tests;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.AutonomousOpMode;
+import org.opencv.core.Scalar;
 
 @Autonomous(name="AutonomousOpTest", group="Tests")
 public class AutonomousOpTest extends AutonomousOpMode {
@@ -13,8 +14,16 @@ public class AutonomousOpTest extends AutonomousOpMode {
             {400, 0, 0},
             {0, 0, 0}
     };
+
+    int linearExtensionIndex = 5;
     @Override
     public double[][] getPath() {
         return path;
     }
+
+    @Override
+    public Scalar[] getColorBounds() {return colorByIndex('r');}
+
+    @Override
+    public int linearExtensionIndex() {return linearExtensionIndex;}
 }
