@@ -32,6 +32,8 @@ public class AutonomousOpMode extends LinearOpMode{
     double robotRotation = 0;
     OpenCvCamera phoneCam;
 
+    int linearExtensionIndex = 0;
+
     Scalar highColorRed = new Scalar(10, 255, 255);
     Scalar lowColorRed = new Scalar(0, 150, 20);
 
@@ -53,6 +55,8 @@ public class AutonomousOpMode extends LinearOpMode{
     }
 
     public Scalar[] getColorBounds() {return new Scalar[]{};}
+
+    public int linearExtensionIndex() {return linearExtensionIndex;}
 
     public void runOpMode() {
         MyHardwareMap hMap = new MyHardwareMap(hardwareMap);
@@ -160,7 +164,7 @@ public class AutonomousOpMode extends LinearOpMode{
             robotRotation += deltaRotation;
             robotRotation = ToolBox.scaleAngle(robotRotation);
 
-            double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, elementPosition[0], elementPosition[1], robotRotation, robotRotation, 0.5);
+            double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, elementPosition[0], elementPosition[1], robotRotation, elementPosition[2], 0.5);
 
             backLeftMotor.setPower(motorPowers[0]);
             backRightMotor.setPower(motorPowers[1]);
@@ -208,7 +212,7 @@ public class AutonomousOpMode extends LinearOpMode{
                 robotRotation += deltaRotation;
                 robotRotation = ToolBox.scaleAngle(robotRotation);
 
-                double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, point[0], point[1], robotRotation, robotRotation, 0.5);
+                double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, point[0], point[1], robotRotation, point[2], 0.5);
 
                 backLeftMotor.setPower(motorPowers[0]);
                 backRightMotor.setPower(motorPowers[1]);

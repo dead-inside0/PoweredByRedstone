@@ -14,6 +14,8 @@ public class AutonomousOpTest extends AutonomousOpMode {
             {400, 0, 0},
             {0, 0, 0}
     };
+
+    int linearExtensionIndex = 5;
     @Override
     public double[][] getPath() {
         return path;
@@ -21,4 +23,7 @@ public class AutonomousOpTest extends AutonomousOpMode {
 
     @Override
     public Scalar[] getColorBounds() {return colorByIndex('r');}
+
+    @Override
+    public int linearExtensionIndex() {return linearExtensionIndex;}
 }
