@@ -55,13 +55,13 @@ public class DriverOpMode extends OpMode {
 
         hookMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         linearMechanismMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        linearMechanismStartPos = linearMechanismMotor.getCurrentPosition();
+        linearMechanismMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     @Override
     public void start() {
         runtime.reset();
+        linearMechanismMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     @Override
@@ -185,12 +185,12 @@ public class DriverOpMode extends OpMode {
         //GAMEPAD 2
 
         // Move arm
-        if(linearMechanismInput < 0/* && linearMechanismMotor.getCurrentPosition() > (linearMechanismStartPos + 3000)*/){
-            //down
+        if(linearMechanismInput < -deadzone && linearMechanismMotor.getCurrentPosition() > -3000){
+            //up - encoder subtracts
             linearMechanismMotor.setPower(linearMechanismInput);
         }
-        else if (linearMechanismInput > 0/* && linearMechanismMotor.getCurrentPosition() < linearMechanismStartPos*/) {
-            //up
+        else if (linearMechanismInput > deadzone && linearMechanismMotor.getCurrentPosition() < 0) {
+            //down - encoder adds
             linearMechanismMotor.setPower(linearMechanismInput);
         }
         else{
