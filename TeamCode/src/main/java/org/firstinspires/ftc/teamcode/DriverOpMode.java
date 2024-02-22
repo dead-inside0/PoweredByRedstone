@@ -40,7 +40,7 @@ public class DriverOpMode extends OpMode {
         hookMotor = hMap.hookMotor;
 
         hookServo = hMap.hookServo;
-        //droneServo = hMap.droneServo;
+        droneServo = hMap.droneServo;
         placeServo = hMap.placeServo;
 
         leftOdo = hMap.leftOdo;
@@ -181,9 +181,9 @@ public class DriverOpMode extends OpMode {
         //GAMEPAD 2
 
         // Move arm
-        if(linearMechanismMotor.getCurrentPosition() > 0 && linearMechanismMotor.getCurrentPosition() < 18000){
+        //if(linearMechanismMotor.getCurrentPosition() > 0 && linearMechanismMotor.getCurrentPosition() < 18000){
             linearMechanismMotor.setPower(linearMechanismInput);
-        }
+        //}
 
         //Pick up pixel
         if(gamepad2.a){
@@ -215,7 +215,7 @@ public class DriverOpMode extends OpMode {
         }
 
         //Shoot drone
-        if(gamepad2.b && gamepad2.left_bumper && gamepad2.right_bumper) {
+        if(gamepad2.x && gamepad2.left_bumper && gamepad2.right_bumper) {
             //hold
             if(gamepad2.left_trigger > triggerDeadzone) {
                 droneServo.setPosition(1);
@@ -230,11 +230,11 @@ public class DriverOpMode extends OpMode {
         if(gamepad2.y){
             //hide hook
             if(gamepad2.left_trigger > triggerDeadzone) {
-                hookServo.setPosition(0);
+                hookServo.setPosition(0.5);
             }
             //place hook
             else{
-                hookServo.setPosition(1);
+                hookServo.setPosition(0);
             }
         }
 
