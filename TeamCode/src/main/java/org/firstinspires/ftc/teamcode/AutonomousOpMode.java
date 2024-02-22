@@ -32,10 +32,27 @@ public class AutonomousOpMode extends LinearOpMode{
     double robotRotation = 0;
     OpenCvCamera phoneCam;
 
+    Scalar highColorRed = new Scalar(10, 255, 255);
+    Scalar lowColorRed = new Scalar(0, 150, 20);
+
+    Scalar highColorBlue = new Scalar(120, 255, 255);
+    Scalar lowColorBlue = new Scalar(110, 150, 20);
+
 
     public double[][] getPath() {
         return path;
     }
+    public Scalar[] colorByIndex(char color) {
+        switch (color) {
+            case 'r':
+                return new Scalar[] {highColorRed,lowColorRed};
+            case 'b':
+                return new Scalar[] {highColorBlue,lowColorBlue};
+        }
+        return new Scalar[] {};
+    }
+
+    public Scalar[] getColorBounds() {return new Scalar[]{};}
 
     public void runOpMode() {
         MyHardwareMap hMap = new MyHardwareMap(hardwareMap);
@@ -65,14 +82,10 @@ public class AutonomousOpMode extends LinearOpMode{
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera2(OpenCvInternalCamera2.CameraDirection.BACK, cameraMonitorViewId);
 
-        Scalar highColorRed = new Scalar(10, 255, 255);
-        Scalar lowColorRed = new Scalar(0, 150, 20);
-
-        Scalar highColorBlue = new Scalar(120, 255, 255);
-        Scalar lowColorBlue = new Scalar(110, 150, 20);
+        Scalar[] colorBounds = getColorBounds();
 
         //Set pipeline for frame processing
-        ColorDetect pipeline = new ColorDetect(highColorRed, lowColorRed);
+        ColorDetect pipeline = new ColorDetect(colorBounds[0], colorBounds[1]);
         phoneCam.setPipeline(pipeline);
 
         path = getPath();
@@ -126,7 +139,7 @@ public class AutonomousOpMode extends LinearOpMode{
                 break;
         }
 
-        while (!(ToolBox.pythagoras(elementPosition[0]-posX,elementPosition[1]-posY) < ToolBox.movementTolerance /*&& Math.abs(elementPosition[2]-robotRotation) < ToolBox.rotateTolerance*/)) {
+        while (!(ToolBox.pythagoras(elementPosition[0]-posX,elementPosition[1]-posY) < ToolBox.movementTolerance && Math.abs(elementPosition[2]-robotRotation) < ToolBox.rotateTolerance)) {
             int deltaContactsLeftOdo = leftOdo.getCurrentPosition() - passedContactsLeftOdo;
             int deltaContactsRightOdo = rightOdo.getCurrentPosition() - passedContactsRightOdo;
             int deltaContactsMiddleOdo = middleOdo.getCurrentPosition() - passedContactsMiddleOdo;
@@ -154,11 +167,17 @@ public class AutonomousOpMode extends LinearOpMode{
             frontLeftMotor.setPower(motorPowers[2]);
             frontRightMotor.setPower(motorPowers[3]);
 
-            pickupMotor.setPower(-1);
+
 
             telemetry.addData("Next point: ", "X: %f, Y: %f, R: %f", elementPosition[0], elementPosition[1], elementPosition[2]);
             telemetry.addData("Current position: ", "X: %f, Y: %f, R: %f", posX, posY, robotRotation);
             telemetry.update();
+        }
+
+        double pauseStartTime = runtime.seconds();
+
+        while(runtime.seconds() < pauseStartTime + 1) {
+            pickupMotor.setPower(-1);
         }
 
 
@@ -168,7 +187,7 @@ public class AutonomousOpMode extends LinearOpMode{
             telemetry.addData("Next point: ", "X: %f, Y: %f, R: %f", point[0], point[1], point[2]);
             telemetry.addData("Current position: ", "X: %f, Y: %f, R: %f", posX, posY, robotRotation);
             telemetry.update();
-            while (!(ToolBox.pythagoras(point[0]-posX,point[1]-posY) < ToolBox.movementTolerance /*&& Math.abs(point[2]-robotRotation) < ToolBox.rotateTolerance*/)) {
+            while (!(ToolBox.pythagoras(point[0]-posX,point[1]-posY) < ToolBox.movementTolerance && Math.abs(point[2]-robotRotation) < ToolBox.rotateTolerance)) {
                 int deltaContactsLeftOdo = leftOdo.getCurrentPosition() - passedContactsLeftOdo;
                 int deltaContactsRightOdo = rightOdo.getCurrentPosition() - passedContactsRightOdo;
                 int deltaContactsMiddleOdo = middleOdo.getCurrentPosition() - passedContactsMiddleOdo;
@@ -195,6 +214,7 @@ public class AutonomousOpMode extends LinearOpMode{
                 backRightMotor.setPower(motorPowers[1]);
                 frontLeftMotor.setPower(motorPowers[2]);
                 frontRightMotor.setPower(motorPowers[3]);
+
 
                 telemetry.addData("Next point: ", "X: %f, Y: %f, R: %f", point[0], point[1], point[2]);
                 telemetry.addData("Current position: ", "X: %f, Y: %f, R: %f", posX, posY, robotRotation);
