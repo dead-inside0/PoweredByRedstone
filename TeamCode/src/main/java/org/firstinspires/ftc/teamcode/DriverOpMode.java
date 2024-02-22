@@ -25,6 +25,8 @@ public class DriverOpMode extends OpMode {
     boolean useGlobalPos = true;
     double speedMultiplier = 0.8;
 
+    double linearMechanismStartPos;
+
     @Override
     public void init() {
         //get motors from hardware map
@@ -53,6 +55,8 @@ public class DriverOpMode extends OpMode {
 
         hookMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         linearMechanismMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        linearMechanismStartPos = linearMechanismMotor.getCurrentPosition();
     }
 
     @Override
@@ -107,7 +111,7 @@ public class DriverOpMode extends OpMode {
                 moveAngle = ToolBox.globalToRobot(joystickAngle, robotRotation);
             }
             double magnitude = ToolBox.pythagoras(joystickX, joystickY);
-            double[] motorPowers = ToolBox.getMotorPowersByDirection(moveAngle, magnitude * speedMultiplier, rotate);
+            double[] motorPowers = ToolBox.getMotorPowersByDirection(moveAngle, magnitude * speedMultiplier, rotate * speedMultiplier);
 
             backLeftMotor.setPower(motorPowers[0]);
             backRightMotor.setPower(motorPowers[1]);
@@ -181,8 +185,16 @@ public class DriverOpMode extends OpMode {
         //GAMEPAD 2
 
         // Move arm
-        if(linearMechanismMotor.getCurrentPosition() < 3000 && linearMechanismMotor.getCurrentPosition() > -600){
+        if(linearMechanismInput < 0/* && linearMechanismMotor.getCurrentPosition() > (linearMechanismStartPos + 3000)*/){
+            //down
             linearMechanismMotor.setPower(linearMechanismInput);
+        }
+        else if (linearMechanismInput > 0/* && linearMechanismMotor.getCurrentPosition() < linearMechanismStartPos*/) {
+            //up
+            linearMechanismMotor.setPower(linearMechanismInput);
+        }
+        else{
+            linearMechanismMotor.setPower(0);
         }
 
         //Pick up pixel
@@ -222,15 +234,15 @@ public class DriverOpMode extends OpMode {
             }
             //let go
             else {
-                droneServo.setPosition(0);
+                droneServo.setPosition(0.65);
             }
         }
 
         //Place hook
-        if(gamepad2.y){
+        if(gamepad2.y && gamepad2.left_bumper && gamepad2.right_bumper){
             //hide hook
             if(gamepad2.left_trigger > triggerDeadzone) {
-                hookServo.setPosition(0.5);
+                hookServo.setPosition(1);
             }
             //place hook
             else{
@@ -248,9 +260,9 @@ public class DriverOpMode extends OpMode {
             else if(gamepad2.right_trigger > triggerDeadzone){
                 placeServo.setPosition(0);
             }
-            //lock pixel
+            //lock pixel while travel
             else{
-                placeServo.setPosition(0.9);
+                placeServo.setPosition(0.65);
             }
         }
 

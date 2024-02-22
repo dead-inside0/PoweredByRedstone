@@ -92,8 +92,8 @@ public class OpenCVTest extends OpMode {
             }
 
 
-            Core.inRange(frame, lowColor, highColor, frame);
-            //Imgproc.cvtColor(frame, frame, Imgproc.COLOR_HSV2RGB);
+            //Core.inRange(frame, lowColor, highColor, frame);
+            Imgproc.cvtColor(frame, frame, Imgproc.COLOR_HSV2RGB);
             return frame;
         }
 
