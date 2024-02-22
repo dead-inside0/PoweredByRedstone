@@ -181,9 +181,9 @@ public class DriverOpMode extends OpMode {
         //GAMEPAD 2
 
         // Move arm
-        //if(linearMechanismMotor.getCurrentPosition() > 0 && linearMechanismMotor.getCurrentPosition() < 18000){
+        if(linearMechanismMotor.getCurrentPosition() < 3000 && linearMechanismMotor.getCurrentPosition() > -600){
             linearMechanismMotor.setPower(linearMechanismInput);
-        //}
+        }
 
         //Pick up pixel
         if(gamepad2.a){
@@ -240,13 +240,17 @@ public class DriverOpMode extends OpMode {
 
         //Place pixel
         if(gamepad2.b){
-            //hide placement mechanism
+            //go to og position
             if(gamepad2.left_trigger > triggerDeadzone) {
-                placeServo.setPosition(0);
+                placeServo.setPosition(1);
             }
             //place pixel
+            else if(gamepad2.right_trigger > triggerDeadzone){
+                placeServo.setPosition(0);
+            }
+            //lock pixel
             else{
-                placeServo.setPosition(1);
+                placeServo.setPosition(0.9);
             }
         }
 
