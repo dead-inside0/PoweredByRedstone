@@ -65,11 +65,14 @@ public class AutonomousOpMode extends LinearOpMode{
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera2(OpenCvInternalCamera2.CameraDirection.BACK, cameraMonitorViewId);
 
-        Scalar highColor = new Scalar(10, 255, 255);
-        Scalar lowColor = new Scalar(0, 150, 30);
+        Scalar highColorRed = new Scalar(10, 255, 255);
+        Scalar lowColorRed = new Scalar(0, 150, 20);
+
+        Scalar highColorBlue = new Scalar(120, 255, 255);
+        Scalar lowColorBlue = new Scalar(110, 150, 20);
 
         //Set pipeline for frame processing
-        ColorDetect pipeline = new ColorDetect(highColor, lowColor);
+        ColorDetect pipeline = new ColorDetect(highColorRed, lowColorRed);
         phoneCam.setPipeline(pipeline);
 
         path = getPath();

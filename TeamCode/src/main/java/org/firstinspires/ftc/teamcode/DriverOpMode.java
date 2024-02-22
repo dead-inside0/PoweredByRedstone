@@ -181,7 +181,9 @@ public class DriverOpMode extends OpMode {
         //GAMEPAD 2
 
         // Move arm
-        linearMechanismMotor.setPower(linearMechanismInput);
+        if(linearMechanismMotor.getCurrentPosition() > 0 && linearMechanismMotor.getCurrentPosition() < 18000){
+            linearMechanismMotor.setPower(linearMechanismInput);
+        }
 
         //Pick up pixel
         if(gamepad2.a){
@@ -198,7 +200,6 @@ public class DriverOpMode extends OpMode {
         else{
             pickUpMotor.setPower(0);
         }
-
 
         //Pull hook
         if(gamepad2.dpad_up){
@@ -236,7 +237,6 @@ public class DriverOpMode extends OpMode {
                 hookServo.setPosition(1);
             }
         }
-
 
         //Place pixel
         if(gamepad2.b){
