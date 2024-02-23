@@ -44,28 +44,18 @@ public class ToolBox {
         double angleToTarget = globalToRobot(Math.atan2(targetX - currentX, targetY - currentY),currentRot);
 
         double rotate = 0;
-        double rotateFactor = 0.5;
         //Rotate either - or + based on difference in angles
         if(Math.abs(currentRot - targetRot) >= rotateTolerance){
             double rotDiff = scaleAngle(targetRot - currentRot);
             if(rotDiff > Math.PI) {
-                rotDiff -= 2 * Math.PI;
+                rotate = -1;
             }
-            //Rotate less if closer to target and convert to PI radians
-            rotate = rotDiff / (Math.PI);
-
-            //Clip from minRotatePower to 1 or from -1 to -minRotatePower respectively
-            double minRotatePower = 0.15;
-            rotate = (rotate > 0 ? Range.clip(rotate,minRotatePower,1) : Range.clip(rotate, -minRotatePower,-1)) * rotateFactor;
+            else{
+                rotate = 1;
+            }
         }
 
-        //Slow down if closer to target
-        double modifiedSpeed = speed;
-        if(pythagoras(currentX - targetX, currentY - targetY) <= movementDecelerationDistance){
-            modifiedSpeed = Range.clip(pythagoras(currentX - targetX, currentY - targetY) / movementDecelerationDistance,Math.min(speed,0.3),speed);
-        }
-
-        return getMotorPowersByDirection(angleToTarget, modifiedSpeed, rotate);
+        return getMotorPowersByDirection(angleToTarget, speed, rotate*speed);
     }
 
     //pythagoras theorem

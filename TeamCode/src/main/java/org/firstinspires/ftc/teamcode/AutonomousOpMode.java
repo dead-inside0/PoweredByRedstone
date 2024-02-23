@@ -236,8 +236,8 @@ public class AutonomousOpMode extends LinearOpMode{
 
         for (int i = 0; i < path.length; i++) {
             double[] point = path[i];
-            telemetry.addData("Next point: ", "X: %f, Y: %f, R: %f", point[0], point[1], point[2]);
-            telemetry.addData("Current position: ", "X: %f, Y: %f, R: %f", posX, posY, robotRotation);
+            telemetry.addData("Next point: ", "X: %f, Y: %f, R: %f", point[0], point[1], point[2]/Math.PI);
+            telemetry.addData("Current position: ", "X: %f, Y: %f, R: %f", posX, posY, robotRotation/Math.PI);
             telemetry.update();
             while (!(ToolBox.pythagoras(point[0]-posX,point[1]-posY) < ToolBox.movementTolerance && Math.abs(point[2]-robotRotation) < ToolBox.rotateTolerance) && opModeIsActive()) {
                 int deltaContactsLeftOdo = leftOdo.getCurrentPosition() - passedContactsLeftOdo;
