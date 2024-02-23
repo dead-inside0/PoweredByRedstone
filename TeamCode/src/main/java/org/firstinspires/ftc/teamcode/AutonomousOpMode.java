@@ -58,6 +58,17 @@ public class AutonomousOpMode extends LinearOpMode{
 
     public int linearExtensionIndex() {return linearExtensionIndex;}
 
+    public double[] getPlacePosition(int elementLocation) {
+        switch (elementLocation) {
+            case 0:
+                return new double[]{};
+            case 2:
+                return new double[]{};
+            default:
+                return new double[]{};
+        }
+    }
+
     public void runOpMode() {
         MyHardwareMap hMap = new MyHardwareMap(hardwareMap);
 
@@ -228,6 +239,37 @@ public class AutonomousOpMode extends LinearOpMode{
                 telemetry.update();
             }
             if(i == linearExtensionIndex()){
+                double[] placePosition = getPlacePosition(elementLocation);
+                if(elementLocation == 0 || elementLocation == 2) {
+                    while (!(ToolBox.pythagoras(placePosition[0]-posX,placePosition[1]-posY) < ToolBox.movementTolerance && Math.abs(placePosition[2]-robotRotation) < ToolBox.rotateTolerance)) {
+                        int deltaContactsLeftOdo = leftOdo.getCurrentPosition() - passedContactsLeftOdo;
+                        int deltaContactsRightOdo = rightOdo.getCurrentPosition() - passedContactsRightOdo;
+                        int deltaContactsMiddleOdo = middleOdo.getCurrentPosition() - passedContactsMiddleOdo;
+
+                        //Update passed odo contacts
+                        passedContactsRightOdo += deltaContactsRightOdo;
+                        passedContactsLeftOdo += deltaContactsLeftOdo;
+                        passedContactsMiddleOdo += deltaContactsMiddleOdo;
+                        //Get position change
+                        double[] positionChange = Odometry.getPositionChange(-deltaContactsRightOdo, deltaContactsLeftOdo, -deltaContactsMiddleOdo, robotRotation);
+                        double deltaX = positionChange[0];
+                        double deltaY = positionChange[1];
+                        double deltaRotation = positionChange[2];
+
+                        //Update position
+                        posX += deltaX;
+                        posY += deltaY;
+                        robotRotation += deltaRotation;
+                        robotRotation = ToolBox.scaleAngle(robotRotation);
+
+                        double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, placePosition[0], placePosition[1], robotRotation, placePosition[2], 0.5);
+
+                        backLeftMotor.setPower(motorPowers[0]);
+                        backRightMotor.setPower(motorPowers[1]);
+                        frontLeftMotor.setPower(motorPowers[2]);
+                        frontRightMotor.setPower(motorPowers[3]);
+                    }
+                }
                 while(linearMechanismMotor.getCurrentPosition() > -3000) {
                     linearMechanismMotor.setPower(-1);
                 }
