@@ -131,19 +131,22 @@ public class AutonomousOpMode extends LinearOpMode{
         double runningSum = 0;
         int framesProcessed = 0;
         runtime.reset();
+        //Average the pixel location over 1 second
         while(runtime.seconds() < 1 && opModeIsActive()){
             runningSum += pipeline.getLastResult();
             framesProcessed ++;
         }
         elementLocation = (int) Math.round(runningSum/framesProcessed);
 
+        //Stop the camera
         phoneCam.stopStreaming();
 
+        //Get first movement based on where pixel is
         path[0] = getPlacementPosition(elementLocation);
 
-
-
+        //loop over path
         for (int i = 0; i < path.length; i++) {
+            //get current point
             double[] point = path[i];
 
             telemetry.addData("Next point: ", "X: %f, Y: %f, R: %f", point[0], point[1], point[2]/Math.PI);
@@ -173,13 +176,12 @@ public class AutonomousOpMode extends LinearOpMode{
                 robotRotation += deltaRotation;
                 robotRotation = ToolBox.scaleAngle(robotRotation);
 
+                //Go to position specified in point
                 double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, point[0], point[1], robotRotation, point[2], 0.5);
-
                 backLeftMotor.setPower(motorPowers[0]);
                 backRightMotor.setPower(motorPowers[1]);
                 frontLeftMotor.setPower(motorPowers[2]);
                 frontRightMotor.setPower(motorPowers[3]);
-
 
 
                 telemetry.addData("Next point: ", "X: %f, Y: %f, R: %f", point[0], point[1], point[2]);
