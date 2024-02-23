@@ -25,6 +25,8 @@ public class AutonomousOpMode extends LinearOpMode{
 
     final private ElapsedTime runtime = new ElapsedTime();
 
+    public final double tile = 600;
+
     static double[][] path;
 
     double posX = 0;
@@ -39,6 +41,16 @@ public class AutonomousOpMode extends LinearOpMode{
 
     Scalar highColorBlue = new Scalar(120, 255, 255);
     Scalar lowColorBlue = new Scalar(110, 150, 20);
+
+    /*  PATH:
+            0-xPos
+            1-yPos
+            2-rot
+            3-place motor
+            4-place servo
+            5-linear mechanism
+     */
+
 
 
     public double[][] getPath() {
@@ -57,6 +69,19 @@ public class AutonomousOpMode extends LinearOpMode{
     public Scalar[] getColorBounds() {return new Scalar[]{};}
 
     public int linearExtensionIndex() {return linearExtensionIndex;}
+
+    public double[] getPlacementPosition(int elementLocation) {
+        if(elementLocation == 0){
+            return new double[]{0,tile*1.25,Math.PI,-1,0,0};
+        }
+        else if(elementLocation == 1){
+            return new double[]{0,tile*2,Math.PI * 0.5,-1,0,0};
+        }
+        else if(elementLocation == 2){
+            return new double[]{0,tile*1.25,0,-1,0,0};
+        }
+        return new double[]{};
+    }
 
     public void runOpMode() {
         runtime.reset();
@@ -118,32 +143,25 @@ public class AutonomousOpMode extends LinearOpMode{
         waitForStart();
 
         int elementLocation;
-        double runningSum = 0;
-        int framesProcessed = 0;
-        runtime.reset();
-        while(runtime.seconds() < 1){
-            runningSum += pipeline.getLastResult();
-            framesProcessed ++;
-        }
-        elementLocation = (int) Math.round(runningSum/framesProcessed);
+        //TEST IF THE AVERAGING FUCKS IT UP
+        //double runningSum = 0;
+        //int framesProcessed = 0;
+        //runtime.reset();
+        //while(runtime.seconds() < 1 && opModeIsActive()){
+        //    runningSum += pipeline.getLastResult();
+        //    framesProcessed ++;
+        //}
+        //elementLocation = (int) Math.round(runningSum/framesProcessed);
+        elementLocation = pipeline.getLastResult();
 
         telemetry.addData("Element location: ", elementLocation);
 
         phoneCam.stopStreaming();
 
-        double[] elementPosition = {};
+        path[0] = getPlacementPosition(elementLocation);
 
-        if(elementLocation == 0){
-            elementPosition = new double[]{0,670,Math.PI};
-        }
-        else if(elementLocation == 1){
-            elementPosition = new double[]{0,670,Math.PI * 0.5};
-        }
-        else if(elementLocation == 2){
-            elementPosition = new double[]{0,670,0};
-        }
 
-        while (!(ToolBox.pythagoras(elementPosition[0]-posX,elementPosition[1]-posY) < ToolBox.movementTolerance && Math.abs(elementPosition[2]-robotRotation) < ToolBox.rotateTolerance)) {
+        /*while (!(ToolBox.pythagoras(elementPosition[0]-posX,elementPosition[1]-posY) < ToolBox.movementTolerance && Math.abs(elementPosition[2]-robotRotation) < ToolBox.rotateTolerance) && opModeIsActive()) {
             int deltaContactsLeftOdo = leftOdo.getCurrentPosition() - passedContactsLeftOdo;
             int deltaContactsRightOdo = rightOdo.getCurrentPosition() - passedContactsRightOdo;
             int deltaContactsMiddleOdo = middleOdo.getCurrentPosition() - passedContactsMiddleOdo;
@@ -183,7 +201,7 @@ public class AutonomousOpMode extends LinearOpMode{
         double pauseStartY = posY;
         double pauseStartRot = robotRotation;
         pickupMotor.setPower(-1);
-        while(runtime.seconds() < pauseStartTime + 2) {
+        while(runtime.seconds() < pauseStartTime + 2  && opModeIsActive()) {
             int deltaContactsLeftOdo = leftOdo.getCurrentPosition() - passedContactsLeftOdo;
             int deltaContactsRightOdo = rightOdo.getCurrentPosition() - passedContactsRightOdo;
             int deltaContactsMiddleOdo = middleOdo.getCurrentPosition() - passedContactsMiddleOdo;
@@ -211,7 +229,7 @@ public class AutonomousOpMode extends LinearOpMode{
             frontLeftMotor.setPower(motorPowers[2]);
             frontRightMotor.setPower(motorPowers[3]);
         }
-        pickupMotor.setPower(0);
+        pickupMotor.setPower(0);*/
 
 
 
@@ -221,7 +239,7 @@ public class AutonomousOpMode extends LinearOpMode{
             telemetry.addData("Next point: ", "X: %f, Y: %f, R: %f", point[0], point[1], point[2]);
             telemetry.addData("Current position: ", "X: %f, Y: %f, R: %f", posX, posY, robotRotation);
             telemetry.update();
-            while (!(ToolBox.pythagoras(point[0]-posX,point[1]-posY) < ToolBox.movementTolerance && Math.abs(point[2]-robotRotation) < ToolBox.rotateTolerance)) {
+            while (!(ToolBox.pythagoras(point[0]-posX,point[1]-posY) < ToolBox.movementTolerance && Math.abs(point[2]-robotRotation) < ToolBox.rotateTolerance) && opModeIsActive()) {
                 int deltaContactsLeftOdo = leftOdo.getCurrentPosition() - passedContactsLeftOdo;
                 int deltaContactsRightOdo = rightOdo.getCurrentPosition() - passedContactsRightOdo;
                 int deltaContactsMiddleOdo = middleOdo.getCurrentPosition() - passedContactsMiddleOdo;
@@ -249,23 +267,18 @@ public class AutonomousOpMode extends LinearOpMode{
                 frontLeftMotor.setPower(motorPowers[2]);
                 frontRightMotor.setPower(motorPowers[3]);
 
+                pickupMotor.setPower(i > 0 ? path[i-1][3] : 0);
+
 
                 telemetry.addData("Next point: ", "X: %f, Y: %f, R: %f", point[0], point[1], point[2]);
                 telemetry.addData("Current position: ", "X: %f, Y: %f, R: %f", posX, posY, robotRotation);
                 telemetry.update();
             }
-            if(i == linearExtensionIndex()){
-                while(linearMechanismMotor.getCurrentPosition() > -2000) {
-                    linearMechanismMotor.setPower(-1);
-                }
-                placeServo.setPosition(1);
-                pauseStartTime = runtime.seconds();
-                while(runtime.seconds() < pauseStartTime + 1.5) {
-                    placeServo.setPosition(1);
-                }
-                placeServo.setPosition(0);
-                while(linearMechanismMotor.getCurrentPosition() < 0) {
-                    linearMechanismMotor.setPower(1);
+            pickupMotor.setPower(point[3]);
+            placeServo.setPosition(point[4]);
+            if(point[5] != 0){
+                while(linearMechanismMotor.getCurrentPosition() > -2000 && linearMechanismMotor.getCurrentPosition() < 0 && opModeIsActive()) {
+                    linearMechanismMotor.setPower(point[5]);
                 }
             }
         }

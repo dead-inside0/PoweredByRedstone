@@ -52,17 +52,17 @@ public class ToolBox {
                 rotDiff -= 2 * Math.PI;
             }
             //Rotate less if closer to target and convert to PI radians
-            rotate = rotDiff / (Math.PI) * rotateFactor;
+            rotate = rotDiff / (Math.PI);
 
             //Clip from minRotatePower to 1 or from -1 to -minRotatePower respectively
             double minRotatePower = 0.15;
-            rotate = rotate > 0 ? Range.clip(rotate,minRotatePower,1) : Range.clip(rotate, -minRotatePower,-1);
+            rotate = (rotate > 0 ? Range.clip(rotate,minRotatePower,1) : Range.clip(rotate, -minRotatePower,-1)) * rotateFactor;
         }
 
         //Slow down if closer to target
         double modifiedSpeed = speed;
         if(pythagoras(currentX - targetX, currentY - targetY) <= movementDecelerationDistance){
-            modifiedSpeed = Range.clip(pythagoras(currentX - targetX, currentY - targetY) / movementDecelerationDistance,speed > 0.3 ? 0.3: speed,speed);
+            modifiedSpeed = Range.clip(pythagoras(currentX - targetX, currentY - targetY) / movementDecelerationDistance,Math.min(speed,0.3),speed);
         }
 
         return getMotorPowersByDirection(angleToTarget, modifiedSpeed, rotate);

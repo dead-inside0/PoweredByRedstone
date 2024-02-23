@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.AutonomousOpMode;
 import org.opencv.core.Scalar;
 
 @Autonomous
-public class Red1 extends AutonomousOpMode {
+public class RedLeft extends AutonomousOpMode {
 
     final double tileLength = 600;
     double[][] path = {

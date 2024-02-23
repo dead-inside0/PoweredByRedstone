@@ -6,13 +6,13 @@ import org.firstinspires.ftc.teamcode.AutonomousOpMode;
 import org.opencv.core.Scalar;
 
 @Autonomous
-public class Red2 extends AutonomousOpMode {
+public class BlueLeft extends AutonomousOpMode {
 
     final double tileLength = 600;
     double[][] path = {
             {0, 85, 0},
-            {tileLength, tileLength, Math.PI/2},
-            {tileLength, 0, Math.PI/2}
+            {-tileLength, tileLength, -Math.PI/2},
+            {-tileLength, 0, -Math.PI/2}
     };
 
     int linearExtensionIndex = 1;
@@ -22,7 +22,7 @@ public class Red2 extends AutonomousOpMode {
     }
 
     @Override
-    public Scalar[] getColorBounds() {return colorByIndex('r');}
+    public Scalar[] getColorBounds() {return colorByIndex('b');}
 
     @Override
     public int linearExtensionIndex() {return linearExtensionIndex;}
