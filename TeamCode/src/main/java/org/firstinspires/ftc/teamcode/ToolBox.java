@@ -52,10 +52,11 @@ public class ToolBox {
                 rotDiff -= 2*Math.PI;
             }
             //Rotate less if closer to target
-            rotate = rotDiff /Math.PI;
+            rotate = rotDiff /(Math.PI) * rotateFactor;
 
-            //Clip from 0.3 to 1 or from -1 to -0.3 respectively (less than 0.3 does not move)
-            rotate = (rotate > 0 ? Range.clip(rotate,0.3,1) : Range.clip(rotate, -0.3,-1)) * rotateFactor;
+            //Clip from minRotatePower to 1 or from -1 to -minRotatePower respectively
+            double minRotatePower = 0.15;
+            rotate = rotate > 0 ? Range.clip(rotate,minRotatePower,1) : Range.clip(rotate, -minRotatePower,-1);
         }
 
         //Slow down if closer to target
