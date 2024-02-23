@@ -8,7 +8,7 @@ import org.opencv.core.Scalar;
 @Autonomous
 public class BlueLeft extends AutonomousOpMode {
 
-    final double tileLength = 610;
+    final double tile = 610;
     double[][] path = {
             {},
             {0, tile*2, 0,0,1,0,0},
@@ -26,6 +26,7 @@ public class BlueLeft extends AutonomousOpMode {
     }
 
     @Override
+
     public Scalar[] getColorBounds() {return colorByIndex('b');}
 
 

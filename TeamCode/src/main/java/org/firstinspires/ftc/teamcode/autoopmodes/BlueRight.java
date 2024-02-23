@@ -7,8 +7,6 @@ import org.opencv.core.Scalar;
 
 @Autonomous
 public class BlueRight extends AutonomousOpMode {
-
-    final double tileLength = 610;
     double[][] path = {
             {},
             {0, tile*2, 0,0,1,0,0},

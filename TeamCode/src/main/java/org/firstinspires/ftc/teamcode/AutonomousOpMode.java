@@ -201,9 +201,10 @@ public class AutonomousOpMode extends LinearOpMode{
             //Place pixel
             placeServo.setPosition(point[4]);
             //If wait - rerun the current position over and over
-            double waitStart = runtime.seconds();
-            while(runtime.seconds() < (waitStart + point[6])){
-
+            double waitStart = runtime.milliseconds();
+            while(runtime.milliseconds() < (waitStart + point[6] * 1000)){
+                telemetry.addData("waiting for", runtime.seconds() - waitStart);
+                telemetry.update();
             }
         }
     }

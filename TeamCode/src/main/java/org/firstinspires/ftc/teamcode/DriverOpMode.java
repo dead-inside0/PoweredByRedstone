@@ -234,19 +234,24 @@ public class DriverOpMode extends OpMode {
             }
             //let go
             else {
-                droneServo.setPosition(0.65);
+                droneServo.setPosition(0.55);
             }
         }
 
         //Place hook
         if(gamepad2.y && gamepad2.left_bumper && gamepad2.right_bumper){
-            //hide hook
+            //og position
             if(gamepad2.left_trigger > triggerDeadzone) {
                 hookServo.setPosition(1);
             }
+
+            //hide hook
+            else if(gamepad2.right_trigger > triggerDeadzone){
+                hookServo.setPosition(0);
+            }
             //place hook
             else{
-                hookServo.setPosition(0);
+                hookServo.setPosition(0.3);
             }
         }
 
