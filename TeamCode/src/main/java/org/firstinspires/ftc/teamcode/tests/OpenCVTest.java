@@ -54,8 +54,8 @@ public class OpenCVTest extends OpMode {
 
     //Pipeline
     class TestPipeline extends OpenCvPipeline {
-        Scalar highColor = new Scalar(120, 255, 255);
-        Scalar lowColor = new Scalar(110, 150, 20);
+        Scalar highColor = new Scalar(10, 255, 255);
+        Scalar lowColor = new Scalar(0, 150, 20);
         int lastResult;
         @Override
         public Mat processFrame(Mat frame) {

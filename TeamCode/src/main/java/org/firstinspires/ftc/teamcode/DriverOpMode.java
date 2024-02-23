@@ -185,7 +185,7 @@ public class DriverOpMode extends OpMode {
         //GAMEPAD 2
 
         // Move arm
-        if(linearMechanismInput < -deadzone && linearMechanismMotor.getCurrentPosition() > -3000){
+        if(linearMechanismInput < -deadzone && linearMechanismMotor.getCurrentPosition() > -2000){
             //up - encoder subtracts
             linearMechanismMotor.setPower(linearMechanismInput);
         }
@@ -252,8 +252,16 @@ public class DriverOpMode extends OpMode {
 
         //Place pixel
         if(gamepad2.b){
+            if(gamepad2.left_trigger > triggerDeadzone && gamepad2.right_trigger > triggerDeadzone){
+                if(placeServo.getPosition() == 0){
+                    placeServo.setPosition(0.1);
+                }
+                else{
+                    placeServo.setPosition(0);
+                }
+            }
             //go to og position
-            if(gamepad2.left_trigger > triggerDeadzone) {
+            else if(gamepad2.left_trigger > triggerDeadzone) {
                 placeServo.setPosition(1);
             }
             //place pixel
