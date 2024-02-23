@@ -55,12 +55,12 @@ public class ToolBox {
             rotate = 1;
         }
 
-        //Rotate either - or + based on difference in angles
-        if(Math.abs(rotDiff) > rotateTolerance){
-            speed = 0;
-        }
-        else if(pythagoras(targetX - currentX, targetY - currentY) > movementTolerance){
+        if(pythagoras(targetX - currentX, targetY - currentY) > movementTolerance){
             rotateSpeed = 0;
+        }
+        //Rotate either - or + based on difference in angles
+        else if(Math.abs(rotDiff) > rotateTolerance){
+            speed = 0;
         }
         else{
             speed = 0;

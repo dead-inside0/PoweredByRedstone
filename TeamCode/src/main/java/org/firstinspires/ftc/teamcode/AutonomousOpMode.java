@@ -49,6 +49,7 @@ public class AutonomousOpMode extends LinearOpMode{
             3-place motor
             4-place servo
             5-linear mechanism
+            6-wait time
      */
 
 
@@ -144,15 +145,14 @@ public class AutonomousOpMode extends LinearOpMode{
 
         int elementLocation;
         //TEST IF THE AVERAGING FUCKS IT UP
-        //double runningSum = 0;
-        //int framesProcessed = 0;
-        //runtime.reset();
-        //while(runtime.seconds() < 1 && opModeIsActive()){
-        //    runningSum += pipeline.getLastResult();
-        //    framesProcessed ++;
-        //}
-        //elementLocation = (int) Math.round(runningSum/framesProcessed);
-        elementLocation = pipeline.getLastResult();
+        double runningSum = 0;
+        int framesProcessed = 0;
+        runtime.reset();
+        while(runtime.seconds() < 1 && opModeIsActive()){
+            runningSum += pipeline.getLastResult();
+            framesProcessed ++;
+        }
+        elementLocation = (int) Math.round(runningSum/framesProcessed);
 
         telemetry.addData("Element location: ", elementLocation);
 
@@ -260,26 +260,33 @@ public class AutonomousOpMode extends LinearOpMode{
                 robotRotation += deltaRotation;
                 robotRotation = ToolBox.scaleAngle(robotRotation);
 
-                double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, point[0], point[1], robotRotation, point[2], 0.25);
+                double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, point[0], point[1], robotRotation, point[2], 0.5);
 
                 backLeftMotor.setPower(motorPowers[0]);
                 backRightMotor.setPower(motorPowers[1]);
                 frontLeftMotor.setPower(motorPowers[2]);
                 frontRightMotor.setPower(motorPowers[3]);
 
-                pickupMotor.setPower(i > 0 ? path[i-1][3] : 0);
+
 
 
                 telemetry.addData("Next point: ", "X: %f, Y: %f, R: %f", point[0], point[1], point[2]);
                 telemetry.addData("Current position: ", "X: %f, Y: %f, R: %f", posX, posY, robotRotation);
+                telemetry.addData("%d",point[3]);
                 telemetry.update();
             }
-            pickupMotor.setPower(point[3]);
-            placeServo.setPosition(point[4]);
             if(point[5] != 0){
                 while(linearMechanismMotor.getCurrentPosition() > -2000 && linearMechanismMotor.getCurrentPosition() < 0 && opModeIsActive()) {
                     linearMechanismMotor.setPower(point[5]);
                 }
+            }
+            telemetry.addData("%d",point[3]);
+            telemetry.update();
+            pickupMotor.setPower(point[3]);
+            placeServo.setPosition(point[4]);
+            double waitStart = runtime.seconds();
+            while(runtime.seconds() < waitStart + point[6]) {
+
             }
         }
     }
