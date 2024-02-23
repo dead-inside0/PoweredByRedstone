@@ -185,7 +185,7 @@ public class DriverOpMode extends OpMode {
         //GAMEPAD 2
 
         // Move arm
-        if(linearMechanismInput < -deadzone && linearMechanismMotor.getCurrentPosition() > -3000){
+        if(linearMechanismInput < -deadzone && linearMechanismMotor.getCurrentPosition() > -2000){
             //up - encoder subtracts
             linearMechanismMotor.setPower(linearMechanismInput);
         }

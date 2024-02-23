@@ -192,9 +192,38 @@ public class AutonomousOpMode extends LinearOpMode{
         }
 
         double pauseStartTime = runtime.seconds();
+        double pauseStartX = posX;
+        double pauseStartY = posY;
+        double pauseStartRot = robotRotation;
 
         while(runtime.seconds() < pauseStartTime + 1) {
             pickupMotor.setPower(-1);
+            int deltaContactsLeftOdo = leftOdo.getCurrentPosition() - passedContactsLeftOdo;
+            int deltaContactsRightOdo = rightOdo.getCurrentPosition() - passedContactsRightOdo;
+            int deltaContactsMiddleOdo = middleOdo.getCurrentPosition() - passedContactsMiddleOdo;
+
+            //Update passed odo contacts
+            passedContactsRightOdo += deltaContactsRightOdo;
+            passedContactsLeftOdo += deltaContactsLeftOdo;
+            passedContactsMiddleOdo += deltaContactsMiddleOdo;
+            //Get position change
+            double[] positionChange = Odometry.getPositionChange(-deltaContactsRightOdo, deltaContactsLeftOdo, -deltaContactsMiddleOdo, robotRotation);
+            double deltaX = positionChange[0];
+            double deltaY = positionChange[1];
+            double deltaRotation = positionChange[2];
+
+            //Update position
+            posX += deltaX;
+            posY += deltaY;
+            robotRotation += deltaRotation;
+            robotRotation = ToolBox.scaleAngle(robotRotation);
+
+            double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, pauseStartX, pauseStartY- 150, robotRotation, pauseStartRot, 0.5);
+
+            backLeftMotor.setPower(motorPowers[0]);
+            backRightMotor.setPower(motorPowers[1]);
+            frontLeftMotor.setPower(motorPowers[2]);
+            frontRightMotor.setPower(motorPowers[3]);
         }
 
 
@@ -270,7 +299,7 @@ public class AutonomousOpMode extends LinearOpMode{
                         frontRightMotor.setPower(motorPowers[3]);
                     }
                 }
-                while(linearMechanismMotor.getCurrentPosition() > -3000) {
+                while(linearMechanismMotor.getCurrentPosition() > -2000) {
                     linearMechanismMotor.setPower(-1);
                 }
                 placeServo.setPosition(1);
