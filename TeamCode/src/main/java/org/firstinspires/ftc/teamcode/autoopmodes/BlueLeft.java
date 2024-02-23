@@ -8,7 +8,7 @@ import org.opencv.core.Scalar;
 @Autonomous
 public class BlueLeft extends AutonomousOpMode {
 
-    final double tileLength = 600;
+    final double tileLength = 610;
     double[][] path = {
             {},
             {-tile,tile*1.25,0,0,1,0,0},

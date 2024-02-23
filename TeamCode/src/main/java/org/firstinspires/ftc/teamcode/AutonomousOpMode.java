@@ -25,7 +25,7 @@ public class AutonomousOpMode extends LinearOpMode{
 
     final private ElapsedTime runtime = new ElapsedTime();
 
-    public final double tile = 600;
+    public final double tile = 610;
 
     static double[][] path;
 
@@ -33,8 +33,6 @@ public class AutonomousOpMode extends LinearOpMode{
     double posY = 0;
     double robotRotation = 0;
     OpenCvCamera phoneCam;
-
-    int linearExtensionIndex = 0;
 
     Scalar highColorRed = new Scalar(10, 255, 255);
     Scalar lowColorRed = new Scalar(0, 150, 20);
@@ -52,11 +50,10 @@ public class AutonomousOpMode extends LinearOpMode{
             6-wait time
      */
 
-
-
     public double[][] getPath() {
         return path;
     }
+
     public Scalar[] colorByIndex(char color) {
         switch (color) {
             case 'r':
@@ -68,8 +65,6 @@ public class AutonomousOpMode extends LinearOpMode{
     }
 
     public Scalar[] getColorBounds() {return new Scalar[]{};}
-
-    public int linearExtensionIndex() {return linearExtensionIndex;}
 
     public double[] getPlacementPosition(int elementLocation) {
         if(elementLocation == 0){
@@ -130,6 +125,8 @@ public class AutonomousOpMode extends LinearOpMode{
             {
                 //Start streaming
                 phoneCam.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
+                telemetry.addLine("Camera initialized, ready to start");
+                telemetry.update();
             }
             @Override
             public void onError(int errorCode)
@@ -140,11 +137,10 @@ public class AutonomousOpMode extends LinearOpMode{
         });
 
 
-
         waitForStart();
 
+
         int elementLocation;
-        //TEST IF THE AVERAGING FUCKS IT UP
         double runningSum = 0;
         int framesProcessed = 0;
         runtime.reset();
@@ -154,91 +150,20 @@ public class AutonomousOpMode extends LinearOpMode{
         }
         elementLocation = (int) Math.round(runningSum/framesProcessed);
 
-        telemetry.addData("Element location: ", elementLocation);
-
         phoneCam.stopStreaming();
 
         path[0] = getPlacementPosition(elementLocation);
 
 
-        /*while (!(ToolBox.pythagoras(elementPosition[0]-posX,elementPosition[1]-posY) < ToolBox.movementTolerance && Math.abs(elementPosition[2]-robotRotation) < ToolBox.rotateTolerance) && opModeIsActive()) {
-            int deltaContactsLeftOdo = leftOdo.getCurrentPosition() - passedContactsLeftOdo;
-            int deltaContactsRightOdo = rightOdo.getCurrentPosition() - passedContactsRightOdo;
-            int deltaContactsMiddleOdo = middleOdo.getCurrentPosition() - passedContactsMiddleOdo;
-
-            //Update passed odo contacts
-            passedContactsRightOdo += deltaContactsRightOdo;
-            passedContactsLeftOdo += deltaContactsLeftOdo;
-            passedContactsMiddleOdo += deltaContactsMiddleOdo;
-            //Get position change
-            double[] positionChange = Odometry.getPositionChange(-deltaContactsRightOdo, deltaContactsLeftOdo, -deltaContactsMiddleOdo, robotRotation);
-            double deltaX = positionChange[0];
-            double deltaY = positionChange[1];
-            double deltaRotation = positionChange[2];
-
-            //Update position
-            posX += deltaX;
-            posY += deltaY;
-            robotRotation += deltaRotation;
-            robotRotation = ToolBox.scaleAngle(robotRotation);
-
-            double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, elementPosition[0], elementPosition[1], robotRotation, elementPosition[2], 0.25);
-
-            backLeftMotor.setPower(motorPowers[0]);
-            backRightMotor.setPower(motorPowers[1]);
-            frontLeftMotor.setPower(motorPowers[2]);
-            frontRightMotor.setPower(motorPowers[3]);
-
-
-
-            telemetry.addData("Next point: ", "X: %f, Y: %f, R: %f", elementPosition[0], elementPosition[1], elementPosition[2]);
-            telemetry.addData("Current position: ", "X: %f, Y: %f, R: %f", posX, posY, robotRotation);
-            telemetry.update();
-        }
-
-        double pauseStartTime = runtime.seconds();
-        double pauseStartX = posX;
-        double pauseStartY = posY;
-        double pauseStartRot = robotRotation;
-        pickupMotor.setPower(-1);
-        while(runtime.seconds() < pauseStartTime + 2  && opModeIsActive()) {
-            int deltaContactsLeftOdo = leftOdo.getCurrentPosition() - passedContactsLeftOdo;
-            int deltaContactsRightOdo = rightOdo.getCurrentPosition() - passedContactsRightOdo;
-            int deltaContactsMiddleOdo = middleOdo.getCurrentPosition() - passedContactsMiddleOdo;
-
-            //Update passed odo contacts
-            passedContactsRightOdo += deltaContactsRightOdo;
-            passedContactsLeftOdo += deltaContactsLeftOdo;
-            passedContactsMiddleOdo += deltaContactsMiddleOdo;
-            //Get position change
-            double[] positionChange = Odometry.getPositionChange(-deltaContactsRightOdo, deltaContactsLeftOdo, -deltaContactsMiddleOdo, robotRotation);
-            double deltaX = positionChange[0];
-            double deltaY = positionChange[1];
-            double deltaRotation = positionChange[2];
-
-            //Update position
-            posX += deltaX;
-            posY += deltaY;
-            robotRotation += deltaRotation;
-            robotRotation = ToolBox.scaleAngle(robotRotation);
-
-            double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, elementLocation == 0 ? pauseStartX+50 : elementLocation == 2 ? pauseStartX-50 : pauseStartX, elementLocation==1? pauseStartY- 50: pauseStartY, robotRotation, pauseStartRot, 0.25);
-
-            backLeftMotor.setPower(motorPowers[0]);
-            backRightMotor.setPower(motorPowers[1]);
-            frontLeftMotor.setPower(motorPowers[2]);
-            frontRightMotor.setPower(motorPowers[3]);
-        }
-        pickupMotor.setPower(0);*/
-
-
-
 
         for (int i = 0; i < path.length; i++) {
             double[] point = path[i];
+
             telemetry.addData("Next point: ", "X: %f, Y: %f, R: %f", point[0], point[1], point[2]/Math.PI);
             telemetry.addData("Current position: ", "X: %f, Y: %f, R: %f", posX, posY, robotRotation/Math.PI);
             telemetry.update();
+
+            //Go to position specified in point
             while (!(ToolBox.pythagoras(point[0]-posX,point[1]-posY) < ToolBox.movementTolerance && Math.abs(point[2]-robotRotation) < ToolBox.rotateTolerance) && opModeIsActive()) {
                 int deltaContactsLeftOdo = leftOdo.getCurrentPosition() - passedContactsLeftOdo;
                 int deltaContactsRightOdo = rightOdo.getCurrentPosition() - passedContactsRightOdo;
@@ -248,6 +173,7 @@ public class AutonomousOpMode extends LinearOpMode{
                 passedContactsRightOdo += deltaContactsRightOdo;
                 passedContactsLeftOdo += deltaContactsLeftOdo;
                 passedContactsMiddleOdo += deltaContactsMiddleOdo;
+
                 //Get position change
                 double[] positionChange = Odometry.getPositionChange(-deltaContactsRightOdo, deltaContactsLeftOdo, -deltaContactsMiddleOdo, robotRotation);
                 double deltaX = positionChange[0];
@@ -269,24 +195,26 @@ public class AutonomousOpMode extends LinearOpMode{
 
 
 
-
                 telemetry.addData("Next point: ", "X: %f, Y: %f, R: %f", point[0], point[1], point[2]);
                 telemetry.addData("Current position: ", "X: %f, Y: %f, R: %f", posX, posY, robotRotation);
                 telemetry.addData("%d",point[3]);
                 telemetry.update();
             }
+
+            //Move linear mechanism
             if(point[5] != 0){
                 while(linearMechanismMotor.getCurrentPosition() > -2000 && linearMechanismMotor.getCurrentPosition() < 0 && opModeIsActive()) {
                     linearMechanismMotor.setPower(point[5]);
                 }
             }
-            telemetry.addData("%d",point[3]);
-            telemetry.update();
+            //Pick up pixel
             pickupMotor.setPower(point[3]);
+            //Place pixel
             placeServo.setPosition(point[4]);
+            //If wait - rerun the current position over and over
             double waitStart = runtime.seconds();
-            while(runtime.seconds() < waitStart + point[6]) {
-
+            if(runtime.seconds() < (waitStart + point[6])){
+                i--;
             }
         }
     }
