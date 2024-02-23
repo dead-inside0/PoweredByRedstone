@@ -139,7 +139,7 @@ public class DriverOpMode extends OpMode {
 
         //odo test - drive back to zero on a
         if(gamepad1.a){
-            double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, 0, 0, robotRotation, 0, 0.6);
+            double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, 0, 0, robotRotation, 0, 0.5);
 
             telemetry.addData("angle to 0 in PI radians", Math.atan2(-posX, -posY)/Math.PI);
 

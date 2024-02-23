@@ -6,7 +6,7 @@ public class ToolBox {
     public static double movementTolerance = 50;
 
     public static double movementDecelerationDistance = 200;
-    public static double rotateTolerance = Math.PI/45;
+    public static double rotateTolerance = Math.PI/30;
 
     //converts the joystick angle (global) to the angle needed to move the robot (local) in that direction
     public static double globalToRobot(double joystickAngle, double robotAngle){
@@ -44,18 +44,30 @@ public class ToolBox {
         double angleToTarget = globalToRobot(Math.atan2(targetX - currentX, targetY - currentY),currentRot);
 
         double rotate = 0;
-        //Rotate either - or + based on difference in angles
-        if(Math.abs(currentRot - targetRot) >= rotateTolerance){
-            double rotDiff = scaleAngle(targetRot - currentRot);
-            if(rotDiff > Math.PI) {
-                rotate = -1;
-            }
-            else{
-                rotate = 1;
-            }
+        double rotateSpeed = speed*0.75;
+
+        double rotDiff = scaleAngle(targetRot - currentRot);
+        if(rotDiff > Math.PI) {
+            rotDiff -= 2 * Math.PI;
+            rotate = -1;
+        }
+        else{
+            rotate = 1;
         }
 
-        return getMotorPowersByDirection(angleToTarget, speed, rotate*speed);
+        //Rotate either - or + based on difference in angles
+        if(Math.abs(rotDiff) > rotateTolerance){
+            speed = 0;
+        }
+        else if(pythagoras(targetX - currentX, targetY - currentY) > movementTolerance){
+            rotateSpeed = 0;
+        }
+        else{
+            speed = 0;
+            rotateSpeed = 0;
+        }
+
+        return getMotorPowersByDirection(angleToTarget, speed, rotate * rotateSpeed);
     }
 
     //pythagoras theorem
