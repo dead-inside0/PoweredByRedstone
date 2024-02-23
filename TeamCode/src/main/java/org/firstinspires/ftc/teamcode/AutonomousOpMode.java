@@ -66,9 +66,11 @@ public class AutonomousOpMode extends LinearOpMode{
         DcMotor frontLeftMotor = hMap.frontLeftMotor;
         DcMotor frontRightMotor = hMap.frontRightMotor;
 
-        Servo droneServo = hMap.droneServo;
+        Servo placeServo = hMap.placeServo;
 
         DcMotor linearMechanismMotor = hMap.linearMechanismMotor;
+        linearMechanismMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        linearMechanismMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         DcMotor pickupMotor = hMap.pickUpMotor;
 
@@ -187,7 +189,8 @@ public class AutonomousOpMode extends LinearOpMode{
 
 
 
-        for (double[] point : path) {
+        for (int i = 0; i < path.length; i++) {
+            double[] point = path[i];
             telemetry.addData("Next point: ", "X: %f, Y: %f, R: %f", point[0], point[1], point[2]);
             telemetry.addData("Current position: ", "X: %f, Y: %f, R: %f", posX, posY, robotRotation);
             telemetry.update();
@@ -223,6 +226,20 @@ public class AutonomousOpMode extends LinearOpMode{
                 telemetry.addData("Next point: ", "X: %f, Y: %f, R: %f", point[0], point[1], point[2]);
                 telemetry.addData("Current position: ", "X: %f, Y: %f, R: %f", posX, posY, robotRotation);
                 telemetry.update();
+            }
+            if(i == linearExtensionIndex()){
+                while(linearMechanismMotor.getCurrentPosition() > -3000) {
+                    linearMechanismMotor.setPower(-1);
+                }
+                placeServo.setPosition(1);
+                pauseStartTime = runtime.seconds();
+                while(runtime.seconds() < pauseStartTime + 1.5) {
+                    placeServo.setPosition(1);
+                }
+                placeServo.setPosition(0);
+                while(linearMechanismMotor.getCurrentPosition() < 0) {
+                    linearMechanismMotor.setPower(1);
+                }
             }
         }
     }
