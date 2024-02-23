@@ -41,10 +41,10 @@ public class ToolBox {
 
     //Get motor powers to drive to a specific point
     public static double[] getMotorPowersToPoint(double currentX, double currentY, double targetX, double targetY, double currentRot, double targetRot, double speed){
-        double angleToTarget = globalToRobot(Math.atan2(targetX - currentX, targetY - currentY), currentRot);
+        double angleToTarget = globalToRobot(Math.atan2(targetX - currentX, targetY - currentY),currentRot);
 
         double rotate = 0;
-        double rotateFactor = 1;
+        double rotateFactor = 0.5;
         //Rotate either - or + based on difference in angles
         if(Math.abs(currentRot - targetRot) >= rotateTolerance){
             double rotDiff = scaleAngle(targetRot - currentRot);
@@ -52,15 +52,16 @@ public class ToolBox {
                 rotDiff -= 2*Math.PI;
             }
             //Rotate less if closer to target
-            rotate = rotDiff/Math.PI * rotateFactor;
+            rotate = rotDiff /(2*Math.PI) * rotateFactor;
+
             //Clip from 0.3 to 1 or from -1 to -0.3 respectively (less than 0.3 does not move)
-            rotate = Range.clip(Math.abs(rotate),0.3,1) * rotate / Math.abs(rotate);
+            rotate = rotate > 0 ? Range.clip(rotate,0.3,1) : Range.clip(rotate, -0.3,-1);
         }
 
         //Slow down if closer to target
         double modifiedSpeed = speed;
         if(pythagoras(currentX - targetX, currentY - targetY) <= movementDecelerationDistance){
-            modifiedSpeed = Range.clip(pythagoras(currentX - targetX, currentY - targetY) / movementDecelerationDistance,0.3,1);
+            modifiedSpeed = Range.clip(pythagoras(currentX - targetX, currentY - targetY) / movementDecelerationDistance,speed > 0.3 ? 0.3: speed,speed);
         }
 
         return getMotorPowersByDirection(angleToTarget, modifiedSpeed, rotate);

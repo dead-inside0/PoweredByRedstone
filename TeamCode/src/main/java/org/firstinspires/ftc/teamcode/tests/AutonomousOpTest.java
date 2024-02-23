@@ -27,15 +27,5 @@ public class AutonomousOpTest extends AutonomousOpMode {
     @Override
     public int linearExtensionIndex() {return linearExtensionIndex;}
 
-    @Override
-    public double[] getPlacePosition(int elementLocation) {
-        switch (elementLocation) {
-            case 0:
-                return new double[]{};
-            case 2:
-                return new double[]{};
-            default:
-                return new double[]{};
-        }
-    }
+
 }
