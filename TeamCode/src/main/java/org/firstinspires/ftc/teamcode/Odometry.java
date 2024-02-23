@@ -5,7 +5,7 @@ public class Odometry {
         final double sideOdosDistance = 300;
         final double wheelCircumference = 60 * Math.PI;
         final double sensorResolution = 8192;
-        final double middleOdoDistance = 190;
+        final double middleOdoDistance = 175;
 
         double deltaLeftOdo = (deltaContactsLeftOdo * wheelCircumference) / sensorResolution;
         double deltaRightOdo = (deltaContactsRightOdo * wheelCircumference) / sensorResolution;
