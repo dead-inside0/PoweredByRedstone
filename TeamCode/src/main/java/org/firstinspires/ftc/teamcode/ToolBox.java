@@ -3,10 +3,10 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.util.Range;
 
 public class ToolBox {
-    public static double movementTolerance = 10;
+    public static double movementTolerance = 50;
 
     public static double movementDecelerationDistance = 200;
-    public static double rotateTolerance = Math.PI/36;
+    public static double rotateTolerance = Math.PI/45;
 
     //converts the joystick angle (global) to the angle needed to move the robot (local) in that direction
     public static double globalToRobot(double joystickAngle, double robotAngle){
@@ -49,10 +49,10 @@ public class ToolBox {
         if(Math.abs(currentRot - targetRot) >= rotateTolerance){
             double rotDiff = scaleAngle(targetRot - currentRot);
             if(rotDiff > Math.PI) {
-                rotDiff -= 2*Math.PI;
+                rotDiff -= 2 * Math.PI;
             }
-            //Rotate less if closer to target
-            rotate = rotDiff /(Math.PI) * rotateFactor;
+            //Rotate less if closer to target and convert to PI radians
+            rotate = rotDiff / (Math.PI) * rotateFactor;
 
             //Clip from minRotatePower to 1 or from -1 to -minRotatePower respectively
             double minRotatePower = 0.15;
