@@ -196,14 +196,14 @@ public class AutonomousOpMode extends LinearOpMode{
                     linearMechanismMotor.setPower(point[5]);
                 }
             }
-            //Pick up pixel
+            //Place pixel on ground
             pickupMotor.setPower(point[3]);
             //Place pixel
             placeServo.setPosition(point[4]);
             //If wait - rerun the current position over and over
             double waitStart = runtime.seconds();
-            if(runtime.seconds() < (waitStart + point[6])){
-                i--;
+            while(runtime.seconds() < (waitStart + point[6])){
+
             }
         }
     }
