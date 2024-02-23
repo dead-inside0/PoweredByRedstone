@@ -49,11 +49,6 @@ public class AutonomousOpMode extends LinearOpMode{
             5-linear mechanism
             6-wait time
      */
-
-    public double[][] getPath() {
-        return path;
-    }
-
     public Scalar[] colorByIndex(char color) {
         switch (color) {
             case 'r':
@@ -64,20 +59,12 @@ public class AutonomousOpMode extends LinearOpMode{
         return new Scalar[] {};
     }
 
+    //Dummy functions which we override
+    public double[][] getPath() {return new double[][]{{}};}
+
     public Scalar[] getColorBounds() {return new Scalar[]{};}
 
-    public double[] getPlacementPosition(int elementLocation) {
-        if(elementLocation == 0){
-            return new double[]{0,tile*1.25,Math.PI,-1,0,0};
-        }
-        else if(elementLocation == 1){
-            return new double[]{0,tile*2,Math.PI * 0.5,-1,0,0};
-        }
-        else if(elementLocation == 2){
-            return new double[]{0,tile*1.25,0,-1,0,0};
-        }
-        return new double[]{};
-    }
+    public double[] getPlacementPosition(int elementLocation) {return new double[]{};}
 
     public void runOpMode() {
         runtime.reset();
