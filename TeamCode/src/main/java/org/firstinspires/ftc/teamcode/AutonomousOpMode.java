@@ -86,6 +86,12 @@ public class AutonomousOpMode extends LinearOpMode{
         DcMotor leftOdo = hMap.leftOdo;
         DcMotor middleOdo = hMap.middleOdo;
         DcMotor rightOdo = hMap.rightOdo;
+        leftOdo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        middleOdo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightOdo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftOdo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        middleOdo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightOdo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         int passedContactsRightOdo = rightOdo.getCurrentPosition();
         int passedContactsLeftOdo = leftOdo.getCurrentPosition();
@@ -153,6 +159,14 @@ public class AutonomousOpMode extends LinearOpMode{
             telemetry.addData("Current position: ", "X: %f, Y: %f, R: %f", posX, posY, robotRotation/Math.PI);
             telemetry.update();
 
+            if(point[5] == 1){
+                placeServo.setPosition(0.65);
+                while(linearMechanismMotor.getCurrentPosition() < 0 && opModeIsActive()) {
+                    linearMechanismMotor.setPower(1);
+                }
+                placeServo.setPosition(1);
+            }
+
             //Go to position specified in point
             while (!(ToolBox.pythagoras(point[0]-posX,point[1]-posY) < ToolBox.movementTolerance && Math.abs(point[2]-robotRotation) < ToolBox.rotateTolerance) && opModeIsActive()) {
                 int deltaContactsLeftOdo = leftOdo.getCurrentPosition() - passedContactsLeftOdo;
@@ -173,8 +187,7 @@ public class AutonomousOpMode extends LinearOpMode{
                 //Update position
                 posX += deltaX;
                 posY += deltaY;
-                robotRotation += deltaRotation;
-                robotRotation = ToolBox.scaleAngle(robotRotation);
+                robotRotation = ToolBox.scaleAngle(deltaRotation);
 
                 //Go to position specified in point
                 double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, point[0], point[1], robotRotation, point[2], 0.5);
@@ -191,18 +204,21 @@ public class AutonomousOpMode extends LinearOpMode{
             }
 
             //Move linear mechanism
-            if(point[5] != 0){
-                while(linearMechanismMotor.getCurrentPosition() > -2000 && linearMechanismMotor.getCurrentPosition() < 0 && opModeIsActive()) {
-                    linearMechanismMotor.setPower(point[5]);
+            if(point[5] == -1){
+                placeServo.setPosition(0.65);
+                while(linearMechanismMotor.getCurrentPosition() > -2000 && opModeIsActive()) {
+                    linearMechanismMotor.setPower(-1);
                 }
+                placeServo.setPosition(0);
             }
+
             //Place pixel on ground
-            pickupMotor.setPower(point[3]);
-            //Place pixel
-            placeServo.setPosition(point[4]);
+            //pickupMotor.setPower(point[3]!=0?1:0);
+
             //If wait - rerun the current position over and over
             double waitStart = runtime.milliseconds();
-            while(runtime.milliseconds() < (waitStart + point[6] * 1000)){
+            while(runtime.milliseconds() < waitStart + point[6] * 1000 && opModeIsActive()){
+                pickupMotor.setPower(1);
                 telemetry.addData("waiting for", runtime.seconds() - waitStart);
                 telemetry.update();
             }

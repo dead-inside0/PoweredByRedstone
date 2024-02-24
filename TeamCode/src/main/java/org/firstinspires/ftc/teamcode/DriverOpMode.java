@@ -56,12 +56,25 @@ public class DriverOpMode extends OpMode {
         hookMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         linearMechanismMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         linearMechanismMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        leftOdo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        middleOdo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightOdo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftOdo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        middleOdo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightOdo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     @Override
     public void start() {
         runtime.reset();
         linearMechanismMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftOdo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        middleOdo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightOdo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftOdo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        middleOdo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightOdo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     @Override
@@ -98,8 +111,7 @@ public class DriverOpMode extends OpMode {
         //Update position
         posX += deltaX;
         posY += deltaY;
-        robotRotation += deltaRotation;
-        robotRotation = ToolBox.scaleAngle(robotRotation);
+        robotRotation = ToolBox.scaleAngle(deltaRotation);
 
 
         //Move robot
@@ -251,7 +263,7 @@ public class DriverOpMode extends OpMode {
             }
             //place hook
             else{
-                hookServo.setPosition(0.3);
+                hookServo.setPosition(0.2);
             }
         }
 
@@ -280,8 +292,8 @@ public class DriverOpMode extends OpMode {
         telemetry.addData("Position X", posX);
         telemetry.addData("Position Y", posY);
         telemetry.addData("Robot direction in PI radians", robotRotation/Math.PI);
-        telemetry.addData("PassedContactsRightOdo", -passedContactsRightOdo);
+        telemetry.addData("PassedContactsRightOdo", passedContactsRightOdo);
         telemetry.addData("PassedContactsLeftOdo", passedContactsLeftOdo);
-        telemetry.addData("PassedContactsMiddleOdo", -passedContactsMiddleOdo);
+        telemetry.addData("PassedContactsMiddleOdo", passedContactsMiddleOdo);
     }
 }

@@ -5,7 +5,7 @@ public class Odometry {
         final double sideOdosDistance = 300;
         final double wheelCircumference = 60 * Math.PI;
         final double sensorResolution = 8192;
-        final double middleOdoDistance = 175;
+        final double middleOdoDistance = 170;
 
         double deltaLeftOdo = (deltaContactsLeftOdo * wheelCircumference) / sensorResolution;
         double deltaRightOdo = (deltaContactsRightOdo * wheelCircumference) / sensorResolution;
@@ -19,7 +19,7 @@ public class Odometry {
         double deltaX = centerDisplacement * Math.cos(deltaAngle + prevAngle) - horizontalDisplacement * Math.sin(deltaAngle + prevAngle);
         double deltaY = centerDisplacement * Math.sin(deltaAngle + prevAngle) + horizontalDisplacement * Math.cos(deltaAngle + prevAngle);
 
-        double[] positionChange = {deltaX, deltaY, deltaAngle};
+        double[] positionChange = {deltaX, deltaY, deltaAngle+prevAngle};
 
         return positionChange;
 
