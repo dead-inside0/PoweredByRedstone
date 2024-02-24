@@ -17,7 +17,6 @@ public class BlueRight extends AutonomousOpMode {
         return path;
     }
 
-
     @Override
     public double[] getPlacementPosition(int elementLocation) {
         if(elementLocation == 0){

@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.ToolBox;
 @Autonomous
 public class Park extends LinearOpMode {
     final private ElapsedTime runtime = new ElapsedTime();
+
     public void runOpMode() {
         runtime.reset();
         MyHardwareMap hMap = new MyHardwareMap(hardwareMap);
@@ -23,42 +24,98 @@ public class Park extends LinearOpMode {
 
         waitForStart();
         runtime.reset();
-        double[] motorPowers = ToolBox.getMotorPowersByDirection(0, 0.7,0);
-        while(opModeIsActive() && runtime.seconds() < 0.5) {
+        double actionStart = runtime.seconds();
+        double[] motorPowers = ToolBox.getMotorPowersByDirection(0, 0.75,0);
+        while(opModeIsActive() && runtime.seconds() < actionStart + 0.5) {
             backLeftMotor.setPower(motorPowers[0]);
             backRightMotor.setPower(motorPowers[1]);
             frontLeftMotor.setPower(motorPowers[2]);
             frontRightMotor.setPower(motorPowers[3]);
         }
 
-        while(opModeIsActive() && runtime.seconds() < 1) {
-            backLeftMotor.setPower(-1);
-            backRightMotor.setPower(-1);
-            frontLeftMotor.setPower(-1);
-            frontRightMotor.setPower(-1);
+        actionStart = runtime.seconds();
+        while(opModeIsActive() && runtime.seconds() < actionStart + 0.5) {
+            backLeftMotor.setPower(0);
+            backRightMotor.setPower(0);
+            frontLeftMotor.setPower(0);
+            frontRightMotor.setPower(0);
+        }
+
+        actionStart = runtime.seconds();
+        motorPowers = ToolBox.getMotorPowersByDirection(0, 0,-0.75);
+        while(opModeIsActive() && runtime.seconds() < actionStart + 0.5) {
+            backLeftMotor.setPower(motorPowers[0]);
+            backRightMotor.setPower(motorPowers[1]);
+            frontLeftMotor.setPower(motorPowers[2]);
+            frontRightMotor.setPower(motorPowers[3]);
         }
 
         pickUpMotor.setPower(1);
 
-        while(opModeIsActive() && runtime.seconds() < 1.5) {
-            backLeftMotor.setPower(1);
-            backRightMotor.setPower(1);
-            frontLeftMotor.setPower(1);
-            frontRightMotor.setPower(1);
+        actionStart = runtime.seconds();
+        while(opModeIsActive() && runtime.seconds() < actionStart + 1) {
+            backLeftMotor.setPower(0);
+            backRightMotor.setPower(0);
+            frontLeftMotor.setPower(0);
+            frontRightMotor.setPower(0);
         }
-        motorPowers = ToolBox.getMotorPowersByDirection(Math.PI, 0.7,0);
-        while(opModeIsActive() && runtime.seconds() < 2) {
+
+        pickUpMotor.setPower(0);
+
+        actionStart = runtime.seconds();
+        while(opModeIsActive() && runtime.seconds() < actionStart + 0.5) {
+            backLeftMotor.setPower(0);
+            backRightMotor.setPower(0);
+            frontLeftMotor.setPower(0);
+            frontRightMotor.setPower(0);
+        }
+
+        actionStart = runtime.seconds();
+        motorPowers = ToolBox.getMotorPowersByDirection(0, 0,0.75);
+        while(opModeIsActive() && runtime.seconds() < actionStart + 0.5) {
             backLeftMotor.setPower(motorPowers[0]);
             backRightMotor.setPower(motorPowers[1]);
             frontLeftMotor.setPower(motorPowers[2]);
             frontRightMotor.setPower(motorPowers[3]);
         }
+
+        actionStart = runtime.seconds();
+        while(opModeIsActive() && runtime.seconds() < actionStart + 0.5) {
+            backLeftMotor.setPower(0);
+            backRightMotor.setPower(0);
+            frontLeftMotor.setPower(0);
+            frontRightMotor.setPower(0);
+        }
+
+        actionStart = runtime.seconds();
+        motorPowers = ToolBox.getMotorPowersByDirection(Math.PI, 0.75,0);
+        while(opModeIsActive() && runtime.seconds() < actionStart + 0.5) {
+            backLeftMotor.setPower(motorPowers[0]);
+            backRightMotor.setPower(motorPowers[1]);
+            frontLeftMotor.setPower(motorPowers[2]);
+            frontRightMotor.setPower(motorPowers[3]);
+        }
+
+        actionStart = runtime.seconds();
+        while(opModeIsActive() && runtime.seconds() < actionStart + 0.5) {
+            backLeftMotor.setPower(0);
+            backRightMotor.setPower(0);
+            frontLeftMotor.setPower(0);
+            frontRightMotor.setPower(0);
+        }
+
+        actionStart = runtime.seconds();
         motorPowers = ToolBox.getMotorPowersByDirection(Math.PI/2, 0.7,0);
-        while(opModeIsActive() && runtime.seconds() < 4) {
+        while(opModeIsActive() && runtime.seconds() < actionStart + 1) {
             backLeftMotor.setPower(motorPowers[0]);
             backRightMotor.setPower(motorPowers[1]);
             frontLeftMotor.setPower(motorPowers[2]);
             frontRightMotor.setPower(motorPowers[3]);
         }
+
+        backLeftMotor.setPower(0);
+        backRightMotor.setPower(0);
+        frontLeftMotor.setPower(0);
+        frontRightMotor.setPower(0);
     }
 }
