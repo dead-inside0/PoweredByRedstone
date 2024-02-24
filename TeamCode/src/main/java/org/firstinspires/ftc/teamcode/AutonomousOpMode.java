@@ -131,6 +131,12 @@ public class AutonomousOpMode extends LinearOpMode{
 
 
         waitForStart();
+        runtime.reset();
+
+        while(runtime.seconds() <= 10){
+            telemetry.addData("Waiting:%d",10-runtime.seconds());
+            telemetry.update();
+        }
 
 
         int elementLocation;
@@ -190,7 +196,7 @@ public class AutonomousOpMode extends LinearOpMode{
                 robotRotation = ToolBox.scaleAngle(deltaRotation);
 
                 //Go to position specified in point
-                double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, point[0], point[1], robotRotation, point[2], 0.5);
+                double[] motorPowers = ToolBox.getMotorPowersToPoint(posX, posY, point[0], point[1], robotRotation, point[2], 0.7);
                 backLeftMotor.setPower(motorPowers[0]);
                 backRightMotor.setPower(motorPowers[1]);
                 frontLeftMotor.setPower(motorPowers[2]);
@@ -214,11 +220,11 @@ public class AutonomousOpMode extends LinearOpMode{
 
             //Place pixel on ground
             //pickupMotor.setPower(point[3]!=0?1:0);
+            pickupMotor.setPower(point[3]);
 
             //If wait - rerun the current position over and over
             double waitStart = runtime.milliseconds();
             while(runtime.milliseconds() < waitStart + point[6] * 1000 && opModeIsActive()){
-                pickupMotor.setPower(1);
                 telemetry.addData("waiting for", runtime.seconds() - waitStart);
                 telemetry.update();
             }

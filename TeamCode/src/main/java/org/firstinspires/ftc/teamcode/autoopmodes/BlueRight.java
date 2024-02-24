@@ -7,36 +7,27 @@ import org.opencv.core.Scalar;
 
 @Autonomous
 public class BlueRight extends AutonomousOpMode {
-    double[][] path = {
-            {},
-            {0, tile*2, 0,0,1,0,0},
-            {-tile, tile*2, 0,0,1,0,0},
-            {-tile*2, tile*2, 0,0,1,0,0},
-            {-tile*3, tile*2, 0,0,1,0,0},
-            {-tile*3.25, tile,0,0,0,-1,1},
-            {-tile*3.25, tile*2,0,1,1,0},
-            {-tile*4,tile*2,0,0,1,0,0}
+    public double[][] path = {
+            {}
     };
-
+    @Override
+    public Scalar[] getColorBounds() {return colorByIndex('b');}
     @Override
     public double[][] getPath() {
         return path;
     }
 
-    @Override
-    public Scalar[] getColorBounds() {return colorByIndex('b');}
-
 
     @Override
     public double[] getPlacementPosition(int elementLocation) {
         if(elementLocation == 0){
-            return new double[]{0,tile*1.25,Math.PI,1,1,0,1};
+            return new double[]{0,tile*0.99,Math.PI *1.17,1,1,0,1};
         }
         else if(elementLocation == 1){
-            return new double[]{0,tile*2,Math.PI * 0.5,1,1,0,1};
+            return new double[]{0,tile * 1.1,Math.PI * 1.5,1,1,0,1};
         }
         else if(elementLocation == 2){
-            return new double[]{0,tile*1.25,0,1,1,0,1};
+            return new double[]{70,tile * 0.9,Math.PI * 1.85,1,1,0,1};
         }
         return new double[]{};
     }

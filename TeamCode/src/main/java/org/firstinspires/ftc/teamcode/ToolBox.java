@@ -3,11 +3,11 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.util.Range;
 
 public class ToolBox {
-    public static double movementTolerance = 40;
+    public static double movementTolerance = 30;
 
     public static double movementDecel = 150;
 
-    public static double rotateTolerance = Math.PI/60;
+    public static double rotateTolerance = Math.PI/140;
 
     //converts the joystick angle (global) to the angle needed to move the robot (local) in that direction
     public static double globalToRobot(double joystickAngle, double robotAngle){
@@ -45,7 +45,7 @@ public class ToolBox {
         double angleToTarget = globalToRobot(Math.atan2(targetX - currentX, targetY - currentY),currentRot);
 
         double rotate = 0;
-        double rotateSpeed = speed;
+        double rotateSpeed = 1;
 
         double rotDiff = scaleAngle(targetRot - currentRot);
         if(rotDiff > Math.PI) {
@@ -58,9 +58,7 @@ public class ToolBox {
         //rotate = Range.clip(rotDiff * 5/Math.PI,-1,1);
 
         if(pythagoras(targetX - currentX, targetY - currentY) < movementDecel) {
-            speed = 0.5*pythagoras(targetX - currentX, targetY - currentY) / movementDecel;
-            speed *= 0.5;
-            speed = 0.25;
+            speed = Range.clip(pythagoras(targetX - currentX, targetY - currentY) / movementDecel,0.2,speed);
         }
 
          if(pythagoras(targetX - currentX, targetY - currentY) > movementTolerance){

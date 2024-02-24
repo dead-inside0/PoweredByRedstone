@@ -165,20 +165,28 @@ public class DriverOpMode extends OpMode {
         //GAMEPAD 1
         double triggerDeadzone = 0.8;
 
-        //Reset position and rotation
-        if(gamepad1.y && gamepad1.left_bumper && gamepad1.right_bumper){
-            robotRotation = 0;
-            posX = 0;
-            posY = 0;
-        }
+        double linearMechanismMinPos = 0;
+        double linearMechanismMaxPos = -2000;
 
-        //Toggle global position use
-        if(gamepad1.x && gamepad1.left_bumper && gamepad1.right_bumper){
-            if(useGlobalPos){
-                useGlobalPos = false;
+        //Turn of all driver assist
+        if(gamepad1.left_bumper && gamepad1.right_bumper) {
+            if (gamepad1.y && gamepad1.x){
+                linearMechanismMinPos = 1000000000;
+                linearMechanismMaxPos = -100000000;
             }
-            else{
-                useGlobalPos = true;
+            //Reset position and rotation
+            else if (gamepad1.y) {
+                robotRotation = 0;
+                posX = 0;
+                posY = 0;
+            }
+            //Toggle global position use
+            else if (gamepad1.x) {
+                if (useGlobalPos) {
+                    useGlobalPos = false;
+                } else {
+                    useGlobalPos = true;
+                }
             }
         }
         
@@ -197,11 +205,11 @@ public class DriverOpMode extends OpMode {
         //GAMEPAD 2
 
         // Move arm
-        if(linearMechanismInput < -deadzone && linearMechanismMotor.getCurrentPosition() > -2000){
+        if(linearMechanismInput < -deadzone && linearMechanismMotor.getCurrentPosition() > linearMechanismMaxPos){
             //up - encoder subtracts
             linearMechanismMotor.setPower(linearMechanismInput);
         }
-        else if (linearMechanismInput > deadzone && linearMechanismMotor.getCurrentPosition() < 0) {
+        else if (linearMechanismInput > deadzone && linearMechanismMotor.getCurrentPosition() < linearMechanismMinPos) {
             //down - encoder adds
             linearMechanismMotor.setPower(linearMechanismInput);
         }
