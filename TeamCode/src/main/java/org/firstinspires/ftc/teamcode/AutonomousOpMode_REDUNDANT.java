@@ -1,15 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.MyHardwareMap;
-import org.firstinspires.ftc.teamcode.Odometry;
-import org.firstinspires.ftc.teamcode.ToolBox;
-import org.firstinspires.ftc.teamcode.tests.OpenCVTest;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
@@ -21,7 +16,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera2;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-public class AutonomousOpMode extends LinearOpMode{
+public class AutonomousOpMode_REDUNDANT extends LinearOpMode{
 
     final private ElapsedTime runtime = new ElapsedTime();
 
