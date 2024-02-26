@@ -60,7 +60,6 @@ public class DriverOpMode extends OpMode {
 
         hookMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         linearMechanismMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        linearMechanismMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         leftOdo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         middleOdo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -73,6 +72,7 @@ public class DriverOpMode extends OpMode {
     @Override
     public void start() {
         runtime.reset();
+        linearMechanismMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         linearMechanismMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftOdo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         middleOdo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
