@@ -53,6 +53,11 @@ public class DriverOpMode extends OpMode {
         passedContactsLeftOdo = leftOdo.getCurrentPosition();
         passedContactsMiddleOdo = middleOdo.getCurrentPosition();
 
+        backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         hookMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         linearMechanismMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         linearMechanismMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -131,19 +136,10 @@ public class DriverOpMode extends OpMode {
             frontRightMotor.setPower(motorPowers[3]);
         }
         else {
-            double breakingPower = 0.01;
-            if(Math.abs(deltaX) > 0.5 || Math.abs(deltaY) > 0.5 || Math.abs(deltaRotation) > Math.PI/360){
-                //break
-                frontLeftMotor.setPower(breakingPower);
-                frontRightMotor.setPower(breakingPower);
-                backLeftMotor.setPower(breakingPower);
-                backRightMotor.setPower(breakingPower);
-
-                frontLeftMotor.setPower(-breakingPower);
-                frontRightMotor.setPower(-breakingPower);
-                backLeftMotor.setPower(-breakingPower);
-                backRightMotor.setPower(-breakingPower);
-            }
+            frontLeftMotor.setPower(0);
+            frontRightMotor.setPower(0);
+            backLeftMotor.setPower(0);
+            backRightMotor.setPower(0);
         }
 
 
