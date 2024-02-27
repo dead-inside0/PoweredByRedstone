@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 public class Odometry {
-    public static double[] getPositionChange(int deltaContactsRightOdo, int deltaContactsLeftOdo, int deltaContactsMiddleOdo, double prevAngle){
+    public static double[] _getPositionChange(int deltaContactsRightOdo, int deltaContactsLeftOdo, int deltaContactsMiddleOdo, double prevAngle){
         final double sideOdosDistance = 300;
         final double wheelCircumference = 60 * Math.PI;
         final double sensorResolution = 8192;
@@ -23,8 +23,45 @@ public class Odometry {
 
     }
 
-    //REDUNDANT - POSX NOT WORKING !!!
-    public static double[] _getPositionChange(int deltaContactsRightOdo, int deltaContactsLeftOdo, int deltaContactsMiddleOdo, double prevAngle){
+    //test podle https://chsftcrobotics.weebly.com/uploads/1/2/3/6/123696510/odometry.pdf
+    public static double[] getPositionChange(int deltaContactsRightOdo, int deltaContactsLeftOdo, int deltaContactsMiddleOdo, double prevAngle){
+        //Set known variables
+        final double sideOdosDistance = 300;
+        final double middleOdoDistance = 170;
+        final double wheelCircumference = 60 * Math.PI;
+        final double sensorResolution = 8192;
+
+        //Distance traveled by either odo wheel
+        double rightArcLength = wheelCircumference * (deltaContactsRightOdo / sensorResolution);
+        double leftArcLength = wheelCircumference * (deltaContactsLeftOdo / sensorResolution);
+
+        //Rotation change of the car
+        double deltaRotation = (rightArcLength - leftArcLength) / sideOdosDistance;
+
+        //Length of the center arc - average between the two arcs
+        double turningRadius = (sideOdosDistance/2 * (rightArcLength + leftArcLength)) / (rightArcLength - leftArcLength);
+
+        //Length of shift while strafing
+        double strafeArcLength = wheelCircumference * (deltaContactsMiddleOdo / sensorResolution);
+        double strafeArcRadius = strafeArcLength/deltaRotation - middleOdoDistance;
+
+        double deltaX;
+        double deltaY;
+        if(deltaRotation == 0){
+            deltaX = strafeArcLength;
+            deltaY = (rightArcLength + leftArcLength)/2;
+        }
+        else{
+            deltaX = turningRadius * (Math.cos(deltaRotation) - 1) + strafeArcRadius * Math.sin(deltaRotation);
+            deltaY = turningRadius * Math.sin(deltaRotation) + strafeArcRadius * (1 - Math.cos(deltaRotation));
+        }
+
+        return new double[]{deltaX, deltaY, deltaRotation};
+    }
+
+
+    //podle eng notebooku 2021/22 - vubec nefunguje
+    public static double[] __getPositionChange(int deltaContactsRightOdo, int deltaContactsLeftOdo, int deltaContactsMiddleOdo, double prevAngle){
         //Set known variables
         final double sideOdosDistance = 300;
         final double wheelCircumference = 60 * Math.PI;
