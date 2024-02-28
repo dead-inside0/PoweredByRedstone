@@ -39,6 +39,7 @@ public class ColorDetectionPipeline extends OpenCvPipeline {
     Scalar lowColor;
 
     public ColorDetectionPipeline(Scalar highColor, Scalar lowColor){
+        //Set color boundaries
         this.highColor = highColor;
         this.lowColor = lowColor;
     }
@@ -46,7 +47,7 @@ public class ColorDetectionPipeline extends OpenCvPipeline {
     int lastResult;
     @Override
     public Mat processFrame(Mat frame) {
-
+        //Convert to HSV
         Imgproc.cvtColor(frame,frame,Imgproc.COLOR_RGB2HSV);
 
         Rect rect0 = new Rect(80,0, 240, 200);

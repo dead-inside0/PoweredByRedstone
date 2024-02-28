@@ -25,8 +25,6 @@ public class DriverOpMode extends OpMode {
     boolean useGlobalPos = true;
     double speedMultiplier = 0.8;
 
-    double linearMechanismStartPos;
-
     @Override
     public void init() {
         //get motors from hardware map

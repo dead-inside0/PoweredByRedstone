@@ -1,28 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 public class Odometry {
-    public static double[] _getPositionChange(int deltaContactsRightOdo, int deltaContactsLeftOdo, int deltaContactsMiddleOdo, double prevAngle){
-        final double sideOdosDistance = 300;
-        final double wheelCircumference = 60 * Math.PI;
-        final double sensorResolution = 8192;
-        final double middleOdoDistance = 170;
-
-        double deltaLeftOdo = (deltaContactsLeftOdo * wheelCircumference) / sensorResolution;
-        double deltaRightOdo = (deltaContactsRightOdo * wheelCircumference) / sensorResolution;
-        double deltaMiddleOdo = (deltaContactsMiddleOdo * wheelCircumference) / sensorResolution;
-
-        double deltaAngle = (deltaRightOdo - deltaLeftOdo) / sideOdosDistance;
-
-        double centerDisplacement = (deltaRightOdo + deltaLeftOdo) / 2;
-        double horizontalDisplacement = deltaMiddleOdo - (deltaAngle * middleOdoDistance);
-
-        double deltaX = centerDisplacement * Math.cos(deltaAngle + prevAngle) - horizontalDisplacement * Math.sin(deltaAngle + prevAngle);
-        double deltaY = centerDisplacement * Math.sin(deltaAngle + prevAngle) + horizontalDisplacement * Math.cos(deltaAngle + prevAngle);
-
-        return new double[]{deltaX, deltaY, deltaAngle+prevAngle};
-
-    }
-
     //test podle https://chsftcrobotics.weebly.com/uploads/1/2/3/6/123696510/odometry.pdf
     public static double[] getPositionChange(int deltaContactsRightOdo, int deltaContactsLeftOdo, int deltaContactsMiddleOdo, double prevAngle){
         //Set known variables
@@ -59,8 +37,33 @@ public class Odometry {
         return new double[]{deltaX, deltaY, deltaRotation};
     }
 
+    //nejaka ernestova vec nevim kde to vzal
+    @Deprecated
+    public static double[] _getPositionChange(int deltaContactsRightOdo, int deltaContactsLeftOdo, int deltaContactsMiddleOdo, double prevAngle){
+        final double sideOdosDistance = 300;
+        final double wheelCircumference = 60 * Math.PI;
+        final double sensorResolution = 8192;
+        final double middleOdoDistance = 170;
+
+        double deltaLeftOdo = (deltaContactsLeftOdo * wheelCircumference) / sensorResolution;
+        double deltaRightOdo = (deltaContactsRightOdo * wheelCircumference) / sensorResolution;
+        double deltaMiddleOdo = (deltaContactsMiddleOdo * wheelCircumference) / sensorResolution;
+
+        double deltaAngle = (deltaRightOdo - deltaLeftOdo) / sideOdosDistance;
+
+        double centerDisplacement = (deltaRightOdo + deltaLeftOdo) / 2;
+        double horizontalDisplacement = deltaMiddleOdo - (deltaAngle * middleOdoDistance);
+
+        double deltaX = centerDisplacement * Math.cos(deltaAngle + prevAngle) - horizontalDisplacement * Math.sin(deltaAngle + prevAngle);
+        double deltaY = centerDisplacement * Math.sin(deltaAngle + prevAngle) + horizontalDisplacement * Math.cos(deltaAngle + prevAngle);
+
+        return new double[]{deltaX, deltaY, deltaAngle+prevAngle};
+
+    }
+
 
     //podle eng notebooku 2021/22 - vubec nefunguje
+    @Deprecated
     public static double[] __getPositionChange(int deltaContactsRightOdo, int deltaContactsLeftOdo, int deltaContactsMiddleOdo, double prevAngle){
         //Set known variables
         final double sideOdosDistance = 300;
