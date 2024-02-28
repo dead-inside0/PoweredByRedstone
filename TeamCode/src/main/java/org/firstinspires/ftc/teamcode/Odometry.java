@@ -13,15 +13,10 @@ public class Odometry {
         double rightArcLength = wheelCircumference * (deltaContactsRightOdo / sensorResolution);
         double leftArcLength = wheelCircumference * (deltaContactsLeftOdo / sensorResolution);
 
+        double strafeArcLength = wheelCircumference * (deltaContactsMiddleOdo / sensorResolution);
+
         //Rotation change of the car
         double deltaRotation = (rightArcLength - leftArcLength) / sideOdosDistance;
-
-        //Length of the center arc - average between the two arcs
-        double turningRadius = (sideOdosDistance/2 * (rightArcLength + leftArcLength)) / (rightArcLength - leftArcLength);
-
-        //Length of shift while strafing
-        double strafeArcLength = wheelCircumference * (deltaContactsMiddleOdo / sensorResolution);
-        double strafeArcRadius = strafeArcLength/deltaRotation - middleOdoDistance;
 
         double deltaX;
         double deltaY;
@@ -30,6 +25,11 @@ public class Odometry {
             deltaY = (rightArcLength + leftArcLength)/2;
         }
         else{
+            //Length of the center arc - average between the two arcs
+            double turningRadius = (sideOdosDistance/2 * (rightArcLength + leftArcLength)) / (rightArcLength - leftArcLength);
+
+            double strafeArcRadius = strafeArcLength/deltaRotation - middleOdoDistance;
+            
             deltaX = turningRadius * (Math.cos(deltaRotation) - 1) + strafeArcRadius * Math.sin(deltaRotation);
             deltaY = turningRadius * Math.sin(deltaRotation) + strafeArcRadius * (1 - Math.cos(deltaRotation));
         }
