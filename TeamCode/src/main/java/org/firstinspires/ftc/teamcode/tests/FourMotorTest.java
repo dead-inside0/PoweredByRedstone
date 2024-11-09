@@ -3,13 +3,15 @@ package org.firstinspires.ftc.teamcode.tests;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.ToolBox;
 
 @TeleOp(name="Four motor")
 public class FourMotorTest extends OpMode {
     public DcMotor backLeftMotor,backRightMotor, frontLeftMotor, frontRightMotor;
-    double speedMultiplier = 0.8;
+
+    public double rotateMultiplier = 0.8;
 
     @Override
     public void init() {
@@ -37,7 +39,7 @@ public class FourMotorTest extends OpMode {
         if(Math.abs(joystickX) > deadzone || Math.abs(joystickY) > deadzone || Math.abs(rotate) > deadzone) {
             double joystickAngle = Math.atan2(joystickX, joystickY);
             double magnitude = ToolBox.pythagoras(joystickX, joystickY);
-            double[] motorPowers = ToolBox.getMotorPowersByDirection(joystickAngle, magnitude * speedMultiplier, rotate * speedMultiplier);
+            double[] motorPowers = ToolBox.getMotorPowersByDirection(joystickAngle, magnitude, rotate * rotateMultiplier);
 
             backLeftMotor.setPower(motorPowers[0]);
             backRightMotor.setPower(motorPowers[1]);
@@ -56,5 +58,11 @@ public class FourMotorTest extends OpMode {
         telemetry.addData("Joystick Y", joystickY);
         telemetry.addData("Rotate joystick", rotate);
         telemetry.addData("Joystick angle", Math.atan2(joystickX, joystickY));
+
+        telemetry.addData("MotorPowerBackLeft", backLeftMotor.getPower());
+        telemetry.addData("MotorPowerBackRight", backRightMotor.getPower());
+        telemetry.addData("MotorPowerFrontLeft", frontLeftMotor.getPower());
+        telemetry.addData("MotorPowerFrontRight", frontRightMotor.getPower());
+
     }
 }

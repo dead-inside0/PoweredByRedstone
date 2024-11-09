@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.tests;
+package org.firstinspires.ftc.teamcode;
 
 public class Odometry {
     //https://chsftcrobotics.weebly.com/uploads/1/2/3/6/123696510/odometry.pdf
     public static double[] getPositionChange(int deltaContactsRightOdo, int deltaContactsLeftOdo, int deltaContactsMiddleOdo, double prevAngle){
         //Set known variables
-        final double sideOdosDistance = 300;
-        final double middleOdoDistance = 170;
+        final double sideOdosDistance = 330;
+        final double middleOdoDistance = -120;
         final double wheelCircumference = 60 * Math.PI;
         final double sensorResolution = 8192;
 
